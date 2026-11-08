@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GRAC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#18101e;--red:#de2c46;--green:#2eb060;--gold:#ffd640;--cyan:#50dcff;--bg:#0b0a1a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:#fff;font-family:'Press Start 2P',monospace}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%}
+.cabinet{width:min(100vw,calc(100vh * 16 / 9));padding:10px}
+.stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:4px solid var(--ink);
+  box-shadow:0 0 0 4px var(--cyan),0 0 0 8px var(--ink),0 18px 40px rgba(0,0,0,.6);overflow:hidden;container-type:inline-size;border-radius:6px}
+.stage video,.stage img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.stage video{opacity:0;transition:opacity .05s}.stage video.on{opacity:1}
+.tap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,6,24,.45)}
+.hidden{display:none!important}
+/* start screen */
+.start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2cqw;
+  background:#f7f7f7;color:#111;text-align:center}
+.start .head{width:52cqw;height:auto;display:block;margin-bottom:1cqw}
+.start p{color:#111;text-shadow:none!important}
+.start h1{margin:0;font-size:9cqw;color:var(--gold);text-shadow:.5cqw .5cqw 0 var(--ink),-.25cqw 0 0 var(--ink),0 -.25cqw 0 var(--ink)}
+.start p{margin:0;font-size:1.6cqw;line-height:1.7;max-width:70cqw;text-shadow:.2cqw .2cqw 0 var(--ink)}
+.blink{animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+/* pixel buttons */
+.pbtn{font-family:inherit;color:#fff;cursor:pointer;border:.35cqw solid #fff;outline:.35cqw solid var(--ink);
+  background:var(--red);border-radius:1.6cqw;box-shadow:.8cqw .8cqw 0 rgba(24,16,30,.75);display:flex;align-items:center;gap:1.4cqw;
+  padding:.8cqw 2.2cqw .8cqw .8cqw;transition:transform .08s,box-shadow .08s,background .15s}
+.pbtn:hover{filter:brightness(1.1)}
+.pbtn:active,.pbtn.pressed{transform:translate(.8cqw,.8cqw);box-shadow:0 0 0 rgba(0,0,0,0)}
+.pbtn.ok{background:var(--green)}
+.pbtn:focus-visible{outline:.5cqw solid var(--gold)}
+.pbtn .lg{width:7.4cqw;height:7.4cqw;border-radius:50%;background:#fff url(logo.png) center/100% no-repeat;flex:none}
+.pbtn .lb{font-size:2.3cqw;text-shadow:.25cqw .25cqw 0 var(--ink);white-space:nowrap}
+.pbtn .tri{display:inline-block;width:0;height:0;border-left:1.6cqw solid #fff;border-top:1cqw solid transparent;border-bottom:1cqw solid transparent;margin-right:1.2cqw;vertical-align:-.1cqw}
+.startbtn{padding:1.4cqw 2.6cqw;font-size:2cqw}
+.btnrow{display:flex;gap:2cqw;flex-wrap:wrap;justify-content:center}
+.start .foot{max-width:none!important;text-align:center;position:absolute;left:0;right:0;bottom:2.2cqw;margin:0;font-size:1.2cqw;opacity:.8}
+.btnrow .startbtn .lb{font-size:1.7cqw}
+.hot{position:absolute;transform:translate(-50%,-50%);animation:pop .35s cubic-bezier(.3,1.6,.6,1) both}
+.hot.pulse{animation:pop .35s cubic-bezier(.3,1.6,.6,1) both,pulse 1s ease-in-out .4s infinite}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(.1)}to{transform:translate(-50%,-50%) scale(1)}}
+@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.05)}}
+.ring{position:absolute;border:.5cqw solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;animation:ring .45s ease-out forwards}
+@keyframes ring{from{width:10cqw;height:5cqw;opacity:1}to{width:42cqw;height:20cqw;opacity:0}}
+.plus{position:absolute;font-size:2cqw;color:var(--gold);text-shadow:.25cqw .25cqw 0 var(--ink);animation:up 1s ease-out forwards;pointer-events:none}
+@keyframes up{to{transform:translateY(-6cqw);opacity:0}}
+.skip{position:absolute;right:1.4cqw;bottom:1.4cqw;font-family:inherit;font-size:1.1cqw;background:rgba(10,10,30,.7);color:#fff;border:.2cqw solid #fff;border-radius:.6cqw;padding:.7cqw 1cqw;cursor:pointer}
+.flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash .25s forwards}
+@keyframes flash{to{opacity:0}}
+/* level screen */
+.levels{width:min(100vw,1100px);height:100vh;display:flex;flex-direction:column;padding:8px}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#0a0a1e;border:3px solid var(--cyan);border-bottom:none;border-radius:8px 8px 0 0;font-size:11px;flex-wrap:wrap}
+.bar .t{color:var(--gold)}
+.bar .sp{flex:1}
+.bar button{font-family:inherit;font-size:10px;background:var(--red);color:#fff;border:2px solid #fff;border-radius:6px;padding:7px 9px;cursor:pointer}
+.levels iframe{flex:1;width:100%;border:3px solid var(--cyan);border-radius:0 0 8px 8px;background:#fff}
+.note{font:12px/1.5 system-ui,sans-serif;color:#aab;margin-top:8px;text-align:center}
+</style>
+</head>
+<body>
+<div class="cabinet" id="cab">
+  <div class="stage" id="stage">
+    <img class="poster hidden" id="poster" src="poster1.jpg" alt="">
+    <video id="vid" playsinline webkit-playsinline preload="auto"></video>
+    <div class="start" id="start">
+      <img class="head" src="grac_word.png" alt="GRAC">
+      <p class="blink">INSERT COIN</p>
+      <div class="btnrow">
+        <button class="pbtn startbtn" id="carrillon"><span class="lb">🔔 REPASA E INTERPRETA</span></button>
+        <button class="pbtn startbtn ok" id="notas"><span class="lb">♪ EL JUEGO</span></button>
+      </div>
+      <p class="foot">@monroymethod</p>
+    </div>
+    <button class="skip hidden" id="skip">SALTAR ▶▶</button>
+  </div>
+</div>
+
+<div class="levels hidden" id="levels">
+  <div class="bar">
+    <span class="t">GRAC</span><span id="bartitle">MUNDO 1 · LA ORQUESTA SINFÓNICA</span><span class="sp"></span>
+    <button id="home">⌂ INICIO</button>
+  </div>
+  <iframe id="game" title="La orquesta sinfónica" src="about:blank"></iframe>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const stage=$('stage'),vid=$('vid'),poster=$('poster');
+let scene=0,AC=null,fin=false;
+
+function chime(notes){ // short bell arpeggio (sol, la, do, re)
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t0=AC.currentTime;
+    notes.forEach((m,i)=>{
+      const o=AC.createOscillator(),g=AC.createGain(),f=440*Math.pow(2,(m-69)/12),t=t0+i*0.06;
+      o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.01);
+      g.gain.exponentialRampToValueAtTime(.001,t+.6);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.65);
+    });
+  }catch(e){}
+}
+function clear(){stage.querySelectorAll('.hot:not(.pressed),.tap').forEach(e=>e.remove())}
+const warmed={};
+function warm(n){if(warmed[n])return;warmed[n]=1;try{fetch('scene'+n+'.mp4').catch(()=>{});const im=new Image();im.src='poster'+n+'.jpg'}catch(e){}}
+function play(n){
+  clear();scene=n;fin=false;warm(n+1);
+  poster.src='poster'+n+'.jpg';
+  poster.classList.remove('hidden');
+  vid.classList.remove('on');
+  vid.muted=false;vid.volume=1;
+  vid.src='scene'+n+'.mp4';
+  vid.addEventListener('playing',()=>vid.classList.add('on'),{once:true});$('skip').classList.remove('hidden');
+  const p=vid.play();
+  if(p&&p.catch)p.catch(()=>{ // blocked: ask for one more tap instead of playing silently
+    const t=document.createElement('div');t.className='tap hot-tap';
+    t.innerHTML='<button class="pbtn startbtn"><span class="lb"><span class="tri"></span>TOCA PARA CONTINUAR</span></button>';
+    stage.appendChild(t);t.querySelector('button').addEventListener('click',()=>{t.remove();vid.muted=false;vid.play().catch(()=>{})},{once:true});
+  });
+}
+function hotButton(html,x,y,onclick){
+  const b=document.createElement('button');b.className='pbtn hot pulse';b.innerHTML=html;
+  b.style.left=x+'%';b.style.top=y+'%';stage.appendChild(b);b.focus({preventScroll:true});
+  b.addEventListener('click',()=>{
+    b.classList.remove('pulse');b.classList.add('pressed','ok');
+    chime([67,74,81,84]);
+    const r=document.createElement('div');r.className='ring';r.style.left=x+'%';r.style.top=y+'%';stage.appendChild(r);
+    const pl=document.createElement('div');pl.className='plus';pl.textContent='+1000';pl.style.left=(x+8)+'%';pl.style.top=(y-14)+'%';stage.appendChild(pl);
+    const f=document.createElement('div');f.className='flash';stage.appendChild(f);
+    onclick();
+    setTimeout(()=>{b.remove();r.remove();pl.remove();f.remove()},700);
+  },{once:true});
+}
+function ended(){
+  if(fin)return;fin=true;
+  $('skip').classList.add('hidden');
+  if(scene===1){
+    hotButton('<span class="lg"></span><span class="lb"><span class="tri"></span>JUGAR</span>',74,64.5,()=>play(2));
+  }else if(scene===2){
+    hotButton('<span class="lg"></span><span class="lb"><span class="tri"></span>NIVELES</span>',75,25,()=>setTimeout(()=>openLevels(),600));
+  }
+}
+function openLevels(page,title){
+  page=page||'orquesta.html';title=title||'MUNDO 1 · LA ORQUESTA SINFÓNICA';
+  vid.pause();
+  $('bartitle').textContent=title;
+  $('cab').classList.add('hidden');$('levels').classList.remove('hidden');
+  if($('game').src.indexOf(page)<0)$('game').src=page;
+}
+vid.addEventListener('ended',ended);
+$('skip').addEventListener('click',()=>{vid.pause();try{vid.currentTime=Math.max(0,vid.duration-0.05)}catch(e){}ended()});
+const goBtn=$('go');if(goBtn)goBtn.addEventListener('click',()=>{
+  chime([67,74,79]);$('start').classList.add('hidden');play(1);
+});
+$('carrillon').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('repaso.html','REPASO E INTERPRETA · CARRILLÓN')});
+$('notas').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('notas.html','EL JUEGO · LAS NOTAS MUSICALES')});
+$('home').addEventListener('click',()=>{
+  vid.pause();clear();$('skip').classList.add('hidden');vid.classList.remove('on');poster.classList.add('hidden');
+  $('levels').classList.add('hidden');$('cab').classList.remove('hidden');$('start').classList.remove('hidden');
+});
+if($('again'))$('again').addEventListener('click',()=>{
+  $('levels').classList.add('hidden');$('cab').classList.remove('hidden');play(1);
+});
+</script>
+</body>
+</html>
