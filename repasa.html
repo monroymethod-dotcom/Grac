@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GRAC · Repaso e Interpreta</title>
+<title>GRAC · Repasa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -772,9 +772,13 @@ function confetti(){
 
 document.querySelector('.logo-sm').src=GRAC; document.querySelector('.logo-sm').alt='GRAC';
 document.documentElement.style.setProperty('--mm', `url(${LOGO})`);
-$('#homeBtn').onclick=showMap;
-$('#reviewBtn').onclick=()=>{ ctx(); showRepaso(0); };
-showMap();
+// GRAC: esta página muestra un solo apartado (la portada de GRAC hace de menú)
+setTop=function(){ $('#homeBtn').style.display='none'; $('#reviewBtn').style.display='none'; };
+const _showRepaso=showRepaso;
+showRepaso=function(step){ _showRepaso(step);
+  const b=$('#toLevels'); if(b){ b.textContent='↻ Repasar de nuevo'; b.onclick=()=>showRepaso(0); } };
+showMap=function(){ showRepaso(0); };
+showRepaso(0);
 </script>
 </body>
 </html>

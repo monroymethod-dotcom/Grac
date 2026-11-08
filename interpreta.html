@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRAC · Interpreta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3e7; --card:#fdfbf8; --ink:#2b2622; --muted:#7a716a; --line:#e7ddd0;
+    --wine:#7a2a35; --wine-soft:#f8e4e6; --skin:#f1ccb3; --skin-dark:#c99476;
+    --ok:#2f8a5b; --bad:#c43a3a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif}
+  body{
+    background-image:repeating-linear-gradient(to bottom, transparent 0 47px, rgba(122,42,53,.05) 47px 48px);
+    min-height:100vh;
+  }
+  button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .wrap{max-width:560px;margin:0 auto;padding:18px 16px 40px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .brand{font-family:Lora,serif;font-weight:700;font-size:15px;color:var(--wine);display:flex;align-items:center;gap:6px}
+  .iconbtn{border:1.5px solid var(--line);background:var(--card);border-radius:999px;height:38px;min-width:38px;padding:0 12px;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14px}
+  .iconbtn:active{transform:scale(.96)}
+  h1{font-family:Lora,serif;font-size:clamp(30px,8vw,40px);line-height:1.05;margin:8px 0 6px;text-align:center}
+  h2{font-family:Lora,serif;font-size:26px;margin:4px 0 6px}
+  .lead{color:var(--muted);text-align:center;margin:0 0 16px;font-size:16px}
+  .chips{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px 0 22px}
+  .chip{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;
+    box-shadow:0 2px 0 rgba(0,0,0,.12)}
+
+  .logo-sm{width:42px;height:42px;border-radius:50%;background:#fff;border:1.5px solid var(--line);object-fit:contain;padding:8px;flex:none}
+  .logo-lg{display:block;width:150px;height:150px;border-radius:50%;background:#fff;margin:4px auto 0;box-shadow:0 4px 0 rgba(0,0,0,.06);border:1.5px solid var(--line)}
+  .hleft,.hright{display:flex;align-items:center;gap:8px}
+  .iconbtn.on{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .review{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:none;border-radius:22px;padding:16px;margin-bottom:16px;
+    background:linear-gradient(135deg,#7a2a35,#a23a48);color:#fff;box-shadow:0 5px 0 #4f1820}
+  .review:active{transform:translateY(2px);box-shadow:0 3px 0 #4f1820}
+  .review .ic{width:58px;height:58px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
+  .review .t{font-family:Lora,serif;font-size:21px;font-weight:700}
+  .review .s{font-size:14px;opacity:.9}
+  .review .badge{margin-left:auto;font-size:12px;font-weight:900;background:#fff;color:var(--wine);border-radius:999px;padding:5px 9px;white-space:nowrap}
+  .gtitle{display:flex;align-items:center;justify-content:center;gap:12px;letter-spacing:.06em;margin-top:14px}
+  .gtitle img{height:.8em;width:auto}
+  /* Marca de agua camuflada (Monroy Method) */
+  .review,.panel{position:relative;overflow:hidden}
+  .review>*{position:relative;z-index:1}
+  .review::after,.panel::after{content:"";position:absolute;pointer-events:none;background:var(--mm) center/contain no-repeat;mix-blend-mode:multiply;filter:grayscale(1)}
+  .review::after{width:130px;height:130px;right:-26px;bottom:-40px;opacity:.22}
+  .panel::after{width:150px;height:150px;right:-34px;bottom:-34px;opacity:.07}
+  .section-h.grac{display:flex;align-items:center;gap:6px;color:var(--ink)}
+  .section-h.grac img{width:22px;height:auto}
+  .section-h{font-weight:900;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2px 4px 8px}
+  .steps{display:flex;gap:6px;margin:10px 0 14px}
+  .steps button{flex:1;border:none;height:34px;border-radius:10px;background:#efe6d9;font-weight:900;font-size:14px;color:var(--muted)}
+  .steps button.on{background:var(--wine);color:#fff}
+  .steps button.seen{color:var(--wine)}
+  .navrow{display:flex;gap:10px}
+  .navrow .cta{margin-top:16px}
+  /* Carillón */
+  .cari{display:flex;align-items:center;gap:3px;padding:12px 6px;border-radius:18px;position:relative;
+    background:linear-gradient(180deg,#9a6644,#7a4a2e);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 5px 0 #4e2d19;touch-action:none;user-select:none;-webkit-user-select:none}
+  .cari::before,.cari::after{content:"";position:absolute;left:6px;right:6px;height:9px;border-radius:6px;background:#4e2d19;opacity:.75}
+  .cari::before{top:22%}.cari::after{bottom:22%}
+  .bar{flex:1;min-width:0;border:none;border-radius:7px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    padding:0;font-weight:900;line-height:1;transition:filter .15s,transform .08s;
+    box-shadow:inset 0 -6px 0 rgba(0,0,0,.16),inset 0 3px 0 rgba(255,255,255,.4),0 3px 0 rgba(0,0,0,.28)}
+  .bar::before,.bar::after{content:"";position:absolute;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#fff,#9aa1a9);box-shadow:0 1px 1px rgba(0,0,0,.35)}
+  .bar::before{top:9px}.bar::after{bottom:9px}
+  .bar .bl{font-family:Lora,serif;font-size:15px}
+  .bar .bn{font-size:10px;letter-spacing:-.02em}
+  .bar.silver{background:linear-gradient(90deg,#b9bec6,#f4f6f8 45%,#aab0b9)!important;color:#2b2622!important}
+  .bar.play{animation:ring .45s}
+  .bar.glow{filter:brightness(1.25) drop-shadow(0 0 10px rgba(255,255,255,.95));transform:translateY(-4px)}
+  .bar.wrong{animation:shake .35s;outline:3px solid var(--bad);outline-offset:1px}
+  .bar.dim{opacity:.35}
+  .bar:disabled{cursor:default}
+  @keyframes ring{15%{transform:translateY(4px) scaleY(.97);filter:brightness(1.3)}45%{transform:translateY(-2px)}}
+  .ripple{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:2px solid #fff;pointer-events:none;animation:rip .6s ease-out forwards}
+  @keyframes rip{to{transform:scale(7);opacity:0}}
+  .now{display:flex;align-items:center;justify-content:center;gap:12px;min-height:56px;margin:8px 0}
+  .now .chip{width:56px;height:56px;font-size:17px}
+  .now .lt{font-family:Lora,serif;font-weight:700;font-size:40px}
+  .song{margin:10px 0;min-height:96px}
+  .song .ph{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:6px 0}
+  .song .ph.next{transform:scale(.8);opacity:.6}
+  .song .phn{text-align:center;font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .song span{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;opacity:.45;transition:all .2s}
+  .song span.done{opacity:1}
+  .song span.cur{opacity:1;transform:scale(1.25);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--wine)}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 4px}
+  .pills button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-weight:800;font-size:14px}
+  .pills button.on{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .review.wood{background:linear-gradient(135deg,#9a6644,#6e4128);box-shadow:0 5px 0 #4e2d19}
+  .score{display:flex;justify-content:center;gap:18px;font-weight:900;color:var(--muted);margin:6px 0}
+  .score b{color:var(--ink);font-size:22px}
+  .tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  g.tap{transform-box:fill-box;transform-origin:center}
+  .tap.hit:not(tr){animation:tapPop .4s}
+  tr.tap.hit td{animation:rowFlash .5s}
+  @keyframes tapPop{35%{transform:scale(1.22)}}
+  @keyframes rowFlash{30%{background:#fff3c4}}
+  .taphint{text-align:center;color:var(--muted);font-weight:800;font-size:14px;margin:12px 0 0}
+  /* Map */
+  .levels{display:grid;gap:12px}
+  .lvl{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:14px;text-align:left;
+    background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 3px 0 rgba(0,0,0,.04);transition:transform .15s}
+  .lvl:not(:disabled):hover{transform:translateY(-2px)}
+  .lvl:disabled{opacity:.55;cursor:not-allowed}
+  .lvl .num{width:64px;height:64px;border-radius:16px;background:var(--wine-soft);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .lvl .t{font-family:Lora,serif;font-weight:700;font-size:19px;line-height:1.15}
+  .lvl .s{color:var(--muted);font-size:14px;margin-top:2px}
+  .lvl .k{font-size:12px;font-weight:900;letter-spacing:.06em;color:var(--wine);text-transform:uppercase}
+  .stars{font-size:18px;letter-spacing:1px;white-space:nowrap}
+  .stars .off{opacity:.2}
+  .teacher{display:block;margin:18px auto 0;background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline}
+
+  /* Panels */
+  .panel{background:var(--card);border:1.5px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 4px 0 rgba(0,0,0,.04)}
+  .tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--wine);background:var(--wine-soft);
+    padding:5px 10px;border-radius:999px}
+  .explain{color:#4d4540;font-size:16px;line-height:1.5}
+  .explain b{color:var(--ink)}
+  .tip{background:#fff7e0;border:1.5px dashed #e7c66a;border-radius:14px;padding:10px 12px;font-size:15px;margin-top:12px}
+  .cta{display:block;width:100%;margin-top:16px;background:var(--wine);color:#fff;border:none;border-radius:16px;padding:16px;
+    font-weight:900;font-size:18px;box-shadow:0 4px 0 #4f1820}
+  .cta:active{transform:translateY(2px);box-shadow:0 2px 0 #4f1820}
+  .cta.ghost{background:var(--card);color:var(--wine);border:2px solid var(--wine);box-shadow:none}
+
+  /* Note cards (level 1 study) */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin-top:14px}
+  .ncard{border:none;border-radius:18px;padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;
+    box-shadow:0 4px 0 rgba(0,0,0,.15);transition:transform .12s;position:relative}
+  .ncard .nm{font-family:Lora,serif;font-weight:700;font-size:26px}
+  .ncard .lt{font-family:Lora,serif;font-weight:700;font-size:34px;line-height:1}
+  .ncard .seen{position:absolute;top:6px;right:8px;font-size:14px;opacity:0}
+  .ncard.done .seen{opacity:1}
+  .ncard.bump{animation:bump .35s}
+  @keyframes bump{40%{transform:scale(1.08)}}
+
+  /* table */
+  table.ref{width:100%;border-collapse:separate;border-spacing:0;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;margin-top:12px}
+  table.ref th{background:var(--wine-soft);color:var(--wine);font-size:13px;padding:8px;text-align:center}
+  table.ref td{padding:7px;text-align:center;border-top:1px solid var(--line);font-weight:800;font-size:18px}
+  table.ref td.l{font-family:Lora,serif;font-size:24px}
+  table.ref tr:nth-child(even) td{background:#f9f4ea}
+  .dot{display:inline-block;width:22px;height:22px;border-radius:50%;vertical-align:middle}
+
+  /* Game */
+  .gamebar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .progress{flex:1;height:12px;background:#ece3d6;border-radius:999px;overflow:hidden}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,#d7233f,#f19037,#e7b423,#6bbc8c,#184b40,#795ba5,#e791ba);
+    border-radius:999px;transition:width .4s}
+  .qcount{font-weight:900;font-size:14px;color:var(--muted);min-width:44px;text-align:right}
+  .prompt{font-family:Lora,serif;font-weight:700;font-size:23px;text-align:center;margin:4px 0 12px;line-height:1.2}
+  .stage{display:flex;align-items:center;justify-content:center;min-height:190px;background:#fffdf9;border:1.5px solid var(--line);
+    border-radius:20px;padding:10px;margin-bottom:14px;position:relative}
+  .stage svg{width:100%;height:auto;display:block}
+  .bigcircle{width:150px;height:150px;border-radius:50%;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12),0 6px 0 rgba(0,0,0,.08)}
+  .bigtext{font-family:Lora,serif;font-weight:700;font-size:96px;line-height:1}
+  .bigname{font-family:Lora,serif;font-weight:700;font-size:72px;line-height:1}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{border:2px solid var(--line);background:#fff;border-radius:18px;padding:16px 8px;font-weight:900;font-size:24px;
+    box-shadow:0 4px 0 #e2d7c8;transition:transform .1s,background .2s,color .2s;min-height:68px}
+  .opt.letter{font-family:Lora,serif;font-size:34px;padding:10px}
+  .opt.swatch{display:flex;align-items:center;justify-content:center}
+  .opt.swatch span{width:54px;height:54px;border-radius:50%;box-shadow:inset 0 -5px 0 rgba(0,0,0,.15)}
+  .opt:active{transform:translateY(2px);box-shadow:0 2px 0 #e2d7c8}
+  .opt.correct{border-color:transparent;transform:scale(1.03)}
+  .opt.wrong{background:#fde8e8;border-color:var(--bad);color:var(--bad);animation:shake .35s}
+  .opt.dim{opacity:.4}
+  .opt:disabled{cursor:default}
+  @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+  .tools{display:flex;gap:8px;justify-content:center;margin-top:14px}
+  .feedback{min-height:56px;margin-top:12px;text-align:center;font-size:17px;font-weight:800}
+  .feedback .good{color:var(--ok)}
+  .feedback .bad{color:var(--bad)}
+  .feedback small{display:block;color:#4d4540;font-weight:700;font-size:15px;margin-top:2px}
+  .hintbox{background:#fff7e0;border:1.5px dashed #e7c66a;border-radius:14px;padding:8px 12px;font-size:15px;margin-top:10px;text-align:center}
+  .next{margin-top:8px}
+
+  /* hand + staff */
+  .pulse{animation:pulse 1.2s infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes pulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.9)}}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(43,38,34,.45);display:flex;align-items:flex-end;justify-content:center;z-index:20;padding:10px}
+  .modal .sheet{background:var(--card);border-radius:24px 24px 18px 18px;max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:18px;
+    animation:up .25s ease-out}
+  @keyframes up{from{transform:translateY(40px);opacity:0}}
+  @media(min-width:640px){.modal{align-items:center}}
+
+  /* result */
+  .result{text-align:center}
+  .bigstars{font-size:54px;letter-spacing:6px;margin:6px 0}
+  .bigstars span{display:inline-block;animation:pop .5s backwards}
+  .bigstars span:nth-child(2){animation-delay:.2s}.bigstars span:nth-child(3){animation-delay:.4s}
+  @keyframes pop{from{transform:scale(0) rotate(-40deg)}}
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:30}
+  .confetti span{position:absolute;top:-40px;font-size:26px;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+
+  .summary-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:8px 0 4px}
+  .summary-row .chip{width:48px;height:48px;font-size:14px;flex-direction:column;line-height:1}
+  .summary-row .chip small{font-size:10px;opacity:.8}
+  .sub-h{font-weight:900;color:var(--wine);text-align:center;font-size:15px;margin-top:12px}
+  .seg{display:flex;background:#efe6d9;border-radius:999px;padding:4px;margin:10px 0 4px}
+  .seg button{flex:1;border:none;background:none;border-radius:999px;padding:8px;font-weight:800;font-size:14px}
+  .seg button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="hleft"><img class="logo-sm" src="" alt="Monroy Method"><button class="iconbtn" id="homeBtn" aria-label="Volver al inicio" style="display:none">← Inicio</button></div>
+    <div class="hright"><button class="iconbtn" id="reviewBtn">📖 Repaso</button>
+    <button class="iconbtn" id="soundBtn" aria-label="Activar o silenciar sonido">🔊</button></div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<script>
+/* ---------------- Datos (extraídos del vídeo) ---------------- */
+const NOTES = {
+  do:{id:'do', name:'Do', letter:'C', color:'#d7233f', ink:'#ffffff', colorName:'rojo'},
+  re:{id:'re', name:'Re', letter:'D', color:'#f19037', ink:'#3d1d04', colorName:'naranja'},
+  mi:{id:'mi', name:'Mi', letter:'E', color:'#e7b423', ink:'#3a2b00', colorName:'amarillo'},
+  fa:{id:'fa', name:'Fa', letter:'F', color:'#6bbc8c', ink:'#0e3321', colorName:'verde claro'},
+  sol:{id:'sol',name:'Sol',letter:'G', color:'#184b40', ink:'#ffffff', colorName:'verde oscuro'},
+  la:{id:'la', name:'La', letter:'A', color:'#795ba5', ink:'#ffffff', colorName:'morado'},
+  si:{id:'si', name:'Si', letter:'B', color:'#e791ba', ink:'#4a1730', colorName:'rosa'}
+};
+const ORDER = ['do','re','mi','fa','sol','la','si'];
+const FREQ4 = {do:261.63,re:293.66,mi:329.63,fa:349.23,sol:392.00,la:440.00,si:493.88};
+const FINGERS = ['', 'pulgar','índice','corazón','anular','meñique'];
+
+// Posiciones en clave de sol (de abajo hacia arriba), igual que en el vídeo
+const POS = [
+  {p:0, n:'re',  f:293.66, kind:'below'},
+  {p:1, n:'mi',  f:329.63, kind:'line',  k:1},
+  {p:2, n:'fa',  f:349.23, kind:'space', k:1},
+  {p:3, n:'sol', f:392.00, kind:'line',  k:2},
+  {p:4, n:'la',  f:440.00, kind:'space', k:2},
+  {p:5, n:'si',  f:493.88, kind:'line',  k:3},
+  {p:6, n:'do',  f:523.25, kind:'space', k:3},
+  {p:7, n:'re',  f:587.33, kind:'line',  k:4},
+  {p:8, n:'mi',  f:659.25, kind:'space', k:4},
+  {p:9, n:'fa',  f:698.46, kind:'line',  k:5}
+];
+const whereStaff = pos => pos.kind==='below' ? 'justo debajo del pentagrama'
+  : pos.kind==='line' ? `en la línea ${pos.k}` : `en el espacio ${pos.k}`;
+const whereHand = pos => pos.kind==='below' ? 'debajo del pulgar'
+  : pos.kind==='line' ? `en el dedo ${pos.k} (${FINGERS[pos.k]})` : `en el hueco ${pos.k}, entre el ${FINGERS[pos.k]} y el ${FINGERS[pos.k+1]}`;
+
+const CLEF_D = 'M314 801Q300 854 291.0 906.0Q282 958 282 1012Q282 1059 288.5 1100.5Q295 1142 307 1177Q320 1217 341.0 1252.5Q362 1288 385.5 1311.0Q409 1334 427 1334Q451 1334 493 1249Q514 1206 524.0 1156.0Q534 1106 534 1049Q534 978 515.0 907.5Q496 837 459.5 775.0Q423 713 372 666L407 498Q422 500 432.0 501.0Q442 502 447 502Q508 502 556.0 467.5Q604 433 632.5 377.0Q661 321 661 254Q661 177 621.5 115.5Q582 54 503 25Q508 8 532 -117Q538 -147 541.0 -164.5Q544 -182 545.0 -195.0Q546 -208 546 -225Q546 -275 521.5 -314.5Q497 -354 455.5 -376.0Q414 -398 363 -398Q311 -398 271.0 -378.5Q231 -359 208.0 -324.5Q185 -290 185 -245Q185 -197 211.5 -165.0Q238 -133 287 -133Q329 -133 355.5 -163.5Q382 -194 382 -236Q382 -272 357.0 -299.0Q332 -326 292 -326H282Q308 -365 364 -365Q433 -365 472.0 -320.0Q511 -275 511 -205Q511 -188 507.0 -159.5Q503 -131 493 -91Q483 -51 477.5 -25.0Q472 1 470 12Q436 2 390 2Q304 2 222 52Q142 102 96.0 184.0Q50 266 50 361Q50 451 91 530Q132 609 192.5 675.0Q253 741 314 801ZM341 826Q364 838 390.0 870.5Q416 903 440.0 945.0Q464 987 479.0 1029.5Q494 1072 494 1106Q494 1142 483.0 1163.0Q472 1184 445 1184Q421 1184 398.5 1162.0Q376 1140 358.5 1103.5Q341 1067 331.0 1022.0Q321 977 321 930Q321 898 327.5 872.0Q334 846 341 826ZM398 379Q371 373 347.0 353.5Q323 334 308.5 306.5Q294 279 294 248Q294 223 307.0 196.5Q320 170 339 154Q352 142 365 136Q380 129 380 123Q380 120 370 117Q332 126 301.5 151.0Q271 176 253.5 211.5Q236 247 236 287Q236 330 253.5 370.0Q271 410 302.5 442.0Q334 474 374 490L345 641Q229 547 174.5 456.5Q120 366 120 277Q120 212 154.0 156.0Q188 100 247.0 65.5Q306 31 380 31Q400 31 420.5 35.0Q441 39 464 45ZM495 55Q593 97 593 227Q593 270 571.0 305.5Q549 341 512.0 362.0Q475 383 429 383Z';
+const clef = (x,yG,sc,fill='#83343e') => `<path d="${CLEF_D}" transform="translate(${x} ${yG}) scale(${sc} ${-sc})" fill="${fill}"/>`;
+
+const LEVELS = [
+  {n:1, title:'Notas, colores y cifrado', sub:'Aprende cada nota con su color y su letra', q:9},
+  {n:2, title:'Nombre y cifrado americano', sub:'Relaciona Do, Re, Mi… con C, D, E…', q:10},
+  {n:3, title:'La mano guidoniana', sub:'Encuentra las notas en tus dedos', q:10},
+  {n:4, title:'Notas en el pentagrama', sub:'Lee las notas de colores en clave de sol', q:10},
+  {n:5, title:'¡Todo junto!', sub:'El reto final con todo lo aprendido', q:12}
+];
+
+/* ---------------- Utilidades ---------------- */
+const $ = s => document.querySelector(s);
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const GRAC = 'data:image/webp;base64,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';
+const LOGO = 'data:image/webp;base64,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';
+const chip = (id, size) => { const n=NOTES[id]; return `<span class="chip" style="background:${n.color};color:${n.ink}${size?`;width:${size}px;height:${size}px`:''}">${n.name}</span>`; };
+
+let store = {stars:{}, unlockAll:false};
+try { const s = JSON.parse(localStorage.getItem('notas-juego')||'null'); if(s) store = Object.assign(store, s); } catch(e){}
+const save = () => { try{ localStorage.setItem('notas-juego', JSON.stringify(store)); }catch(e){} };
+
+/* ---------------- Sonido ---------------- */
+let actx=null, soundOn=true;
+function ctx(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(actx && actx.state==='suspended') actx.resume(); return actx; }
+let master=null;
+function out(){ const c=ctx(); if(!c) return null;
+  if(!master){ master=c.createDynamicsCompressor(); master.threshold.value=-14; master.ratio.value=4; master.connect(c.destination);
+    // pequeña reverberación (eco suave) para dar sensación de metal
+    const d=c.createDelay(); d.delayTime.value=.11; const fb=c.createGain(); fb.gain.value=.22; const wet=c.createGain(); wet.gain.value=.18;
+    master._in=c.createGain(); master._in.connect(master); master._in.connect(d); d.connect(fb); fb.connect(d); d.connect(wet); wet.connect(master);
+  }
+  return master._in; }
+// Sonido de carillón (glockenspiel): parciales inarmónicos de una lámina metálica + golpe de baqueta
+function glock(freq, when=0, vol=.5){
+  if(!soundOn) return; const c=ctx(), dst=out(); if(!c||!dst) return;
+  const f0=freq*2, t=c.currentTime+when+.005;           // el carillón suena una octava más aguda
+  [[1,1,2.2],[2.756,.32,.7],[5.404,.14,.32],[8.933,.06,.16]].forEach(([r,a,dec])=>{
+    const fr=f0*r; if(fr>17000) return;
+    const o=c.createOscillator(), g=c.createGain(); o.type='sine'; o.frequency.value=fr;
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(a*vol,t+.002); g.gain.exponentialRampToValueAtTime(0.0001,t+dec);
+    o.connect(g); g.connect(dst); o.start(t); o.stop(t+dec+.05);
+  });
+  // golpe de baqueta
+  const len=Math.floor(c.sampleRate*.025), buf=c.createBuffer(1,len,c.sampleRate), ch=buf.getChannelData(0);
+  for(let k=0;k<len;k++) ch[k]=(Math.random()*2-1)*Math.pow(1-k/len,3);
+  const nz=c.createBufferSource(), bp=c.createBiquadFilter(), ng=c.createGain(); nz.buffer=buf; bp.type='bandpass'; bp.frequency.value=Math.min(f0*3,9000); bp.Q.value=1.5; ng.gain.value=.25*vol;
+  nz.connect(bp); bp.connect(ng); ng.connect(dst); nz.start(t);
+}
+const tone = (freq) => glock(freq);
+function buzz(f,d,w=0){ if(!soundOn) return; const c=ctx(), dst=out(); if(!c) return; const t=c.currentTime+w, o=c.createOscillator(), g=c.createGain();
+  o.type='triangle'; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.12,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g); g.connect(dst); o.start(t); o.stop(t+d+.05); }
+const sndWrong = () => { buzz(180,.16); buzz(150,.22,.1); };
+const sndWin = () => [261.63,329.63,392,523.25,659.25].forEach((f,i)=>glock(f,i*.11,.45));
+$('#soundBtn').onclick = () => { soundOn=!soundOn; $('#soundBtn').textContent = soundOn?'🔊':'🔇'; if(soundOn) glock(392); };
+
+/* ---------------- Carillón ---------------- */
+// 11 láminas: Do4 … Fa5 (las mismas alturas que el pentagrama, más el Do grave)
+const CARI = [['do',261.63],['re',293.66],['mi',329.63],['fa',349.23],['sol',392.00],['la',440.00],['si',493.88],['do',523.25],['re',587.33],['mi',659.25],['fa',698.46],['sol',783.99],['la',880.00]]
+  .map(([n,f],i)=>({n,f,i}));
+function carillonHTML({labels='both', silver=false, h=190, id='cari', count=13}={}){
+  return `<div class="cari" id="${id}">${CARI.slice(0,count).map(b=>{ const n=NOTES[b.n], hh=Math.round(h-(h*.36)*b.i/(count-1));
+    const lab = labels==='both' ? `<span class="bl">${n.letter}</span><span class="bn">${n.name}</span>`
+      : labels==='names' ? `<span class="bn" style="font-size:12px">${n.name}</span>` : labels==='letters' ? `<span class="bl">${n.letter}</span>` : '';
+    return `<button class="bar${silver?' silver':''}" data-i="${b.i}" data-id="${b.n}" style="height:${hh}px;background:${n.color};color:${n.ink}" aria-label="${n.name} (${n.letter})">${lab}</button>`; }).join('')}</div>`;
+}
+function strike(bar){
+  const b=CARI[+bar.dataset.i]; glock(b.f);
+  bar.classList.remove('play'); void bar.offsetWidth; bar.classList.add('play');
+  const r=document.createElement('span'); r.className='ripple'; bar.appendChild(r); setTimeout(()=>r.remove(),650);
+  return b;
+}
+// Toque por puntero: responde al instante (sin esperar al click) y permite deslizar el dedo
+function wireCarillon(root, onHit){
+  let down=false, last=null;
+  const hit = el => { const bar = el && el.closest && el.closest('.bar'); if(!bar || bar.disabled || bar===last) return; last=bar; ctx(); onHit(bar, strike(bar)); };
+  root.addEventListener('pointerdown', e=>{ down=true; last=null; hit(e.target); });
+  root.addEventListener('pointermove', e=>{ if(down && e.pointerType!=='mouse') hit(document.elementFromPoint(e.clientX,e.clientY)); else if(down) hit(e.target); });
+  window.addEventListener('pointerup', ()=>{ down=false; last=null; });
+}
+
+/* ---------------- Dibujos SVG ---------------- */
+// Mano guidoniana (dedos en horizontal: pulgar = línea 1 abajo, meñique = línea 5 arriba)
+const LY = {1:252,2:207,3:162,4:117,5:72};
+function handY(pos){ if(pos.kind==='below') return 292; if(pos.kind==='line') return LY[pos.k]; return (LY[pos.k]+LY[pos.k+1])/2; }
+function handOne(withBadges){
+  const lens={1:100,2:120,3:124,4:120,5:106};
+  let s=`<rect x="-40" y="40" width="112" height="244" rx="46" fill="var(--skin)" stroke="var(--skin-dark)" stroke-width="2.5"/>`;
+  for(let k=1;k<=5;k++){
+    s+=`<rect x="34" y="${LY[k]-17}" width="${lens[k]}" height="34" rx="17" fill="var(--skin)" stroke="var(--skin-dark)" stroke-width="2.5"/>`;
+  }
+  // tapar la unión dedos-palma
+  s+=`<rect x="-38" y="44" width="90" height="236" rx="40" fill="var(--skin)"/>`;
+  if(withBadges){
+    for(let k=1;k<=5;k++) s+=`<circle cx="112" cy="${LY[k]}" r="11" fill="#2b2622"/><text x="112" y="${LY[k]+4.5}" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="Nunito">${k}</text>`;
+  }
+  return s;
+}
+function handSVG({mark=null, reveal=false, guide=false, show='both'}={}){
+  let s=`<svg viewBox="-10 30 420 290" role="img" aria-label="Mano guidoniana">`;
+  for(let k=1;k<=5;k++) s+=`<line x1="80" x2="320" y1="${LY[k]}" y2="${LY[k]}" stroke="#2b2622" stroke-width="3" stroke-linecap="round"/>`;
+  s+=`<g>${handOne(true)}</g><g transform="translate(400 0) scale(-1 1)">${handOne(false)}</g>`;
+  s+=clef(-8,212,0.085);
+  if(guide){
+    POS.forEach(pos=>{
+      if(show==='lines' && pos.kind!=='line') return;
+      if(show==='spaces' && pos.kind==='line') return;
+      const n=NOTES[pos.n], x = pos.kind==='line'? 180 : 222, y=handY(pos);
+      s+=`<g class="tap" data-f="${pos.f}" role="button" aria-label="Escuchar ${n.name}"><circle cx="${x}" cy="${y}" r="22" fill="transparent"/><circle cx="${x}" cy="${y}" r="17" fill="${n.color}" stroke="rgba(0,0,0,.18)"/>`+
+         `<text x="${x}" y="${y+5}" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="13" fill="${n.ink}">${n.name}</text></g>`;
+      if(pos.kind==='below') s+=`<text x="246" y="${y+5}" font-family="Nunito" font-style="italic" font-size="13" fill="#7a716a">debajo</text>`;
+    });
+  }
+  if(mark){
+    const y=handY(mark), n=NOTES[mark.n];
+    if(reveal){
+      s+=`<circle cx="200" cy="${y}" r="19" fill="${n.color}" stroke="rgba(0,0,0,.2)"/><text x="200" y="${y+5.5}" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="15" fill="${n.ink}">${n.name}</text>`;
+    } else {
+      s+=`<circle class="pulse" cx="200" cy="${y}" r="19" fill="none" stroke="var(--wine)" stroke-width="3"/>`+
+         `<circle cx="200" cy="${y}" r="19" fill="#fff" stroke="var(--wine)" stroke-width="3"/><text x="200" y="${y+7}" text-anchor="middle" font-family="Lora" font-weight="700" font-size="21" fill="var(--wine)">?</text>`;
+    }
+  }
+  return s+`</svg>`;
+}
+
+// Pentagrama en clave de sol
+const staffY = p => 140 - p*10;
+function noteHead(x, p, color, extra=''){
+  return `<ellipse cx="${x}" cy="${staffY(p)}" rx="12.5" ry="9" transform="rotate(-20 ${x} ${staffY(p)})" fill="${color}" stroke="rgba(0,0,0,.28)" stroke-width="1.5" ${extra}/>`;
+}
+function staffSVG({notes=[], labels=false, numbers=false, h=160}={}){
+  let s=`<svg viewBox="0 0 360 ${labels?180:h}" role="img" aria-label="Pentagrama en clave de sol">`;
+  for(let k=1;k<=5;k++){ const y=staffY(2*k-1); s+=`<line x1="14" x2="${numbers?320:346}" y1="${y}" y2="${y}" stroke="#2b2622" stroke-width="2"/>`;
+    if(numbers) s+=`<circle cx="336" cy="${y}" r="9" fill="#2b2622"/><text x="336" y="${y+4}" text-anchor="middle" fill="#fff" font-size="11" font-weight="900" font-family="Nunito">${k}</text>`; }
+  s+=clef(14,staffY(3),0.08);
+  notes.forEach(o=>{
+    const n=NOTES[o.n||POS[o.p].n];
+    [-1,11].forEach(L=>{ if((L<0 && o.p<=L) || (L>0 && o.p>=L)) s+=`<line x1="${o.x-19}" x2="${o.x+19}" y1="${staffY(L)}" y2="${staffY(L)}" stroke="#2b2622" stroke-width="2"/>`; });
+    if(o.pulse) s+=`<ellipse class="pulse" cx="${o.x}" cy="${staffY(o.p)}" rx="13" ry="10" fill="none" stroke="${n.color}" stroke-width="3"/>`;
+    if(labels){ const f=(POS[o.p]||{}).f;
+      s+=`<g class="tap" data-f="${f}" role="button" aria-label="Escuchar ${n.name}"><rect x="${o.x-20}" y="${staffY(o.p)-22}" width="40" height="${174-staffY(o.p)+30}" fill="transparent"/>`+noteHead(o.x, o.p, n.color)+
+         `<text x="${o.x}" y="174" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="13" fill="${n.color==='#e7b423'?'#a77f00':n.color}">${n.name}</text></g>`; }
+    else s+=noteHead(o.x, o.p, n.color);
+  });
+  return s+`</svg>`;
+}
+
+/* ---------------- Preguntas ---------------- */
+function optionsFor(correctId){ return shuffle([correctId, ...shuffle(ORDER.filter(x=>x!==correctId)).slice(0,3)]); }
+const Q = {
+  colorToName(id){ const n=NOTES[id]; return {type:'name', answer:id, freq:FREQ4[id],
+    prompt:'¿Qué nota tiene este color?', visual:`<div class="bigcircle" style="background:${n.color}"></div>`,
+    hint:`Recuerda: Do rojo · Re naranja · Mi amarillo · Fa verde claro · Sol verde oscuro · La morado · Si rosa`,
+    explain:`El ${n.colorName} es <b>${n.name}</b> (${n.letter}).`}; },
+  nameToColor(id){ const n=NOTES[id]; return {type:'color', answer:id, freq:FREQ4[id],
+    prompt:`¿De qué color es <b>${n.name}</b>?`, visual:`<div class="bigname">${n.name}</div>`,
+    hint:`Los colores van como un arcoíris: Do rojo, Re naranja, Mi amarillo, Fa y Sol verdes, La morado, Si rosa.`,
+    explain:`${n.name} es de color <b>${n.colorName}</b>.`}; },
+  nameToLetterColored(id){ const n=NOTES[id]; return {type:'letter', answer:id, freq:FREQ4[id],
+    prompt:'¿Cuál es su cifrado americano?', visual:`<div class="bigcircle" style="background:${n.color};display:flex;align-items:center;justify-content:center"><span class="bigname" style="font-size:52px;color:${n.ink}">${n.name}</span></div>`,
+    hint:`El cifrado empieza en Do = C y sigue el alfabeto: C D E F G A B.`,
+    explain:`${n.name} en cifrado americano es <b>${n.letter}</b>.`}; },
+  letterToName(id){ const n=NOTES[id]; return {type:'name', answer:id, freq:FREQ4[id],
+    prompt:'¿Qué nota es este cifrado?', visual:`<div class="bigtext">${n.letter}</div>`,
+    hint:`Truco: A = La. Desde ahí sigue el alfabeto: A La · B Si · C Do · D Re · E Mi · F Fa · G Sol.`,
+    explain:`<b>${n.letter}</b> es <b>${n.name}</b>.`}; },
+  nameToLetter(id){ const n=NOTES[id]; return {type:'letter', answer:id, freq:FREQ4[id],
+    prompt:`¿Cuál es el cifrado americano de <b>${n.name}</b>?`, visual:`<div class="bigname">${n.name}</div>`,
+    hint:`Do = C y sigue el alfabeto: Do C · Re D · Mi E · Fa F · Sol G · La A · Si B.`,
+    explain:`${n.name} se escribe <b>${n.letter}</b>.`}; },
+  hand(pos){ const n=NOTES[pos.n]; return {type:'name', answer:pos.n, freq:pos.f, pos, kind:'hand',
+    prompt:'¿Qué nota marca la mano?', visual:handSVG({mark:pos}), revealVisual:handSVG({mark:pos,reveal:true}),
+    hint: pos.kind==='below' ? 'Está fuera de los dedos, por debajo del pulgar.'
+      : pos.kind==='line' ? `Está sobre un dedo (línea). Cuenta desde el pulgar: dedos = Mi · Sol · Si · Re · Fa.`
+      : `Está entre dos dedos (espacio). Huecos de abajo arriba: Fa · La · Do · Mi.`,
+    explain:`Es <b>${n.name}</b> (${n.letter}): ${whereHand(pos)}.`}; },
+  staff(pos, asLetter){ const n=NOTES[pos.n]; return {type: asLetter?'letter':'name', answer:pos.n, freq:pos.f, pos,
+    prompt: asLetter ? '¿Cuál es el cifrado americano de esta nota?' : '¿Qué nota es?',
+    visual:staffSVG({notes:[{x:205,p:pos.p,pulse:true}], numbers:true}),
+    hint: pos.kind==='below' ? 'Está colgando justo debajo de la primera línea.'
+      : pos.kind==='line' ? `Está en una línea. Líneas de abajo arriba: Mi · Sol · Si · Re · Fa. Fíjate también en su color.`
+      : `Está en un espacio. Espacios de abajo arriba: Fa · La · Do · Mi. Fíjate también en su color.`,
+    explain:`Es <b>${n.name}</b> (${n.letter}), ${whereStaff(pos)}.`}; }
+};
+
+function buildQuestions(level){
+  const L = LEVELS[level-1]; let qs=[];
+  if(level===1){
+    const ids = shuffle(ORDER).concat(shuffle(ORDER)).slice(0,L.q);
+    const kinds = ['nameToColor','colorToName','nameToLetterColored'];
+    qs = ids.map((id,i)=>Q[kinds[i%3]](id));
+  } else if(level===2){
+    const ids = shuffle(ORDER).concat(shuffle(ORDER)).slice(0,L.q);
+    qs = ids.map((id,i)=> i%2 ? Q.nameToLetter(id) : Q.letterToName(id));
+  } else if(level===3){
+    qs = shuffle(POS).slice(0,L.q).map(Q.hand);
+  } else if(level===4){
+    qs = shuffle(POS).slice(0,L.q).map(p=>Q.staff(p));
+  } else {
+    const mk = [ ()=>Q.colorToName(pick(ORDER)), ()=>Q.letterToName(pick(ORDER)), ()=>Q.nameToLetter(pick(ORDER)),
+                 ()=>Q.hand(pick(POS)), ()=>Q.staff(pick(POS)), ()=>Q.staff(pick(POS),true) ];
+    const order = shuffle([0,1,2,3,4,5,0,1,2,3,4,5]);
+    // evitar dos preguntas idénticas seguidas
+    let last=''; qs = order.map(i=>{ let q; do{ q=mk[i](); }while(q.prompt+q.answer===last); last=q.prompt+q.answer; return q; });
+  }
+  // Algunas preguntas se responden tocando el carillón
+  const plan = {1:{n:3, from:['color'], labels:'none'}, 2:{n:4, from:['name'], labels:'names'}, 3:{n:3, from:['name'], labels:'names'},
+                4:{n:4, from:['name'], labels:'letters', silver:true}, 5:{n:4}}[level];
+  const cand = shuffle(qs.map((q,i)=>i).filter(i=> level===5 ? (qs[i].type!=='letter') : plan.from.includes(qs[i].type))).slice(0,plan.n);
+  cand.forEach(i=>{ const q=qs[i]; const n=NOTES[q.answer]; q.mode='bar';
+    if(q.pos && q.kind!=='hand'){ q.prompt='Toca esta nota en el carillón'; q.labels='letters'; q.silver=true; }
+    else if(q.kind==='hand'){ q.prompt='Toca en el carillón la nota que marca la mano'; q.labels='names'; }
+    else if(q.type==='color' || (level===5 && q.visual.includes('bigcircle'))){ q.prompt = q.type==='color' ? `Toca <b>${n.name}</b> en el carillón` : 'Toca en el carillón la nota de este color'; q.labels='none';
+      if(q.type!=='color'){ q.labels='names'; q.silver=true; } }
+    else { q.prompt = q.visual.includes('bigtext') ? `Toca la nota <b>${n.letter}</b> en el carillón` : `Toca <b>${n.name}</b> en el carillón`; q.labels = q.visual.includes('bigtext') ? 'names' : 'letters'; }
+    if(level===1 && q.type==='color'){ q.labels='none'; }
+  });
+  return qs.map(q=>Object.assign(q,{options:optionsFor(q.answer)}));
+}
+
+/* ---------------- Contenidos de aprendizaje (guías) ---------------- */
+const TAPHINT = '<p class="taphint">🔊 Toca las notas para escucharlas</p>';
+function guideHTML(level){
+  return guideBody(level) + (level>1 ? TAPHINT : '');
+}
+function guideBody(level){
+  if(level===1) return `
+    <p class="explain">Hay <b>7 notas</b>. Cada una tiene un <b>color</b> y una <b>letra</b> (cifrado americano). Toca cada tarjeta para escucharla.</p>
+    <div class="cards">${ORDER.map(id=>{const n=NOTES[id];return `<button class="ncard" data-id="${id}" style="background:${n.color};color:${n.ink}" aria-label="${n.name}, ${n.letter}, color ${n.colorName}">
+      <span class="seen">✓</span><span class="lt">${n.letter}</span><span class="nm">${n.name}</span><small style="font-weight:800;opacity:.85">${n.colorName}</small></button>`}).join('')}</div>
+    <div class="tip">💡 El cifrado americano empieza en <b>Do = C</b> y sigue el alfabeto: <b>C D E F G A B</b>.</div>`;
+  if(level===2) return `
+    <p class="explain">Las notas pueden nombrarse con su <b>nombre en español</b> o con su <b>cifrado americano</b>.</p>
+    <table class="ref"><tr><th>Cifrado americano</th><th>Nombre</th><th>Color</th></tr>
+    ${ORDER.map(id=>{const n=NOTES[id];return `<tr class="tap" data-f="${FREQ4[id]}" role="button" aria-label="Escuchar ${n.name}"><td class="l">${n.letter}</td><td>${n.name}</td><td><span class="dot" style="background:${n.color}"></span></td></tr>`}).join('')}</table>
+    <div class="tip">💡 Truco: <b>A = La</b>. Desde La, el alfabeto sigue en orden: A La · B Si · C Do · D Re · E Mi · F Fa · G Sol.</div>`;
+  if(level===3) return `
+    <p class="explain">La mano nos ayuda a visualizar y memorizar las notas. Pon los dedos en horizontal con el <b>pulgar abajo</b>.</p>
+    <div class="seg" role="tablist"><button class="on" data-show="lines">Notas en los dedos</button><button data-show="spaces">Entre los dedos</button></div>
+    <div id="handGuide">${handSVG({guide:true, show:'lines'})}</div>
+    <p class="explain" id="handText" style="text-align:center;margin:6px 0 0"></p>`;
+  if(level===4) return `
+    <p class="explain">Las <b>5 líneas</b> y los <b>4 espacios</b> se cuentan <b>de abajo hacia arriba</b>. Cada nota lleva su color.</p>
+    <div class="sub-h">Líneas</div>
+    ${staffSVG({notes:POS.filter(p=>p.kind==='line').map((p,i)=>({x:105+i*50,p:p.p})), labels:true, numbers:true})}
+    <div class="sub-h">Espacios (y el Re de debajo)</div>
+    ${staffSVG({notes:POS.filter(p=>p.kind!=='line').map((p,i)=>({x:95+i*50,p:p.p})), labels:true, numbers:true})}
+    <div class="tip">💡 El <b>Re</b> queda justo debajo del pentagrama, colgando de la primera línea.</div>`;
+  return `
+    <p class="explain">Resumen para no olvidar: cada nota con su <b>color</b>, su <b>cifrado</b> y su lugar en el <b>pentagrama</b> y en la <b>mano</b>.</p>
+    <div class="sub-h">Líneas, de abajo hacia arriba</div>
+    <div class="summary-row">${POS.filter(p=>p.kind==='line').map(p=>{const n=NOTES[p.n];return `<span class="chip tap" data-f="${p.f}" role="button" style="background:${n.color};color:${n.ink}">${n.name}<small>${n.letter}</small></span>`}).join('')}</div>
+    <div class="sub-h">Espacios, de abajo hacia arriba</div>
+    <div class="summary-row">${POS.filter(p=>p.kind==='space').map(p=>{const n=NOTES[p.n];return `<span class="chip tap" data-f="${p.f}" role="button" style="background:${n.color};color:${n.ink}">${n.name}<small>${n.letter}</small></span>`}).join('')}</div>
+    <p class="explain" style="text-align:center;font-size:14px">El <b>Re</b> queda justo debajo del pentagrama (y del pulgar).</p>`;
+}
+function wireGuide(root){
+  if(!root._tapWired){ root._tapWired=true; root.addEventListener('click', e=>{ const t=e.target.closest && e.target.closest('.tap'); if(!t || !root.contains(t)) return;
+    ctx(); glock(+t.dataset.f); t.classList.remove('hit'); void t.getBoundingClientRect(); t.classList.add('hit'); }); }
+  root.querySelectorAll('.ncard').forEach(b=>b.onclick=()=>{ tone(FREQ4[b.dataset.id],.8); b.classList.add('done'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); });
+  const seg = root.querySelector('.seg');
+  if(seg){
+    const txt = {lines:'Del pulgar al meñique: <b>Mi · Sol · Si · Re · Fa</b>', spaces:'Entre los dedos: <b>Fa · La · Do · Mi</b> · Debajo del pulgar: <b>Re</b>'};
+    const set = v => { seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.show===v));
+      root.querySelector('#handGuide').innerHTML = handSVG({guide:true, show:v}); root.querySelector('#handText').innerHTML = txt[v]; };
+    seg.querySelectorAll('button').forEach(b=>b.onclick=()=>set(b.dataset.show)); set('lines');
+  }
+}
+
+/* ---------------- Pantallas ---------------- */
+const unlocked = n => store.unlockAll || (n===1 ? !!store.repaso : (store.stars[n-1]||0)>0);
+const starStr = (k,max=3) => Array.from({length:max},(_,i)=>`<span class="${i<k?'':'off'}">⭐</span>`).join('');
+function levelIcon(n){
+  if(n===1) return `<div style="display:grid;grid-template-columns:repeat(4,12px);gap:3px">${ORDER.map(id=>`<span style="width:12px;height:12px;border-radius:50%;background:${NOTES[id].color}"></span>`).join('')}</div>`;
+  if(n===2) return `<span style="font-family:Lora;font-weight:700;font-size:20px;color:var(--wine)">C·Do</span>`;
+  if(n===3) return `<span style="font-size:34px">🖐️</span>`;
+  if(n===4) return `<svg viewBox="0 0 60 50" width="56">${[10,18,26,34,42].map(y=>`<line x1="2" x2="58" y1="${y}" y2="${y}" stroke="#2b2622" stroke-width="1.5"/>`).join('')}<ellipse cx="22" cy="34" rx="6" ry="4.2" fill="#184b40"/><ellipse cx="40" cy="22" rx="6" ry="4.2" fill="#e791ba"/></svg>`;
+  return `<span style="font-size:32px">🏆</span>`;
+}
+
+function showMap(){
+  clearTimeout(timer); CS.simon.on=false;
+  setTop('home');
+  $('#app').innerHTML = `
+    <h1 class="gtitle"><img src="${GRAC}" alt="">GRAC</h1>
+    <p class="lead" style="margin:-2px 0 4px;font-family:Lora,serif;font-weight:700;font-size:20px;color:var(--wine)">Las notas musicales</p>
+    <div class="chips">${ORDER.map(id=>chip(id)).join('')}</div>
+    <button class="review" id="goReview"><span class="ic">📖</span>
+      <span><div class="t">Repaso</div><div class="s">Colores, cifrado, mano y pentagrama</div></span>
+      <span class="badge">${store.repaso?'✓ Hecho':'Empieza aquí'}</span></button>
+    <button class="review wood" id="goCari"><span class="ic">🎵</span>
+      <span><div class="t">Interpreta</div><div class="s">Toca libre, aprende canciones y repite melodías</div></span>
+      <span class="badge" style="color:#6e4128">¡Juega!</span></button>
+`;
+  document.querySelectorAll('.lvl').forEach(b=>b.onclick=()=>{ ctx(); startGame(+b.dataset.l); });
+  $('#goReview').onclick=()=>showRepaso(0);
+  $('#goCari').onclick=()=>{ ctx(); showCarillon('libre'); };
+  const u=$('#unlock'); if(u) u.onclick=()=>{ store.unlockAll=true; save(); showMap(); };
+  window.scrollTo(0,0);
+}
+
+const REVIEW = ['Notas y colores','Cifrado americano','Mano guidoniana','Pentagrama','Resumen'];
+function setTop(where){
+  $('#homeBtn').style.display = where==='home' ? 'none' : '';
+  $('#reviewBtn').classList.toggle('on', where==='review');
+}
+let seenSteps = new Set();
+function showRepaso(step){
+  clearTimeout(timer); CS.simon.on=false; setTop('review'); seenSteps.add(step);
+  const last = step===REVIEW.length-1;
+  if(last){ store.repaso=true; save(); }
+  $('#app').innerHTML = `<div class="panel">
+    <span class="tag">Repaso · ${step+1} de ${REVIEW.length}</span>
+    <div class="steps">${REVIEW.map((t,i)=>`<button data-s="${i}" class="${i===step?'on':seenSteps.has(i)?'seen':''}" aria-label="${t}">${i+1}</button>`).join('')}</div>
+    <h2>${REVIEW[step]}</h2>
+    ${guideHTML(step+1)}
+    <div class="navrow">
+      ${step>0?`<button class="cta ghost" id="prev">← Anterior</button>`:''}
+      ${last?`<button class="cta" id="toLevels">¡A interpretar! 🎵</button>`:`<button class="cta" id="next">Siguiente →</button>`}
+    </div></div>`;
+  wireGuide($('#app'));
+  document.querySelectorAll('.steps button').forEach(b=>b.onclick=()=>showRepaso(+b.dataset.s));
+  if($('#prev')) $('#prev').onclick=()=>showRepaso(step-1);
+  if($('#next')) $('#next').onclick=()=>showRepaso(step+1);
+  if($('#toLevels')) $('#toLevels').onclick=()=>{ ctx(); showCarillon('libre'); };
+  window.scrollTo(0,0);
+}
+
+let G=null, timer=null;
+
+// Canciones: frases separadas por "|"; cada nota = índice de lámina (0 = Do grave … 12 = La agudo), ":n" = duración en pulsos
+const SONG_SRC = {
+  escala:{t:'La escala', bpm:120, src:'0 1 2 3 4 5 6 7:2|7 6 5 4 3 2 1 0:2'},
+  cumple:{t:'🎂 Cumpleaños feliz', bpm:110, src:'4:.75 4:.25 5 4 7 6:2|4:.75 4:.25 5 4 8 7:2|4:.75 4:.25 11 9 7 6 5:2|10:.75 10:.25 9 7 8 7:3'},
+  alegria:{t:'Himno de la alegría', bpm:120, src:'2 2 3 4 4 3 2 1|0 0 1 2 2:1.5 1:.5 1:2|2 2 3 4 4 3 2 1|0 0 1 2 1:1.5 0:.5 0:2'},
+  navidad:{t:'🎄 Navidad, navidad', bpm:150, src:'2 2 2:2 2 2 2:2|2 4 0:1.5 1:.5 2:4|3 3 3:1.5 3:.5 3 2 2 2:.5 2:.5|2 1 1 2 1:2 4:2|2 2 2:2 2 2 2:2|2 4 0:1.5 1:.5 2:4|3 3 3:1.5 3:.5 3 2 2 2:.5 2:.5|4 4 3 1 0:4'},
+  jingle:{t:'🔔 Jingle Bells', bpm:150, src:'4 9 8 7 4:3 4:.5 4:.5|4 9 8 7 5:4|5 10 9 8 6:4|11 11 10 8 9:4|4 9 8 7 4:4|4 9 8 7 5:3 5|5 10 9 8 11 11 11 11|12 11 10 8 7:4|9 9 9:2 9 9 9:2|9 11 7:1.5 8:.5 9:4|10 10 10:1.5 10:.5 10 9 9 9:.5 9:.5|9 8 8 9 8:2 11:2|9 9 9:2 9 9 9:2|9 11 7:1.5 8:.5 9:4|10 10 10:1.5 10:.5 10 9 9 9:.5 9:.5|11 11 10 8 7:4'}
+};
+const SONGS = Object.fromEntries(Object.entries(SONG_SRC).map(([k,v])=>{
+  const phrases = v.src.split('|').map(ph=>ph.trim().split(/\s+/).map(t=>{ const [i,d]=t.split(':'); return {i:+i, d:d?+d:1}; }));
+  return [k,{t:v.t, bpm:v.bpm, phrases, seq:phrases.flat().map(x=>x.i), notes:phrases.flat()}];
+}));
+let CS = {mode:'libre', labels:'both', song:'escala', k:0, simon:{seq:[],k:0,busy:false,on:false}};
+let keyHandler=null;
+function showCarillon(mode){
+  clearTimeout(timer); setTop('cari'); CS.mode=mode||CS.mode;
+  const m=CS.mode;
+  let top='';
+  if(m==='libre') top = `<div class="stage" id="stage" style="min-height:150px">${staffSVG({notes:[]})}</div><div class="now" id="now"><span style="color:var(--muted);font-weight:800">Toca una lámina…</span></div>
+    <div class="pills" id="lab"><button data-l="both">Nombre y cifrado</button><button data-l="letters">Solo cifrado</button><button data-l="none">Solo colores</button></div>`;
+  if(m==='cancion') top = `<div class="pills" id="songs">${Object.entries(SONGS).map(([k,v])=>`<button data-s="${k}">${v.t}</button>`).join('')}</div>
+    <p class="explain" style="text-align:center;margin:6px 0 0">Toca la lámina que brilla. ¡Sigue los colores!</p><div class="song" id="song"></div>
+    <div class="pills"><button id="listen">▶ Escuchar la canción</button><button id="restart">↻ Empezar de nuevo</button></div>`;
+  if(m==='simon') top = `<p class="explain" style="text-align:center;margin:4px 0">Escucha la melodía y repítela tocando las mismas láminas. ¡Cada vez es una nota más larga!</p>
+    <div class="score"><span>Ronda <b id="round">0</b></span><span>Récord <b>${store.simon||0}</b></span></div>
+    <div class="now" id="now"><button class="cta" id="simonGo" style="margin:0;width:auto;padding:12px 22px">▶ Empezar</button></div>`;
+  $('#app').innerHTML = `<div class="panel">
+    <span class="tag">Interpreta</span>
+    <div class="seg"><button data-m="libre">Tocar libre</button><button data-m="cancion">Canciones</button><button data-m="simon">Repite la melodía</button></div>
+    ${top}
+    <div style="margin-top:12px">${carillonHTML({labels: m==='libre'?CS.labels:'both', count: m==='simon'?8:13})}</div>
+    ${m==='libre'?'<p class="explain" style="text-align:center;font-size:13px;margin:10px 0 0">Desliza el dedo por las láminas para hacer un glissando 🎶</p>':''}
+  </div>`;
+  document.querySelectorAll('.seg button').forEach(b=>{ b.classList.toggle('on', b.dataset.m===m); b.onclick=()=>{ CS.simon.on=false; showCarillon(b.dataset.m); }; });
+  const cari=$('#cari');
+  if(m==='libre'){
+    document.querySelectorAll('#lab button').forEach(b=>{ b.classList.toggle('on',b.dataset.l===CS.labels); b.onclick=()=>{ CS.labels=b.dataset.l; showCarillon('libre'); }; });
+    wireCarillon(cari, (bar,b)=>{ const n=NOTES[b.n];
+      $('#now').innerHTML = `${chip(b.n)}<span class="lt" style="color:${n.color==='#e7b423'?'#b88a00':n.color}">${n.letter}</span>`;
+      $('#stage').innerHTML = staffSVG({notes:[{x:205,p:b.i-1,n:b.n}], numbers:true, h:166});
+    });
+  }
+  if(m==='cancion'){
+    const song=()=>SONGS[CS.song].seq;
+    const draw=()=>{ const S=SONGS[CS.song]; let start=0, pi=0;
+      while(pi<S.phrases.length-1 && start+S.phrases[pi].length<=CS.k){ start+=S.phrases[pi].length; pi++; }
+      const row=(ph,off,faded)=>`<div class="ph${faded?' next':''}">${ph.map((x,j)=>{ const k=off+j, n=NOTES[CARI[x.i].n]; return `<span class="${k<CS.k?'done':k===CS.k?'cur':''}" style="background:${n.color};color:${n.ink}">${n.name}</span>`; }).join('')}</div>`;
+      $('#song').innerHTML = `<div class="phn">Frase ${Math.min(pi+1,S.phrases.length)} de ${S.phrases.length}</div>` + row(S.phrases[pi],start,false)
+        + (pi+1<S.phrases.length ? row(S.phrases[pi+1], start+S.phrases[pi].length, true) : '');
+      document.querySelectorAll('#cari .bar').forEach(b=>b.classList.toggle('glow', CS.k<song().length && +b.dataset.i===song()[CS.k])); };
+    document.querySelectorAll('#songs button').forEach(b=>{ b.classList.toggle('on',b.dataset.s===CS.song); b.onclick=()=>{ CS.song=b.dataset.s; CS.k=0; CS.playId=(CS.playId||0)+1; showCarillon('cancion'); }; });
+    $('#restart').onclick=()=>{ CS.k=0; draw(); };
+    $('#listen').onclick=()=>{ ctx(); const S=SONGS[CS.song], beat=60000/S.bpm; let t=0; CS.playId=(CS.playId||0)+1; const id=CS.playId;
+      S.notes.forEach(x=>{ setTimeout(()=>{ if(CS.playId!==id || CS.mode!=='cancion' || !document.body.contains(cari)) return; const bar=cari.querySelector(`[data-i="${x.i}"]`); strike(bar); bar.classList.add('glow'); setTimeout(()=>bar.classList.remove('glow'), Math.min(beat*x.d*.8,500)); }, t); t+=beat*x.d; }); };
+    wireCarillon(cari, (bar,b)=>{ const s=song(); if(CS.k>=s.length) return;
+      if(b.i===s[CS.k]){ CS.k++; draw(); if(CS.k===s.length){ setTimeout(()=>{ sndWin(); confetti(); },300); $('#song').insertAdjacentHTML('afterend','<p class="feedback"><span class="good">✓ ¡Canción completada!</span></p>'); } }
+      else { bar.classList.remove('wrong'); void bar.offsetWidth; bar.classList.add('wrong'); setTimeout(()=>bar.classList.remove('wrong'),400); } });
+    draw();
+  }
+  if(m==='simon'){
+    const S=CS.simon; S.seq=[]; S.k=0; S.busy=false; S.on=true;
+    const bars=[...cari.querySelectorAll('.bar')];
+    const playSeq=()=>{ S.busy=true; S.k=0; $('#now').innerHTML='<span style="font-weight:900;color:var(--wine)">👂 Escucha…</span>';
+      S.seq.forEach((bi,k)=>setTimeout(()=>{ if(!S.on) return; const bar=bars[bi]; strike(bar); bar.classList.add('glow'); setTimeout(()=>bar.classList.remove('glow'),380); },600+k*620));
+      setTimeout(()=>{ if(!S.on) return; S.busy=false; $('#now').innerHTML='<span style="font-weight:900;color:var(--ok)">👆 ¡Tu turno!</span>'; }, 600+S.seq.length*620); };
+    const nextRound=()=>{ if(!S.on || !$('#round')) return; S.seq.push(Math.floor(Math.random()*8)); $('#round').textContent=S.seq.length; playSeq(); };
+    $('#simonGo').onclick=()=>{ ctx(); S.seq=[Math.floor(Math.random()*8),Math.floor(Math.random()*8)]; nextRound(); };
+    wireCarillon(cari, (bar,b)=>{ if(S.busy || !S.seq.length) return;
+      if(b.i===S.seq[S.k]){ S.k++; if(S.k===S.seq.length){ S.busy=true; $('#now').innerHTML='<span style="font-weight:900;color:var(--ok)">✓ ¡Muy bien!</span>'; setTimeout(nextRound,900); } }
+      else { S.busy=true; sndWrong(); const got=S.seq.length-1; if(got>(store.simon||0)){ store.simon=got; save(); }
+        const n=NOTES[CARI[S.seq[S.k]].n];
+        $('#now').innerHTML=`<div style="text-align:center"><div style="font-weight:900;color:var(--bad)">¡Uy! Tocaba ${n.name} (${n.letter})</div><div style="font-weight:800;color:var(--muted);font-size:14px">Recordaste ${got} nota${got===1?'':'s'}</div>
+          <button class="cta" id="simonGo2" style="margin:8px auto 0;width:auto;padding:10px 20px">↻ Otra vez</button></div>`;
+        $('#simonGo2').onclick=()=>showCarillon('simon'); } });
+  }
+  // Teclado del ordenador: A S D F G H J K L Ñ '
+  if(keyHandler) window.removeEventListener('keydown', keyHandler);
+  keyHandler = e=>{ const k='asdfghjklñ\'zx'.indexOf(e.key.toLowerCase()); const bar=cari.querySelector(`[data-i="${k}"]`); if(k>=0 && bar && document.body.contains(cari)){ bar.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true})); window.dispatchEvent(new PointerEvent('pointerup')); } };
+  window.addEventListener('keydown', keyHandler);
+  window.scrollTo(0,0);
+}
+function startGame(level){ clearTimeout(timer); CS.simon.on=false; setTop('game'); window.scrollTo(0,0); G={level, qs:buildQuestions(level), i:0, errors:0, hints:0}; renderQ(); }
+
+function optHTML(q,id){
+  const n=NOTES[id];
+  if(q.type==='color') return `<button class="opt swatch" data-id="${id}" aria-label="${n.colorName}"><span style="background:${n.color}"></span></button>`;
+  if(q.type==='letter') return `<button class="opt letter" data-id="${id}">${n.letter}</button>`;
+  return `<button class="opt" data-id="${id}">${n.name}</button>`;
+}
+
+function renderQ(){
+  const q=G.qs[G.i], L=LEVELS[G.level-1];
+  q.tries=0;
+  $('#app').innerHTML = `
+    <div class="gamebar">
+      <span class="tag">Nivel ${G.level}</span>
+      <div class="progress"><i style="width:${G.i/G.qs.length*100}%"></i></div>
+      <span class="qcount">${G.i+1}/${G.qs.length}</span>
+    </div>
+    <div class="prompt">${q.prompt}</div>
+    <div class="stage" id="stage">${q.visual}</div>
+    <div id="answers">${q.mode==='bar' ? carillonHTML({labels:q.labels, silver:q.silver, h:170}) : `<div class="options">${q.options.map(id=>optHTML(q,id)).join('')}</div>`}</div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <div class="tools" id="tools">
+      <button class="iconbtn" id="hintBtn">💡 Pista</button>
+      ${q.kind==='hand'||q.pos?`<button class="iconbtn" id="playBtn" aria-label="Escuchar la nota">🎵 Oír</button>`:''}
+    </div>`;
+  if(q.mode==='bar') wireCarillon($('#cari'), (bar,b)=>answer(bar,b));
+  else document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b));
+  $('#hintBtn').onclick=()=>{ if(!$('.hintbox')){ G.hints++; $('#fb').insertAdjacentHTML('beforebegin',`<div class="hintbox">${q.hint}</div>`);} };
+  const pb=$('#playBtn'); if(pb) pb.onclick=()=>tone(q.freq,.9);
+}
+
+function answer(btn, barInfo){
+  const q=G.qs[G.i], id=btn.dataset.id, n=NOTES[q.answer], isBar=!!barInfo;
+  if(q.locked) return;
+  if(id===q.answer){
+    q.locked=true;
+    if(isBar){
+      document.querySelectorAll('#answers .bar').forEach(b=>{ b.disabled=true; if(b!==btn) b.classList.add('dim'); });
+      btn.classList.remove('silver'); btn.classList.add('glow'); btn.innerHTML=`<span class="bl">${n.letter}</span><span class="bn">${n.name}</span>`;
+    } else {
+      document.querySelectorAll('.opt').forEach(b=>{ b.disabled=true; if(b!==btn) b.classList.add('dim'); });
+      btn.classList.add('correct');
+      if(q.type!=='color'){ btn.style.background=n.color; btn.style.color=n.ink; } else { btn.style.background=n.color+'33'; btn.style.borderColor=n.color; }
+      tone(q.freq,.8);
+    }
+    if(q.revealVisual) $('#stage').innerHTML=q.revealVisual;
+    const praise = q.tries ? '¡Ahora sí!' : pick(['¡Muy bien!','¡Genial!','¡Perfecto!','¡Bravo!','¡Eso es!']);
+    $('#fb').innerHTML = `<span class="good">✓ ${praise}</span><small>${q.explain}</small>`;
+    timer=setTimeout(nextQ, q.tries? 1700 : 1300);
+  } else {
+    q.tries++; if(q.tries===1) G.errors++;
+    btn.classList.add('wrong'); btn.disabled=true; setTimeout(sndWrong, isBar?180:0);
+    const chosen=NOTES[id];
+    const what = isBar ? `esa lámina es ${chosen.name} (${chosen.letter})` : q.type==='color' ? `ese color es el de ${chosen.name}` : q.type==='letter' ? `no es ${chosen.letter} (${chosen.letter} es ${chosen.name})` : `no es ${chosen.name}`;
+    $('#fb').innerHTML = `<span class="bad">✗ Casi… ${what}.</span><small>Inténtalo otra vez${$('.hintbox')?'':' o pide una pista 💡'}</small>`;
+    if(q.tries>=2){ // tras dos fallos, mostramos la respuesta
+      q.locked=true;
+      if(isBar){ let shown=false; document.querySelectorAll('#answers .bar').forEach(b=>{ b.disabled=true;
+        const match = b.dataset.id===q.answer && (!q.pos || CARI[+b.dataset.i].f===q.pos.f || (!shown && !CARI.some(c=>c.f===q.pos.f)));
+        if(match && !shown){ shown=true; b.classList.remove('silver'); b.classList.add('glow'); b.innerHTML=`<span class="bl">${n.letter}</span><span class="bn">${n.name}</span>`; } else b.classList.add('dim'); }); }
+      document.querySelectorAll('.opt').forEach(b=>{ b.disabled=true; if(b.dataset.id===q.answer){ b.classList.add('correct'); if(q.type!=='color'){b.style.background=n.color;b.style.color=n.ink;} else {b.style.borderColor=n.color;b.style.background=n.color+'33';} } else b.classList.add('dim'); });
+      if(q.revealVisual) $('#stage').innerHTML=q.revealVisual;
+      tone(q.freq,.8);
+      $('#fb').innerHTML = `<span class="bad">La respuesta era:</span><small>${q.explain}</small><button class="cta ghost next" id="nx">Siguiente →</button>`;
+      $('#nx').onclick=nextQ;
+    }
+  }
+}
+function nextQ(){ G.i++; if(G.i>=G.qs.length) showResult(); else renderQ(); }
+
+function showResult(){
+  const total=G.qs.length, ok=total-G.errors;
+  const stars = G.errors===0 ? 3 : G.errors<=2 ? 2 : 1;
+  store.stars[G.level]=Math.max(store.stars[G.level]||0, stars); save();
+  const hasNext = G.level<5;
+  const msg = stars===3 ? '¡Perfecto! Lo dominas.' : stars===2 ? '¡Muy bien! Casi perfecto.' : '¡Buen trabajo! Repite para conseguir más estrellas.';
+  $('#app').innerHTML = `<div class="panel result">
+    <span class="tag">Nivel ${G.level} completado</span>
+    <div class="bigstars">${Array.from({length:3},(_,i)=>`<span style="${i<stars?'':'opacity:.18;filter:grayscale(1)'}">⭐</span>`).join('')}</div>
+    <h2>${msg}</h2>
+    <p class="explain">Acertaste <b>${ok} de ${total}</b> a la primera${G.hints?` · usaste ${G.hints} pista${G.hints>1?'s':''}`:''}.</p>
+    ${hasNext?`<button class="cta" id="nextL">Siguiente nivel: ${LEVELS[G.level].title} ▶</button>`:`<p class="explain"><b>🏆 ¡Has completado todos los niveles!</b></p>`}
+    <button class="cta ghost" id="again">↻ Repetir nivel</button>
+    <button class="cta ghost" id="map">Ver todos los niveles</button></div>`;
+  sndWin(); confetti();
+  if(hasNext) $('#nextL').onclick=()=>startGame(G.level+1);
+  $('#again').onclick=()=>startGame(G.level);
+  $('#map').onclick=showMap;
+  window.scrollTo(0,0);
+}
+
+function confetti(){
+  const c=document.createElement('div'); c.className='confetti';
+  for(let i=0;i<34;i++){ const s=document.createElement('span'); const n=NOTES[ORDER[i%7]];
+    s.textContent=pick(['♪','♫','♩','●']); s.style.color=n.color; s.style.left=Math.random()*100+'vw';
+    s.style.animationDuration=(1.8+Math.random()*1.8)+'s'; s.style.animationDelay=(Math.random()*.6)+'s'; s.style.fontSize=(18+Math.random()*18)+'px'; c.appendChild(s); }
+  document.body.appendChild(c); setTimeout(()=>c.remove(),4500);
+}
+
+document.querySelector('.logo-sm').src=GRAC; document.querySelector('.logo-sm').alt='GRAC';
+document.documentElement.style.setProperty('--mm', `url(${LOGO})`);
+// GRAC: esta página muestra un solo apartado (la portada de GRAC hace de menú)
+setTop=function(){ $('#homeBtn').style.display='none'; $('#reviewBtn').style.display='none'; };
+showMap=function(){ showCarillon('libre'); };
+showCarillon('libre');
+</script>
+</body>
+</html>
