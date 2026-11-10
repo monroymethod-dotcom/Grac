@@ -5,12 +5,92 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GRAC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#18101e;--red:#de2c46;--green:#2eb060;--gold:#ffd640;--cyan:#50dcff;--bg:#0b0a1a}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:#fff;font-family:'Press Start 2P',monospace}
 body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%}
+
+/* ============ PORTADA ANIMADA ============ */
+.cover{position:fixed;inset:0;z-index:50;background:#fffdf6;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  transition:opacity .5s ease,transform .5s ease}
+.cover.out{opacity:0;transform:scale(1.08);pointer-events:none}
+.stripes{position:absolute;left:0;right:0;height:min(5.1vw,5.1vh,56px);display:flex;flex-direction:column;z-index:3}
+.stripes.top{top:0}.stripes.bot{bottom:0}
+.stripes i{flex:1;display:block;transform:scaleX(0);transform-origin:left;animation:stripe .7s cubic-bezier(.6,.05,.3,1) forwards}
+.stripes.bot i{transform-origin:right}
+.stripes i:nth-child(1){background:#f5002c;animation-delay:.05s}
+.stripes i:nth-child(2){background:#00b012;animation-delay:.15s}
+.stripes i:nth-child(3){background:#2a3df5;animation-delay:.25s}
+.stripes i:nth-child(4){background:#e3e600;animation-delay:.35s}
+@keyframes stripe{to{transform:scaleX(1)}}
+
+.cv{position:relative;width:min(100vw,100vh);aspect-ratio:1/1;container-type:inline-size}
+.blob{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);animation:blobIn .9s cubic-bezier(.3,1.4,.5,1) forwards,breathe 6s ease-in-out 1s infinite}
+.b1{left:5vmin;top:6vmin;width:56vmin;height:56vmin;background:#ffb6c1;animation-delay:.2s,1.1s}
+.b2{left:calc(100% - 5vmin);top:10vmin;width:62vmin;height:62vmin;background:#f8f8c0;animation-delay:.3s,1.6s}
+.b3{left:5vmin;top:calc(100% - 16vmin);width:52vmin;height:52vmin;background:#c0ecc0;animation-delay:.4s,2.1s}
+.b4{left:calc(100% - 5vmin);top:calc(100% - 5vmin);width:56vmin;height:56vmin;background:#bcc4fa;animation-delay:.5s,2.6s}
+@keyframes blobIn{to{transform:translate(-50%,-50%) scale(1)}}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+
+.note{position:absolute;font-family:'Segoe UI Symbol','Noto Music','Apple Symbols',serif;line-height:1;transform:translate(-50%,-50%);
+  opacity:0;animation:noteIn .6s ease-out forwards,float 3.2s ease-in-out infinite;font-weight:700}
+.n1{left:9%;top:18.5%;font-size:7cqw;color:#e3e600;animation-delay:1.2s,1.8s}
+.n2{left:85.5%;top:16%;font-size:8cqw;color:#00b012;animation-delay:1.35s,2.0s}
+.n3{left:15.5%;top:46.5%;font-size:4cqw;color:#f5002c;animation-delay:1.5s,2.3s}
+.n4{left:78%;top:43%;font-size:5cqw;color:#2a3df5;animation-delay:1.65s,2.6s}
+.n5{left:10%;top:74.5%;font-size:6cqw;color:#2a3df5;animation-delay:1.8s,1.9s}
+.n6{left:86.5%;top:69.5%;font-size:8cqw;color:#f5002c;animation-delay:1.95s,2.2s}
+@keyframes noteIn{from{opacity:0;margin-top:4cqw}to{opacity:1;margin-top:0}}
+@keyframes float{0%,100%{rotate:-8deg;translate:0 0}50%{rotate:8deg;translate:0 -1.6cqw}}
+
+.card{position:absolute;left:50%;top:30%;width:27.8cqw;height:27.8cqw;margin:-13.9cqw 0 0 -13.9cqw;
+  background:#f6f6f6;border-radius:4.4cqw;box-shadow:0 -1.4cqw 0 #d4d4da;display:flex;align-items:center;justify-content:center;
+  transform:scale(0) rotate(-12deg);animation:cardIn .8s cubic-bezier(.3,1.6,.5,1) .6s forwards,bob 3s ease-in-out 1.6s infinite}
+.card img{mix-blend-mode:multiply;width:82%;height:auto;display:block;animation:wiggle 4s ease-in-out 2.4s infinite}
+@keyframes cardIn{to{transform:scale(1) rotate(0)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.2cqw)}}
+@keyframes wiggle{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-6deg)}92%{transform:rotate(6deg)}95%{transform:rotate(-3deg)}}
+
+.title{position:absolute;left:50%;top:47.3%;width:44cqw;margin:0 0 0 -22cqw;display:block;
+  clip-path:inset(0 100% 0 0);transform:scale(.6);animation:logoIn .9s cubic-bezier(.3,1.4,.5,1) 1.0s forwards}
+.title.glow{animation:logoIn .9s cubic-bezier(.3,1.4,.5,1) 1.0s forwards,hop 2.4s ease-in-out 2.4s infinite}
+@keyframes logoIn{0%{clip-path:inset(0 100% 0 0);transform:scale(.6)}60%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 0 0);transform:scale(1)}}
+@keyframes hop{0%,80%,100%{transform:scale(1) translateY(0)}88%{transform:scale(1.04) translateY(-1.2cqw)}}
+
+.sub{position:absolute;left:0;right:0;top:60.5%;text-align:center;margin:0;font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:4.4cqw;color:#c8102e;opacity:0;animation:fadeUp .6s ease-out 1.9s forwards}
+.tag{position:absolute;left:0;right:0;top:69.2%;text-align:center;margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:2.6cqw;color:#1c2550}
+.tag span{display:inline-block;opacity:0;animation:fadeUp .5s ease-out forwards}
+.tag span:nth-child(1){animation-delay:2.2s}.tag span:nth-child(2){animation-delay:2.35s}.tag span:nth-child(3){animation-delay:2.5s}
+.tag span:nth-child(4){animation-delay:2.65s}.tag span:nth-child(5){animation-delay:2.8s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(2cqw)}to{opacity:1;transform:translateY(0)}}
+
+.enter{position:absolute;left:50%;top:77.5%;width:29cqw;height:9.4cqw;margin-left:-14.5cqw;border:none;border-radius:5cqw;cursor:pointer;
+  background:#0d1442;color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:3.4cqw;letter-spacing:.25cqw;
+  box-shadow:0 -.9cqw 0 #f5002c;display:flex;align-items:center;justify-content:center;gap:1.6cqw;
+  opacity:0;transform:scale(.3);animation:pop .55s cubic-bezier(.3,1.6,.5,1) 3s forwards,beat 1.6s ease-in-out 3.6s infinite;
+  transition:box-shadow .1s,translate .1s}
+.enter:hover{filter:brightness(1.25)}
+.enter:active{translate:0 .6cqw;box-shadow:0 -.3cqw 0 #f5002c}
+.enter:focus-visible{outline:.5cqw solid #e3e600;outline-offset:.6cqw}
+.enter .arr{display:inline-block;animation:nudge .9s ease-in-out 3.6s infinite}
+@keyframes pop{to{opacity:1;transform:scale(1)}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(1cqw)}}
+
+.sig{position:absolute;left:0;right:0;top:89%;justify-content:center;display:flex;align-items:center;gap:1.6cqw;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:2.7cqw;color:#0d1442;opacity:0;animation:fadeUp .6s ease-out 3.3s forwards;white-space:nowrap}
+.sig img{width:6.2cqw;height:6.2cqw;border-radius:50%;background:#fff;animation:spin 8s linear 3.5s infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.spark{position:absolute;width:1.4cqw;height:1.4cqw;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);animation:spark .7s ease-out forwards}
+@keyframes spark{to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.3)}}
+@media (prefers-reduced-motion:reduce){.cover *{animation-duration:.01s!important;animation-iteration-count:1!important;animation-delay:0s!important}}
+
+/* ============ JUEGO (existente) ============ */
 .cabinet{width:min(100vw,calc(100vh * 16 / 9));padding:10px}
 .stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:4px solid var(--ink);
   box-shadow:0 0 0 4px var(--cyan),0 0 0 8px var(--ink),0 18px 40px rgba(0,0,0,.6);overflow:hidden;container-type:inline-size;border-radius:6px}
@@ -18,7 +98,6 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .stage video{opacity:0;transition:opacity .05s}.stage video.on{opacity:1}
 .tap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,6,24,.45)}
 .hidden{display:none!important}
-/* start screen */
 .start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2cqw;
   background:#f7f7f7;color:#111;text-align:center}
 .start .head{width:52cqw;height:auto;display:block;margin-bottom:1cqw}
@@ -27,7 +106,6 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .start p{margin:0;font-size:1.6cqw;line-height:1.7;max-width:70cqw;text-shadow:.2cqw .2cqw 0 var(--ink)}
 .blink{animation:blink 1s steps(2,start) infinite}
 @keyframes blink{to{visibility:hidden}}
-/* pixel buttons */
 .pbtn{font-family:inherit;color:#fff;cursor:pointer;border:.35cqw solid #fff;outline:.35cqw solid var(--ink);
   background:var(--red);border-radius:1.6cqw;box-shadow:.8cqw .8cqw 0 rgba(24,16,30,.75);display:flex;align-items:center;gap:1.4cqw;
   padding:.8cqw 2.2cqw .8cqw .8cqw;transition:transform .08s,box-shadow .08s,background .15s}
@@ -43,9 +121,9 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .start .foot{max-width:none!important;text-align:center;position:absolute;left:0;right:0;bottom:2.2cqw;margin:0;font-size:1.2cqw;opacity:.8}
 .btnrow .startbtn .lb{font-size:1.7cqw}
 .pbtn.gold{background:#f4c430;color:#1a1020}.pbtn.gold .lb{text-shadow:none}
-.hot{position:absolute;transform:translate(-50%,-50%);animation:pop .35s cubic-bezier(.3,1.6,.6,1) both}
-.hot.pulse{animation:pop .35s cubic-bezier(.3,1.6,.6,1) both,pulse 1s ease-in-out .4s infinite}
-@keyframes pop{from{transform:translate(-50%,-50%) scale(.1)}to{transform:translate(-50%,-50%) scale(1)}}
+.hot{position:absolute;transform:translate(-50%,-50%);animation:pop2 .35s cubic-bezier(.3,1.6,.6,1) both}
+.hot.pulse{animation:pop2 .35s cubic-bezier(.3,1.6,.6,1) both,pulse 1s ease-in-out .4s infinite}
+@keyframes pop2{from{transform:translate(-50%,-50%) scale(.1)}to{transform:translate(-50%,-50%) scale(1)}}
 @keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.05)}}
 .ring{position:absolute;border:.5cqw solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;animation:ring .45s ease-out forwards}
 @keyframes ring{from{width:10cqw;height:5cqw;opacity:1}to{width:42cqw;height:20cqw;opacity:0}}
@@ -54,17 +132,33 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .skip{position:absolute;right:1.4cqw;bottom:1.4cqw;font-family:inherit;font-size:1.1cqw;background:rgba(10,10,30,.7);color:#fff;border:.2cqw solid #fff;border-radius:.6cqw;padding:.7cqw 1cqw;cursor:pointer}
 .flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash .25s forwards}
 @keyframes flash{to{opacity:0}}
-/* level screen */
 .levels{width:min(100vw,1100px);height:100vh;display:flex;flex-direction:column;padding:8px}
 .bar{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#0a0a1e;border:3px solid var(--cyan);border-bottom:none;border-radius:8px 8px 0 0;font-size:11px;flex-wrap:wrap}
 .bar .t{color:var(--gold)}
 .bar .sp{flex:1}
 .bar button{font-family:inherit;font-size:10px;background:var(--red);color:#fff;border:2px solid #fff;border-radius:6px;padding:7px 9px;cursor:pointer}
 .levels iframe{flex:1;width:100%;border:3px solid var(--cyan);border-radius:0 0 8px 8px;background:#fff}
-.note{font:12px/1.5 system-ui,sans-serif;color:#aab;margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
+
+<!-- PORTADA ANIMADA -->
+<div class="cover" id="cover">
+  <div class="stripes top"><i></i><i></i><i></i><i></i></div>
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+  <div class="cv" id="cv">
+    <span class="note n1">♪</span><span class="note n2">♫</span><span class="note n3">♪</span>
+    <span class="note n4">♫</span><span class="note n5">♩</span><span class="note n6">♬</span>
+    <div class="card"><img src="cplus.png" alt=""></div>
+    <img class="title" id="title" src="grac_word.png" alt="GRAC">
+    <p class="sub">Las notas musicales</p>
+    <p class="tag"><span>Repasa</span><span>&nbsp;·&nbsp;</span><span>Interpreta</span><span>&nbsp;·&nbsp;</span><span>Juega</span></p>
+    <button class="enter" id="enter">ENTRAR <span class="arr">→</span></button>
+    <div class="sig"><img src="logo.png" alt="">@monroymethod</div>
+  </div>
+  <div class="stripes bot"><i></i><i></i><i></i><i></i></div>
+</div>
+
 <div class="cabinet" id="cab">
   <div class="stage" id="stage">
     <img class="poster hidden" id="poster" src="poster1.jpg" alt="">
@@ -86,6 +180,7 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 <div class="levels hidden" id="levels">
   <div class="bar">
     <span class="t">GRAC</span><span id="bartitle">MUNDO 1 · LA ORQUESTA SINFÓNICA</span><span class="sp"></span>
+    <button id="cover-btn">★ PORTADA</button>
     <button id="home">⌂ INICIO</button>
   </div>
   <iframe id="game" title="La orquesta sinfónica" src="about:blank"></iframe>
@@ -96,7 +191,7 @@ const $=id=>document.getElementById(id);
 const stage=$('stage'),vid=$('vid'),poster=$('poster');
 let scene=0,AC=null,fin=false;
 
-function chime(notes){ // short bell arpeggio (sol, la, do, re)
+function chime(notes){
   try{
     AC=AC||new (window.AudioContext||window.webkitAudioContext)();
     const t0=AC.currentTime;
@@ -107,6 +202,34 @@ function chime(notes){ // short bell arpeggio (sol, la, do, re)
     });
   }catch(e){}
 }
+
+/* ---- portada ---- */
+function sparks(){
+  const cv=$('cv'),cols=['#f5002c','#00b012','#2a3df5','#e3e600'];
+  for(let i=0;i<18;i++){
+    const s=document.createElement('div');s.className='spark';
+    const a=Math.PI*2*i/18,d=14+Math.random()*10;
+    s.style.left='50%';s.style.top="82.2%";s.style.background=cols[i%4];
+    s.style.setProperty('--dx',Math.cos(a)*d+'cqw');s.style.setProperty('--dy',Math.sin(a)*d+'cqw');
+    cv.appendChild(s);setTimeout(()=>s.remove(),750);
+  }
+}
+$('cover-btn').addEventListener('click',()=>{
+  $('game').src='about:blank';$('levels').classList.add('hidden');$('cab').classList.remove('hidden');$('start').classList.remove('hidden');
+  const c=$('cover');c.classList.remove('hidden','out');
+  // reinicia animaciones
+  const clone=c.cloneNode(true);c.replaceWith(clone);bindCover();
+});
+function bindCover(){
+  setTimeout(()=>$('title').classList.add('glow'),2200);
+  $('enter').addEventListener('click',()=>{
+    chime([67,69,72,74,79]);sparks();
+    setTimeout(()=>{$('cover').classList.add('out');setTimeout(()=>$('cover').classList.add('hidden'),500)},380);
+  });
+}
+bindCover();
+
+/* ---- juego ---- */
 function clear(){stage.querySelectorAll('.hot:not(.pressed),.tap').forEach(e=>e.remove())}
 const warmed={};
 function warm(n){if(warmed[n])return;warmed[n]=1;try{fetch('scene'+n+'.mp4').catch(()=>{});const im=new Image();im.src='poster'+n+'.jpg'}catch(e){}}
@@ -119,7 +242,7 @@ function play(n){
   vid.src='scene'+n+'.mp4';
   vid.addEventListener('playing',()=>vid.classList.add('on'),{once:true});$('skip').classList.remove('hidden');
   const p=vid.play();
-  if(p&&p.catch)p.catch(()=>{ // blocked: ask for one more tap instead of playing silently
+  if(p&&p.catch)p.catch(()=>{
     const t=document.createElement('div');t.className='tap hot-tap';
     t.innerHTML='<button class="pbtn startbtn"><span class="lb"><span class="tri"></span>TOCA PARA CONTINUAR</span></button>';
     stage.appendChild(t);t.querySelector('button').addEventListener('click',()=>{t.remove();vid.muted=false;vid.play().catch(()=>{})},{once:true});
@@ -156,18 +279,12 @@ function openLevels(page,title){
 }
 vid.addEventListener('ended',ended);
 $('skip').addEventListener('click',()=>{vid.pause();try{vid.currentTime=Math.max(0,vid.duration-0.05)}catch(e){}ended()});
-const goBtn=$('go');if(goBtn)goBtn.addEventListener('click',()=>{
-  chime([67,74,79]);$('start').classList.add('hidden');play(1);
-});
 $('repasa').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('repasa.html','REPASA · LAS NOTAS MUSICALES')});
 $('interpreta').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('interpreta.html','INTERPRETA · CARRILLÓN')});
 $('notas').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('notas.html','JUEGA · LAS NOTAS MUSICALES')});
 $('home').addEventListener('click',()=>{
   vid.pause();clear();$('skip').classList.add('hidden');vid.classList.remove('on');poster.classList.add('hidden');
   $('levels').classList.add('hidden');$('cab').classList.remove('hidden');$('start').classList.remove('hidden');
-});
-if($('again'))$('again').addEventListener('click',()=>{
-  $('levels').classList.add('hidden');$('cab').classList.remove('hidden');play(1);
 });
 </script>
 </body>
