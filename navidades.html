@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navidades del mundo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Plan: atlas escolar luminoso para proyectar en clase; cada región tiene su color; las láminas del carillón siguen el código de colores del aula. */
+  --ink:#1b2742;
+  --muted:#56617a;
+  --paper:#eef2f8;
+  --card:#ffffff;
+  --line:#d6deeb;
+  --accent:#1f5fbf;
+  --ok:#1e8a4c;
+  --bad:#c2333f;
+  --canarias:#137a8a;
+  --asia:#c42f3d;
+  --africa:#b86a00;
+  --america:#2c7d4f;
+  --display:"Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Nunito", "Segoe UI", system-ui, sans-serif;
+  /* colores de las láminas */
+  --n-C:#e53935; --n-D:#fb8c00; --n-E:#fdd835; --n-F:#43a047; --n-G:#00acc1; --n-A:#1e63d6; --n-B:#8e44ad;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} *{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* Cabecera */
+header.top{background:var(--ink);color:#fff;padding:28px 0 22px}
+header.top .eyebrow{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;opacity:.8}
+header.top h1{font-size:clamp(34px,6vw,54px);font-weight:800;margin:4px 0 6px}
+header.top p{max-width:62ch;margin:0;opacity:.92}
+.steps{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.step{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px}
+.step b{color:#ffd54f}
+nav.regions{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
+nav.regions .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px}
+nav.regions a{flex:0 0 auto;text-decoration:none;font-weight:800;padding:7px 14px;border-radius:999px;color:#fff;font-size:15px}
+
+/* Secciones */
+section.region{padding:34px 0 10px}
+.region-head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;border-bottom:4px solid var(--rc);padding-bottom:10px;margin-bottom:18px}
+.region-head .tag{background:var(--rc);color:#fff;font-weight:800;border-radius:8px;padding:3px 10px;font-size:14px;text-transform:uppercase;letter-spacing:.06em}
+.region-head h2{font-size:clamp(28px,4.4vw,40px);color:var(--rc)}
+.region-head .sub{color:var(--muted);font-weight:700;width:100%}
+.grid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card h3{font-size:22px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card h3 .num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--rc);color:#fff;font-size:16px}
+.card p{margin:0 0 10px;max-width:68ch}
+.card ul{margin:0 0 6px;padding-left:20px}
+.card li{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1.5px solid var(--rc);color:var(--rc);border-radius:999px;padding:2px 10px;font-weight:700;font-size:14px;background:#fff}
+.full{grid-column:1/-1}
+
+/* Vídeos */
+.videos{display:grid;gap:8px}
+.video{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fafbfe}
+.video:hover{border-color:var(--rc)}
+.video .play{flex:0 0 38px;height:38px;border-radius:50%;background:var(--rc);display:grid;place-items:center}
+.video .play::before{content:"";border-left:13px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.video b{display:block;line-height:1.25}
+.video small{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted);margin-top:8px}
+
+/* Completar */
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.bank button{border:1.5px dashed var(--rc);background:#fff;color:var(--ink);border-radius:8px;padding:3px 10px;font-weight:700;font-size:15px}
+.bank button.used{opacity:.35;text-decoration:line-through}
+ol.fill{margin:0;padding-left:22px}
+ol.fill li{margin-bottom:10px}
+.fill input{font:inherit;font-weight:700;width:9.5em;max-width:100%;border:none;border-bottom:2.5px solid var(--line);background:#f5f7fb;padding:1px 6px;border-radius:4px 4px 0 0;color:var(--ink)}
+.fill input:focus{outline:none;border-bottom-color:var(--rc);background:#fff}
+.fill input.ok{border-bottom-color:var(--ok);background:#e8f6ee}
+.fill input.no{border-bottom-color:var(--bad);background:#fdecee}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.btn{border:none;border-radius:10px;padding:8px 14px;font-weight:800;background:var(--rc);color:#fff}
+.btn.ghost{background:#fff;color:var(--rc);border:2px solid var(--rc)}
+.score{font-weight:800}
+
+/* Carillón */
+.piece-meta{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--muted);font-weight:700;font-size:15px;margin-bottom:10px}
+.score-line{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px;align-items:flex-end}
+.phrase-label{width:100%;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:6px}
+.nt{display:flex;flex-direction:column;align-items:center;min-width:38px}
+.nt .pill{min-width:38px;padding:4px 6px;border-radius:8px;font-weight:800;font-size:15px;text-align:center;color:#1b2742;border:2px solid transparent;transition:transform .08s}
+.nt .syl{font-size:13px;color:var(--muted);margin-top:2px;min-height:18px;font-weight:700}
+.nt.long .pill{min-width:58px}
+.nt.vlong .pill{min-width:80px}
+.nt.on .pill{transform:translateY(-4px) scale(1.12);border-color:var(--ink);box-shadow:0 4px 0 var(--ink)}
+.nt.next .pill{border-color:var(--ink);outline:3px dashed var(--ink);outline-offset:2px}
+.nt.done .pill{opacity:.45}
+.bar-sep{width:2px;align-self:stretch;background:var(--line);margin:0 2px}
+
+.glock{display:flex;gap:6px;align-items:center;justify-content:center;padding:14px 10px;margin-top:12px;background:linear-gradient(#4a3426,#3a281d);border-radius:14px;overflow-x:auto}
+.glock button{flex:0 0 auto;width:44px;border:none;border-radius:6px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-weight:800;color:#1b2742;font-size:14px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18), 0 2px 0 rgba(0,0,0,.35);position:relative}
+.glock button::before,.glock button::after{content:"";position:absolute;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:rgba(0,0,0,.35)}
+.glock button::before{top:8px}
+.glock button::after{bottom:30px}
+.glock button.hit{filter:brightness(1.25);transform:translateY(2px)}
+.glock button.target{outline:4px solid #fff;outline-offset:2px;animation:pulse 1s infinite}
+.glock button.wrong{animation:shake .3s}
+@keyframes pulse{50%{outline-color:#ffd54f}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (max-width:520px){.glock{justify-content:flex-start}.glock button{width:36px;font-size:12px}}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.controls label{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px}
+.controls input[type=range]{width:120px}
+.status{font-weight:800;color:var(--rc);min-height:1.5em;margin-top:6px}
+
+/* Comparativa */
+section.compare{padding:34px 0}
+.tablewrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:15.5px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{font-family:var(--display);font-size:17px;color:#fff}
+tbody th{background:#f5f7fb;width:150px}
+.teacher{padding:10px 0 40px}
+.teacher .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.teacher h3{font-size:19px}
+footer{background:#fff;border-top:1px solid var(--line);padding:22px 0 40px;font-size:14.5px;color:var(--muted)}
+footer ul{padding-left:18px;margin:6px 0}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Música · Proyecto de Navidad</div>
+    <h1>Navidades del mundo</h1>
+    <p>Viajamos desde Canarias a Japón, Ghana y Venezuela para descubrir cómo suena la Navidad en cada lugar. En cada parada: miramos y escuchamos, completamos frases y tocamos una pieza en Do mayor con el carillón.</p>
+    <div class="steps">
+      <span class="step"><b>1</b> Mira y escucha</span>
+      <span class="step"><b>2</b> Completa</span>
+      <span class="step"><b>3</b> Toca el carillón</span>
+      <a class="step" href="dossier-navidades-del-mundo.pdf" style="color:#1b2742;background:#ffd54f;text-decoration:none">Descargar el dossier (PDF)</a>
+    </div>
+  </div>
+</header>
+
+<nav class="regions" aria-label="Regiones">
+  <div class="wrap">
+    <a href="#canarias" style="background:var(--canarias)">Europa · Canarias</a>
+    <a href="#asia" style="background:var(--asia)">Asia · Japón</a>
+    <a href="#africa" style="background:var(--africa)">África · Ghana</a>
+    <a href="#america" style="background:var(--america)">América · Venezuela y EE. UU.</a>
+    <a href="#comparar" style="background:var(--ink)">Comparamos</a>
+  </div>
+</nav>
+
+<main id="app"></main>
+
+<section class="compare" id="comparar">
+  <div class="wrap">
+    <div class="region-head" style="--rc:var(--ink)">
+      <span class="tag">Final</span>
+      <h2>¿En qué se parecen y en qué se diferencian?</h2>
+      <div class="sub">Canarias frente al resto del mundo</div>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="background:var(--ink)"></th>
+            <th style="background:var(--canarias)">Canarias</th>
+            <th style="background:var(--asia)">Japón</th>
+            <th style="background:var(--africa)">Ghana</th>
+            <th style="background:var(--america)">Venezuela</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>¿Quién canta?</th><td>Ranchos, parrandas, coros y bandas que recorren plazas e iglesias</td><td>Orquestas y coros enormes, a veces miles de voces</td><td>Coros de iglesia, niños por las calles, grupos de highlife</td><td>Parrandas de amigos y familias que van de casa en casa</td></tr>
+          <tr><th>Instrumentos</th><td>Timple, guitarra, panderos, castañuelas</td><td>Orquesta sinfónica completa</td><td>Tambores, guitarras, metales</td><td>Cuatro, maracas, furruco, tambora</td></tr>
+          <tr><th>Carácter</th><td>Solemne en los ranchos, alegre en las parrandas</td><td>Grandioso y festivo, para despedir el año</td><td>Rítmico y bailable, de llamada y respuesta</td><td>Alegre y bailable</td></tr>
+          <tr><th>Idioma</th><td>Español</td><td>Alemán (el texto original de Schiller)</td><td>Inglés y lenguas locales como el akan</td><td>Español</td></tr>
+          <tr><th>Pieza que tocamos</th><td>Campana sobre campana</td><td>Himno de la alegría</td><td>¡Afishapa! (llamada y respuesta)</td><td>Jingle Bells (EE. UU.) y la tradición del aguinaldo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">Pregunta para el debate: ¿Qué tradición se parece más a la canaria? Una pista: piensa en quién emigró a Venezuela.</p>
+  </div>
+</section>
+
+<section class="teacher">
+  <div class="wrap">
+    <div class="region-head" style="--rc:var(--ink)">
+      <span class="tag">Docente</span>
+      <h2>Cómo usarlo en el aula</h2>
+    </div>
+    <div class="cols">
+      <div class="card"><h3>Sesiones</h3><p>Una sesión por región (unos 45 min): 10 min de vídeo y comentario, 10 min de completar, 25 min de carillón. Una última sesión para la tabla comparativa y un pequeño concierto con las cuatro piezas.</p></div>
+      <div class="card"><h3>El carillón</h3><p>Todas las piezas están en Do mayor y solo usan láminas naturales. Se necesitan de Do a Fa agudo (11 láminas). Los colores son los del código de aula; si tus carillones tienen otros colores, guíate por el nombre de la nota.</p></div>
+      <div class="card"><h3>Modo práctica</h3><p>Con el botón «Practicar paso a paso» se ilumina la siguiente lámina. El alumnado toca en pantalla (o en su carillón) y avanza nota a nota. El ritmo está simplificado para facilitar la lectura.</p></div>
+      <div class="card"><h3>Vídeos</h3><p>Los enlaces abren una búsqueda en YouTube para que elijas la versión que prefieras. Conviene revisarlos antes de proyectarlos en clase.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Fuentes</b>
+    <ul>
+      <li><a href="https://rtvc.es/tradiciones-de-navidad-en-canarias/">RTVC: La Navidad en Canarias en seis tradiciones</a></li>
+      <li><a href="https://accedacris.ulpgc.es/handle/10553/73003">M. Trapero (ULPGC): Los Ranchos de Pascua de Lanzarote</a></li>
+      <li><a href="https://www.japantimes.co.jp/culture/2017/12/13/music/years-not-till-hear-beethovens-symphony-no-9">The Japan Times: Beethoven's Symphony No. 9 («daiku»)</a></li>
+      <li><a href="https://whychristmas.com/cultures/japan">Why Christmas: Christmas in Japan</a></li>
+      <li><a href="https://mobile.ghanaweb.com/GhanaHomePage/entertainment/All-Set-For-The-Festivities-to-Begin-136418">GhanaWeb: música navideña de Ghana y highlife</a></li>
+      <li><a href="https://k24.digital/uncategorized/10-christmas-traditions-youll-only-find-in-africa">K24: tradiciones navideñas en África</a></li>
+      <li><a href="https://curriculum.teachrock.org/lessons/aguinaldos-venezuelan-songs-for-the-holiday-season">TeachRock: Aguinaldos venezolanos</a></li>
+      <li><a href="https://mdc.ulpgc.es/files/original/666faaea6513cbe6c9e89ce697deaf374f71e6ff.pdf">S. Barreto (ULPGC): malagueñas canarias y venezolanas</a></li>
+      <li><a href="https://www.flauta-dulce.com/campana-sobre-campana-flauta-dulce/">Flauta-dulce.com: notas de Campana sobre campana</a> (transportadas aquí a Do mayor)</li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+/* ---------- Datos ---------- */
+const NOTES = {
+  "C":{name:"Do",f:523.25,col:"--n-C"},"D":{name:"Re",f:587.33,col:"--n-D"},"E":{name:"Mi",f:659.25,col:"--n-E"},
+  "F":{name:"Fa",f:698.46,col:"--n-F"},"G":{name:"Sol",f:783.99,col:"--n-G"},"A":{name:"La",f:880.00,col:"--n-A"},
+  "B":{name:"Si",f:987.77,col:"--n-B"},"c":{name:"Do'",f:1046.50,col:"--n-C"},"d":{name:"Re'",f:1174.66,col:"--n-D"},
+  "e":{name:"Mi'",f:1318.51,col:"--n-E"},"f":{name:"Fa'",f:1396.91,col:"--n-F"}
+};
+const BAR_ORDER = ["C","D","E","F","G","A","B","c","d","e","f"];
+
+// Una frase: [nota, pulsos, sílaba]. "|" = línea divisoria.
+function P(str){ // "C:1:Do E:2:mi |"
+  return str.trim().split(/\s+/).map(t=>{
+    if(t==="|") return "|";
+    const [n,d,s] = t.split(":");
+    return [n, parseFloat(d), (s||"").replace(/_/g," ")];
+  });
+}
+
+const REGIONS = [
+{
+  id:"canarias", color:"--canarias", tag:"Europa", title:"Canarias", sub:"Ranchos de Pascua, parrandas y villancicos",
+  info:`<p>En Canarias la Navidad suena de muchas maneras. La tradición más antigua es la de los <b>Ranchos de Pascua</b>: grupos que cantan coplas al Niño Jesús con un tono serio y lastimero. Se conservan sobre todo en <b>Lanzarote</b> (Teguise, San Bartolomé, Tías, Haría…), y también en Gran Canaria y Fuerteventura. Tienen más de 400 años de historia.</p>
+  <p>Junto a ellos están las <b>parrandas</b>, alegres y bailables, y los <b>villancicos</b> que se cantan en toda España, como <i>Campana sobre campana</i>, de origen andaluz. Ya en el siglo XVI los pastores de Tenerife y La Gomera celebraban el nacimiento con danzas.</p>
+  <ul><li>Programa «Navidad Isleña»: ranchos, corales y bandas recorren los pueblos de Lanzarote cada diciembre.</li>
+  <li>Curiosidad: el canto del Rancho de San Bartolomé se ha transmitido solo de memoria, sin partituras.</li></ul>`,
+  instruments:["Timple","Guitarra","Pandero","Castañuelas","Voz solista y coro"],
+  videos:[
+    ["Rancho de Pascua de Teguise","Rancho de Pascua Teguise Lanzarote"],
+    ["Rancho de Pascua de San Bartolomé","Rancho de Pascua San Bartolomé Lanzarote"],
+    ["Campana sobre campana (villancico)","Campana sobre campana villancico tradicional"]
+  ],
+  fill:{
+    bank:["Pascua","Lanzarote","400","lastimero","timple","villancico","andaluz","memoria"],
+    items:[
+      "Los Ranchos de [Pascua] se conservan sobre todo en la isla de [Lanzarote].",
+      "Esta tradición tiene más de [400] años y su canto suena serio y [lastimero|triste].",
+      "El pequeño instrumento de cuerda típico de Canarias es el [timple].",
+      "<i>Campana sobre campana</i> es un [villancico] tradicional de origen [andaluz|andalucia|andalucía].",
+      "El Rancho de San Bartolomé se aprende de [memoria|oido|oído], sin partituras."
+    ]
+  },
+  piece:{
+    title:"Campana sobre campana", meta:["Tradicional de España","Láminas: Sol a Fa'","Estrofa"],
+    bpm:120,
+    phrases:[
+      ["Frase 1", P("c:.5:Cam c:.5:pa c:.5:na c:.5:so | B:.5:bre c:.5:cam d:.5:pa B:.5:na | G:2:~")],
+      ["Frase 2", P("d:.5:y d:.5:so e:.5:bre f:.5:cam | e:.5:pa d:.5:na e:.5:u d:.5:na | c:2:~")],
+      ["Frase 3", P("c:.5:a c:.5:só c:.5:ma c:.5:te_a | B:.5:la c:.5:ven d:.5:ta B:.5:na | G:2:~")],
+      ["Frase 4", P("d:.5:ve d:.5:rás e:.5:al f:.5:Ni | e:.5:ño_en d:.5:la e:.5:cu d:.5:na | c:2:~")]
+    ]
+  }
+},
+{
+  id:"asia", color:"--asia", tag:"Asia", title:"Japón", sub:"El «Daiku»: la Novena de Beethoven en diciembre",
+  info:`<p>En Japón muy poca gente es cristiana y el 25 de diciembre no es festivo, pero las ciudades se llenan de luces. La fiesta grande es el <b>Año Nuevo</b>.</p>
+  <p>La música estrella de diciembre es la <b>Novena Sinfonía de Beethoven</b>, con su <i>Himno de la alegría</i>. Los japoneses la llaman <b>«Daiku»</b>, que significa «número nueve». Se interpreta con orquestas de unos 80 músicos y coros de más de 100 voces, y en Osaka se reúnen hasta 10.000 cantantes. ¡Y la cantan en alemán!</p>
+  <ul><li>Curiosidad: la cena navideña más popular en Japón es… ¡pollo frito!</li>
+  <li>Diferencia con Canarias: no se canta por las calles ni de casa en casa, sino en grandes auditorios.</li></ul>`,
+  instruments:["Orquesta sinfónica","Coro gigante","Violines","Timbales","Metales"],
+  videos:[
+    ["10.000 voces cantan la Novena en Osaka","10000 Daiku Osaka Beethoven 9"],
+    ["Daiku: la Novena en Japón","Daiku Japan Beethoven Ninth December"],
+    ["Himno de la alegría para carillón","Himno de la alegría carillón"]
+  ],
+  fill:{
+    bank:["Beethoven","Daiku","nueve","Año Nuevo","alemán","alegría","coros"],
+    items:[
+      "En diciembre los japoneses escuchan la Novena Sinfonía de [Beethoven].",
+      "La llaman «[Daiku]», que significa «número [nueve|9]».",
+      "La fiesta más importante de estas fechas en Japón es el [Año Nuevo|ano nuevo].",
+      "Se canta con orquesta y enormes [coros], ¡en idioma [alemán|aleman]!",
+      "La melodía que tocaremos es el Himno de la [alegría|alegria]."
+    ]
+  },
+  piece:{
+    title:"Himno de la alegría (Oda a la alegría)", meta:["L. van Beethoven, 1824","Láminas: Do a Sol","Texto original de Schiller"],
+    bpm:108,
+    phrases:[
+      ["Frase 1", P("E:1:Freu E:1:de F:1:schö G:1:ner | G:1:Göt F:1:ter E:1:fun D:1:ken | C:1:Toch C:1:ter D:1:aus E:1:E | E:1.5:ly D:.5:si D:2:um")],
+      ["Frase 2", P("E:1:Wir E:1:be F:1:tre G:1:ten | G:1:feu F:1:er E:1:trun D:1:ken | C:1:Himm C:1:li D:1:sche E:1:dein | D:1.5:Hei C:.5:lig C:2:tum")]
+    ]
+  }
+},
+{
+  id:"africa", color:"--africa", tag:"África", title:"Ghana", sub:"Tambores, highlife y canto de llamada y respuesta",
+  info:`<p>En Ghana la Navidad empieza semanas antes, con desfiles por las calles, música y fuegos artificiales. En Nochebuena se celebran misas de vigilia y los niños representan el Belén.</p>
+  <p>Los coros cantan villancicos conocidos en todo el mundo, pero los acompañan con <b>tambores</b> tradicionales. El estilo más popular es el <b>highlife</b>, que mezcla ritmos africanos con jazz y bandas de metales. Por las calles bailan zancudos y personas con máscaras.</p>
+  <ul><li>En Liberia el árbol de Navidad es una <b>palmera</b> decorada con campanas.</li>
+  <li>En Malawi los niños van de puerta en puerta cantando y tocando instrumentos tradicionales.</li>
+  <li>Diferencia con Canarias: allí es temporada de calor, y la música se baila en la calle.</li></ul>`,
+  instruments:["Djembé","Tambores parlantes","Guitarra highlife","Trompetas","Palmas"],
+  videos:[
+    ["Villancicos de Ghana con tambores","Ghana Christmas carols drums choir"],
+    ["Navidad en Ghana: highlife","Ghana Christmas highlife music"],
+    ["Betelehemu, villancico yoruba (Nigeria)","Betelehemu choir"]
+  ],
+  fill:{
+    bank:["tambores","highlife","palmera","campanas","respuesta","calor","Afishapa"],
+    items:[
+      "En Ghana los coros acompañan los villancicos con [tambores].",
+      "El estilo musical más popular de Ghana se llama [highlife].",
+      "En Liberia el árbol de Navidad es una [palmera] decorada con [campanas].",
+      "En Navidad en Ghana no hace frío, sino [calor].",
+      "En el canto de llamada y [respuesta] el grupo contesta al solista.",
+      "«¡Feliz Navidad!» en akan, una lengua de Ghana, se dice «[Afishapa]»."
+    ]
+  },
+  piece:{
+    title:"¡Afishapa! Canto de llamada y respuesta", meta:["Pieza original inspirada en los coros de Ghana","Escala pentatónica: Do Re Mi Sol La","Solista llama, el grupo responde"],
+    bpm:116, drum:true,
+    phrases:[
+      ["Solista", P("G:1:Ya G:1:lle A:1:ga G:1:la | E:1:Na G:1:vi A:2:dad")],
+      ["Todos", P("G:.5:¡A E:.5:fi D:1:sha C:2:pa!")],
+      ["Solista", P("c:1:Can A:1:ta G:1:mos A:1:con | G:1:el E:1:tam G:2:bor")],
+      ["Todos", P("D:.5:¡A E:.5:fi D:1:sha C:2:pa!")],
+      ["Todos", P("E:.5:¡A G:.5:fi A:1:sha G:2:pa! | E:.5:¡A D:.5:fi D:1:sha C:2:pa!")]
+    ]
+  }
+},
+{
+  id:"america", color:"--america", tag:"América", title:"Venezuela y Estados Unidos", sub:"Aguinaldos, parrandas… y un trineo con cascabeles",
+  info:`<p>En Venezuela la Navidad se canta con <b>aguinaldos</b>, canciones dedicadas al Niño Jesús que nacieron de los villancicos traídos de España. Cuando los grupos van de casa en casa cantando y bailando, se llaman <b>parrandas</b>. Se tocan con el <b>cuatro</b> (una guitarra pequeña de cuatro cuerdas), maracas, furruco y tambora.</p>
+  <p>Hay un lazo especial con Canarias: durante siglos muchos canarios <b>emigraron a Venezuela</b>, y la música de las dos orillas del Atlántico se mezcló. La parranda venezolana viajó también a Trinidad y Tobago, donde se llama <b>parang</b>.</p>
+  <p>Más al norte, en Estados Unidos, nació <i>Jingle Bells</i> (James Lord Pierpont, 1857), que habla de un paseo en <b>trineo</b> con cascabeles. Hoy se canta en todo el mundo.</p>`,
+  instruments:["Cuatro","Maracas","Furruco","Tambora","Cascabeles"],
+  videos:[
+    ["Aguinaldo venezolano","aguinaldo venezolano navidad tradicional"],
+    ["Parranda navideña","parranda venezolana navidad cuatro maracas"],
+    ["Parang de Trinidad y Tobago","parang Trinidad Christmas music"],
+    ["Jingle Bells para carillón","Jingle Bells carillón"]
+  ],
+  fill:{
+    bank:["aguinaldos","parrandas","cuatro","maracas","Venezuela","parang","trineo","Estados Unidos"],
+    items:[
+      "En Venezuela las canciones de Navidad se llaman [aguinaldos].",
+      "Los grupos que van de casa en casa cantando forman [parrandas].",
+      "El [cuatro] es una guitarra pequeña y se acompaña con [maracas].",
+      "Muchos canarios emigraron a [Venezuela].",
+      "En Trinidad y Tobago la parranda se llama [parang].",
+      "<i>Jingle Bells</i> es de [Estados Unidos|eeuu|ee. uu.|usa] y cuenta un paseo en [trineo]."
+    ]
+  },
+  piece:{
+    title:"Jingle Bells (estribillo)", meta:["J. L. Pierpont, EE. UU., 1857","Láminas: Do a Sol","Estribillo"],
+    bpm:132,
+    phrases:[
+      ["Frase 1", P("E:1:Jin E:1:gle E:2:bells | E:1:jin E:1:gle E:2:bells | E:1:jin G:1:gle C:1.5:all D:.5:the | E:4:way")],
+      ["Frase 2", P("F:1:Oh F:1:what F:1.5:fun F:.5:it | F:1:is E:1:to E:1:ride E:.5:in E:.5:a | E:1:one D:1:horse D:1:o E:1:pen | D:2:sleigh, G:2:hey!")],
+      ["Frase 3", P("E:1:Jin E:1:gle E:2:bells | E:1:jin E:1:gle E:2:bells | E:1:jin G:1:gle C:1.5:all D:.5:the | E:4:way")],
+      ["Frase 4", P("F:1:Oh F:1:what F:1.5:fun F:.5:it | F:1:is E:1:to E:1:ride E:.5:in E:.5:a | G:1:one G:1:horse F:1:o D:1:pen | C:4:sleigh!")]
+    ]
+  }
+}
+];
+
+/* ---------- Sonido ---------- */
+let AC = null;
+function ctx(){ if(!AC){ AC = new (window.AudioContext||window.webkitAudioContext)(); } if(AC.state==="suspended") AC.resume(); return AC; }
+function bell(freq, when){
+  const a = ctx(); const t = when ?? a.currentTime;
+  const out = a.createGain(); out.gain.setValueAtTime(0.0001,t);
+  out.gain.exponentialRampToValueAtTime(0.35,t+0.005); out.gain.exponentialRampToValueAtTime(0.0001,t+1.6);
+  out.connect(a.destination);
+  [[1,1],[2.76,0.25],[5.4,0.08]].forEach(([m,v])=>{
+    const o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.value=freq*m;
+    g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(0.0001,t+(m===1?1.6:0.4));
+    o.connect(g); g.connect(out); o.start(t); o.stop(t+1.7);
+  });
+}
+function drum(when, low){
+  const a=ctx(), t=when, o=a.createOscillator(), g=a.createGain();
+  o.frequency.setValueAtTime(low?140:260,t); o.frequency.exponentialRampToValueAtTime(low?55:120,t+0.15);
+  g.gain.setValueAtTime(low?0.5:0.25,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.25);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+0.3);
+}
+
+/* ---------- Construcción ---------- */
+const app = document.getElementById("app");
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[.¡!¿?«»]/g,"").replace(/\s+/g," ").trim();
+const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
+REGIONS.forEach((R, ri)=>{
+  const s = document.createElement("section");
+  s.className="region"; s.id=R.id; s.style.setProperty("--rc",`var(${R.color})`);
+  s.innerHTML = `
+  <div class="wrap">
+    <div class="region-head"><span class="tag">${R.tag}</span><h2>${R.title}</h2><div class="sub">${R.sub}</div></div>
+    <div class="grid">
+      <div class="card"><h3><span class="num">1</span>Mira y escucha</h3>${R.info}
+        <div class="chips">${R.instruments.map(i=>`<span class="chip">${i}</span>`).join("")}</div></div>
+      <div class="card"><h3>Vídeos</h3>
+        <div class="videos">${R.videos.map(([t,q])=>`<a class="video" href="${yt(q)}" target="_blank" rel="noopener"><span class="play" aria-hidden="true"></span><span><b>${t}</b><small>Abrir búsqueda en YouTube</small></span></a>`).join("")}</div>
+        <p class="hint">Mientras escuchas: ¿qué instrumentos reconoces? ¿La música es alegre o solemne? ¿Se puede bailar?</p>
+      </div>
+      <div class="card full"><h3><span class="num">2</span>Completa las frases</h3>
+        <div class="bank" id="bank-${R.id}">${R.fill.bank.map(w=>`<button type="button">${w}</button>`).join("")}</div>
+        <ol class="fill" id="fill-${R.id}"></ol>
+        <div class="actions"><button class="btn" type="button" data-act="check">Comprobar</button><button class="btn ghost" type="button" data-act="solve">Ver soluciones</button><button class="btn ghost" type="button" data-act="reset">Borrar</button><span class="score" aria-live="polite"></span></div>
+        <p class="hint">Toca una palabra del banco para colocarla en el hueco seleccionado.</p>
+      </div>
+      <div class="card full"><h3><span class="num">3</span>Toca el carillón: ${R.piece.title}</h3>
+        <div class="piece-meta">${R.piece.meta.map(m=>`<span>${m}</span>`).join("")}</div>
+        <div class="scorebox"></div>
+        <div class="glock" role="group" aria-label="Carillón"></div>
+        <div class="controls">
+          <button class="btn" type="button" data-act="play">▶ Escuchar</button>
+          <button class="btn ghost" type="button" data-act="practice">Practicar paso a paso</button>
+          <button class="btn ghost" type="button" data-act="stop">■ Parar</button>
+          <label for="bpm-${R.id}">Velocidad <input type="range" id="bpm-${R.id}" min="50" max="160" value="${R.piece.bpm}"></label>
+          ${R.piece.drum?`<label for="drum-${R.id}"><input type="checkbox" id="drum-${R.id}" checked> Con tambor</label>`:""}
+        </div>
+        <div class="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>`;
+  app.appendChild(s);
+
+  /* Completar */
+  const ol = s.querySelector(`#fill-${R.id}`);
+  let lastInput = null;
+  R.fill.items.forEach((txt, i)=>{
+    const li = document.createElement("li");
+    let k=0;
+    li.innerHTML = txt.replace(/\[([^\]]+)\]/g,(m,ans)=>`<input type="text" autocomplete="off" spellcheck="false" id="in-${R.id}-${i}-${k++}" aria-label="Hueco" data-ans="${ans}">`);
+    ol.appendChild(li);
+  });
+  const inputs = [...ol.querySelectorAll("input")];
+  inputs.forEach(inp=>{ inp.addEventListener("focus",()=>lastInput=inp); inp.addEventListener("input",()=>{inp.classList.remove("ok","no"); syncBank();}); });
+  const bankBtns = [...s.querySelectorAll(`#bank-${R.id} button`)];
+  function syncBank(){
+    const vals = inputs.map(i=>norm(i.value));
+    bankBtns.forEach(b=>b.classList.toggle("used", vals.includes(norm(b.textContent))));
+  }
+  bankBtns.forEach(b=>b.addEventListener("click",()=>{
+    let target = (lastInput && !lastInput.value) ? lastInput : inputs.find(i=>!i.value);
+    if(!target) target = lastInput;
+    if(!target) return;
+    target.value = b.textContent; target.classList.remove("ok","no");
+    const nxt = inputs.find(i=>!i.value); if(nxt){ nxt.focus(); } else target.focus();
+    syncBank();
+  }));
+  const scoreEl = s.querySelector(".score");
+  s.querySelector('[data-act="check"]').addEventListener("click",()=>{
+    let good=0;
+    inputs.forEach(inp=>{
+      const ok = inp.dataset.ans.split("|").map(norm).includes(norm(inp.value));
+      inp.classList.toggle("ok",ok); inp.classList.toggle("no",!ok); if(ok) good++;
+    });
+    scoreEl.textContent = `${good} de ${inputs.length} correctas` + (good===inputs.length?" · ¡Perfecto!":"");
+    scoreEl.style.color = good===inputs.length ? "var(--ok)" : "var(--ink)";
+  });
+  s.querySelector('[data-act="solve"]').addEventListener("click",()=>{
+    inputs.forEach(inp=>{ inp.value = inp.dataset.ans.split("|")[0]; inp.classList.add("ok"); inp.classList.remove("no"); });
+    scoreEl.textContent="Soluciones a la vista"; scoreEl.style.color="var(--ink)"; syncBank();
+  });
+  s.querySelector('[data-act="reset"]').addEventListener("click",()=>{
+    inputs.forEach(inp=>{ inp.value=""; inp.classList.remove("ok","no"); }); scoreEl.textContent=""; syncBank();
+  });
+
+  /* Partitura de colores */
+  const box = s.querySelector(".scorebox");
+  const seq = []; // {n,d,el}
+  R.piece.phrases.forEach(([label, notes])=>{
+    const lab = document.createElement("div"); lab.className="phrase-label"; lab.textContent=label;
+    const line = document.createElement("div"); line.className="score-line";
+    notes.forEach(item=>{
+      if(item==="|"){ const sep=document.createElement("span"); sep.className="bar-sep"; sep.setAttribute("aria-hidden","true"); line.appendChild(sep); return; }
+      const [n,d,syl] = item;
+      const el = document.createElement("div");
+      el.className = "nt" + (d>=4?" vlong":d>=2?" long":"");
+      el.innerHTML = `<span class="pill" style="background:var(${NOTES[n].col})">${NOTES[n].name}</span><span class="syl">${syl==="~"?"":syl}</span>`;
+      line.appendChild(el); seq.push({n,d,el});
+    });
+    box.appendChild(lab); box.appendChild(line);
+  });
+
+  /* Carillón */
+  const glock = s.querySelector(".glock");
+  const bars = {};
+  BAR_ORDER.forEach((n,i)=>{
+    const b = document.createElement("button"); b.type="button";
+    b.style.background = `var(${NOTES[n].col})`;
+    b.style.height = (150 - i*7) + "px";
+    b.textContent = NOTES[n].name; b.setAttribute("aria-label", "Lámina " + NOTES[n].name);
+    b.addEventListener("pointerdown", e=>{ e.preventDefault(); hitBar(n, true); });
+    b.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); hitBar(n, true); } });
+    glock.appendChild(b); bars[n]=b;
+  });
+  function flash(n){ const b=bars[n]; b.classList.add("hit"); setTimeout(()=>b.classList.remove("hit"),160); }
+
+  const status = s.querySelector(".status");
+  let timers=[], practiceIdx=-1;
+  function clearMarks(){ seq.forEach(x=>x.el.classList.remove("on","next","done")); Object.values(bars).forEach(b=>b.classList.remove("target")); }
+  function stopAll(){ timers.forEach(clearTimeout); timers=[]; practiceIdx=-1; clearMarks(); status.textContent=""; }
+
+  function hitBar(n, byUser){
+    bell(NOTES[n].f); flash(n);
+    if(byUser && practiceIdx>=0){
+      const cur = seq[practiceIdx];
+      if(n===cur.n){
+        cur.el.classList.remove("next"); cur.el.classList.add("done"); bars[cur.n].classList.remove("target");
+        practiceIdx++;
+        if(practiceIdx>=seq.length){ practiceIdx=-1; status.textContent="¡Muy bien! Has tocado la pieza completa."; setTimeout(clearMarks,1500); }
+        else markNext();
+      } else { bars[n].classList.add("wrong"); setTimeout(()=>bars[n].classList.remove("wrong"),300); status.textContent=`Esa es ${NOTES[n].name}. Busca ${NOTES[cur.n].name}.`; }
+    }
+  }
+  function markNext(){
+    const cur = seq[practiceIdx];
+    cur.el.classList.add("next"); bars[cur.n].classList.add("target");
+    status.textContent = `Nota ${practiceIdx+1} de ${seq.length}: ${NOTES[cur.n].name}`;
+  }
+
+  s.querySelector('[data-act="play"]').addEventListener("click",()=>{
+    stopAll(); const a=ctx();
+    const bpm = +s.querySelector(`#bpm-${R.id}`).value, beat = 60/bpm;
+    const useDrum = R.piece.drum && s.querySelector(`#drum-${R.id}`).checked;
+    let t = 0.08; const t0=a.currentTime;
+    seq.forEach(x=>{
+      const start=t;
+      bell(NOTES[x.n].f, t0+start);
+      timers.push(setTimeout(()=>{ seq.forEach(y=>y.el.classList.remove("on")); x.el.classList.add("on"); flash(x.n); }, start*1000));
+      t += x.d*beat;
+    });
+    if(useDrum){ for(let k=0; k*beat < t; k++){ drum(t0+0.08+k*beat, k%2===0); if(k%2===1) drum(t0+0.08+(k+0.5)*beat, false); } }
+    timers.push(setTimeout(()=>{ seq.forEach(y=>y.el.classList.remove("on")); status.textContent=""; }, (t+0.6)*1000));
+    status.textContent = "Sonando…";
+  });
+  s.querySelector('[data-act="practice"]').addEventListener("click",()=>{
+    stopAll(); ctx(); practiceIdx=0; markNext();
+  });
+  s.querySelector('[data-act="stop"]').addEventListener("click",stopAll);
+});
+</script>
+</body>
+</html>
