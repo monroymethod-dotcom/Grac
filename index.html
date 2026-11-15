@@ -75,7 +75,6 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
         <button class="pbtn startbtn" id="repasa"><span class="lb">📖 REPASA</span></button>
         <button class="pbtn startbtn ok" id="interpreta"><span class="lb">🔔 INTERPRETA</span></button>
         <button class="pbtn startbtn gold" id="notas"><span class="lb">🎮 JUEGA</span></button>
-        <button class="pbtn startbtn" id="luna" style="background:#1F55D6"><span class="lb">🌙 CLARO DE LUNA</span></button>
       </div>
       <p class="foot">@monroymethod</p>
     </div>
@@ -161,7 +160,6 @@ $('skip').addEventListener('click',()=>{vid.pause();try{vid.currentTime=Math.max
 $('repasa').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('repasa.html','REPASA · LAS NOTAS MUSICALES')});
 $('interpreta').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('interpreta.html','INTERPRETA · CARRILLÓN')});
 $('notas').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('notas.html','JUEGA · LAS NOTAS MUSICALES')});
-$('luna').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('claro-de-luna/index.html','SONATA DE CLARO DE LUNA')});
 $('home').addEventListener('click',()=>{
   vid.pause();clear();$('skip').classList.add('hidden');vid.classList.remove('on');poster.classList.add('hidden');
   $('levels').classList.add('hidden');$('cab').classList.remove('hidden');$('start').classList.remove('hidden');
