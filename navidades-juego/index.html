@@ -526,7 +526,7 @@ SONGS.push(
   notes:seq("A:.5 B:.5 c:.5 c:.5 c:.5 c:.5 c:.5 c:.5 c:.5 d:.5 c:.5 d:.5 c:.5 B:.5 B:1 B:.5 c:.5 d:.5 c:.5 d:.5 c:.5 B:.5 B:.5 A:.5 G:.5 A:.5 B:.5 c:.5 A:1.5"),
   frag:"A B c c c c c c c d c d c B B", fact:"Es un villancico tradicional español, muy popular también en Latinoamérica. Su estribillo dice «pero mira cómo beben los peces en el río»."},
  {id:"chiquirritin",title:"Ay del chiquirritín",place:"España",color:"--n4",bpm:116,bpb:2,pickup:0,style:"pandereta",
-  notes:seq("c:.5 c:.5 c:.5 c:.5 c:.5 c:.5 d:.5 c:.5 B:.5 c:.5 d:1 c:.5 c:.5 c:.5 B:.5 c:.5 d:.5 B:.5 G:1.5 G:.5 A:.5 B:.5 B:.5 c:.5 d:.5 e:.5 B:.5 d:.5 c:1.5"),
+  notes:seq("c:.5 c:.5 c:.25 c:.25 c:.5 c:.5 c:.25 d:.25 c:.25 B:.25 c:.5 d:1 c:.5 c:.5 c:.5 B:.5 c:.5 d:.5 B:.5 G:1.5 G:.5 A:.5 B:.25 B:.25 c:.5 d:.5 e:.5 B:.5 d:.5 c:1.5"),
   frag:"c c c c c c d c B c d", fact:"Es un villancico tradicional español, alegre y lleno de diminutivos: «chiquirritín» quiere decir «pequeñito»."},
  {id:"dimenino",title:"Dime, niño, ¿de quién eres?",place:"España",color:"--n2",bpm:96,bpb:3,pickup:0,style:"suave",minor:true,
   notes:seq("A:1 B:.5 c:.5 c:1 d:1 c:.5 B:.5 c:1 F:1 G:1 A:1 G:.5 A:.5 G:1 F:2"),
@@ -602,7 +602,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&AC&&AC.st
 function whenReady(fn){const a=ac();if(a.state==="running")fn(a);else{const pr=a.resume();if(pr&&pr.then)pr.then(()=>fn(a)).catch(()=>fn(a));else fn(a);}}
 let MASTER=null;function out(){const a=ac();if(!MASTER){const c=a.createDynamicsCompressor();c.threshold.value=-14;c.ratio.value=4;const g=a.createGain();g.gain.value=1;g.connect(c);c.connect(a.destination);MASTER=g;}return MASTER;}
 function bell(f,when,vol=.5){const a=ac(),t=when??a.currentTime,o=a.createGain();o.gain.setValueAtTime(.0001,t);o.gain.exponentialRampToValueAtTime(vol,t+.005);o.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(out());
- [[1,1],[2.76,.25],[5.4,.07]].forEach(([m,v])=>{const s=a.createOscillator(),g=a.createGain();s.frequency.value=f*m;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+(m===1?1.5:.35));s.connect(g);g.connect(o);s.start(t);s.stop(t+1.6);});}
+ [[1,1],[2.76,.1],[5.4,.03]].forEach(([m,v])=>{const s=a.createOscillator(),g=a.createGain();s.frequency.value=f*m;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+(m===1?1.5:.35));s.connect(g);g.connect(o);s.start(t);s.stop(t+1.6);});}
 function tone(ok){const a=ac(),t=a.currentTime;(ok?[784,1046.5]:[311,233]).forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.type=ok?"triangle":"square";o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.12);g.gain.exponentialRampToValueAtTime(ok?.15:.06,t+i*.12+.01);g.gain.exponentialRampToValueAtTime(.0001,t+i*.12+.2);o.connect(g);g.connect(out());o.start(t+i*.12);o.stop(t+i*.12+.25);});}
 
 /* ---- acompañamiento: bajo, acordes y percusión ---- */
@@ -618,27 +618,31 @@ function accompany(song,t0,beat){
  let pos=-(song.pickup||0); const bpb=song.bpb||4; const st=song.style;
  song.notes.forEach(([n,d])=>{
   if(pos>=0&&Math.abs(pos%bpb)<1e-6){const t=t0+(pos+(song.pickup||0))*beat;const ch=CH[chordFor(n,song.minor)];const dur=bpb*beat;
-    oscNote(ch[0]/2,t,dur*.95,"triangle",.32);
-    ch.forEach(f=>oscNote(f,t,dur*.98,st==="orquesta"?"sawtooth":"sine",st==="orquesta"?.025:.05,.08));
-    if(st==="orquesta")skin(t,true,.45);
-    if(st==="suave")for(let k=0;k<bpb;k++)oscNote(ch[k%3]*2,t+k*beat,beat*1.2,"triangle",.05);}
+    oscNote(ch[0]/2,t,dur*.95,"triangle",.16);
+    ch.forEach(f=>oscNote(f,t,dur*.98,"sine",.022,.1));
+    if(st==="orquesta")skin(t,true,.3);
+    if(st==="suave")for(let k=0;k<bpb;k++)oscNote(ch[k%3],t+k*beat,beat*1.1,"triangle",.025);}
   pos+=d;});
  const total=pos+(song.pickup||0);
  for(let k=0;k<total;k++){const t=t0+k*beat;
-  if(st==="cascabeles"){sleigh(t);sleigh(t+beat/2,.1);if(k%2===1)snare(t);}
-  if(st==="pandereta"){tamb(t);if(k%2===0)skin(t,true,.35);}
-  if(st==="tambores"){skin(t,k%2===0);skin(t+beat/2,false,.3);if(k%4===3)skin(t+beat*.75,false,.3);}
-  if(st==="campanas"&&k%3===0)oscNote(110,t,beat*2.5,"sine",.25);}
+  if(st==="cascabeles"){sleigh(t,.11);sleigh(t+beat/2,.06);if(k%2===1)snare(t,.07);}
+  if(st==="pandereta"){tamb(t,.09);if(k%2===0)skin(t,true,.22);}
+  if(st==="tambores"){skin(t,k%2===0,.35);skin(t+beat/2,false,.18);if(k%4===3)skin(t+beat*.75,false,.18);}
+  if(st==="campanas"&&k%3===0)oscNote(110,t,beat*2.5,"sine",.15);}
 }
 function fanfare(){whenReady(a=>{const t=a.currentTime+.02;[523.25,659.25,783.99,1046.5].forEach((f,i)=>{oscNote(f,t+i*.08,.35,"square",.06);bell(f,t+i*.08,.25);});[261.63,329.63,392].forEach(f=>oscNote(f,t+.34,.7,"triangle",.12));sleigh(t+.34,.2);});}
 function buzz(){whenReady(a=>{const t=a.currentTime+.02;oscNote(196,t,.18,"square",.07);oscNote(155.56,t+.16,.3,"square",.07);});}
 function drumroll(){whenReady(a=>{const t=a.currentTime+.02;for(let i=0;i<10;i++)snare(t+i*.045,.05+i*.008);skin(t+.48,true,.5);});}
 
+function leadVoice(f,t,dur){const a=ac(),g=a.createGain(),o1=a.createOscillator(),o2=a.createOscillator(),g2=a.createGain();
+ const d=Math.max(.18,dur*.92);o1.type="triangle";o1.frequency.value=f/2;o2.type="sine";o2.frequency.value=f;g2.gain.value=.35;
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.42,t+.012);g.gain.exponentialRampToValueAtTime(.22,t+Math.min(.15,d*.5));g.gain.setValueAtTime(.22,t+d*.85);g.gain.exponentialRampToValueAtTime(.0001,t+d+.06);
+ o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out());o1.start(t);o2.start(t);o1.stop(t+d+.1);o2.stop(t+d+.1);bell(f,t,.16);}
 let playTimers=[];
 function playSong(song,onNote,opts={}){whenReady(()=>{playTimers.forEach(clearTimeout);playTimers=[];const a=ac(),beat=60/song.bpm;let t=.08;const t0=a.currentTime;
  const notes=opts.max?song.notes.slice(0,opts.max):song.notes;
  if(opts.band!==false)accompany({...song,notes},t0+.08,beat);
- notes.forEach(([n,d],i)=>{bell(NOTES[n][1],t0+t,.55);if(onNote)playTimers.push(setTimeout(()=>onNote(n,i),t*1000));t+=d*beat;});
+ notes.forEach(([n,d],i)=>{leadVoice(NOTES[n][1],t0+t,d*beat);if(onNote)playTimers.push(setTimeout(()=>onNote(n,i),t*1000));t+=d*beat;});
  if(onNote)playTimers.push(setTimeout(()=>onNote(null,-1),(t+.3)*1000));});}
 
 /* ================== UTILIDADES ================== */
@@ -752,13 +756,13 @@ function gEscucha(){
      let extra=0;if(type==="fast"&&ok&&t0){const secs=(performance.now()-t0)/1000;if(secs<8)extra=Math.round((8-secs)*2);}reveal(ok,extra);};optsEl.appendChild(b);});}
   if(type==="ab"){
     const songsAB={A:aFirst?song:decoy,B:aFirst?decoy:song};
-    $view.querySelectorAll("[data-ab]").forEach(btn=>btn.onclick=()=>{const card=btn.closest(".abcard");playSong(songsAB[btn.dataset.ab],animEq(card),{max:12});});
+    $view.querySelectorAll("[data-ab]").forEach(btn=>btn.onclick=()=>{const card=btn.closest(".abcard");playSong(songsAB[btn.dataset.ab],animEq(card),{max:16});});
     $view.querySelectorAll("[data-pick]").forEach(btn=>btn.onclick=()=>{const ok=songsAB[btn.dataset.pick]===song;btn.closest(".abcard").classList.add(ok?"right":"wrong");reveal(ok);});
   } else if(type==="trivia"){optButtons(opts,correct);}
   else {
     const play=$view.querySelector(".listen .play"), eq=animEq($view.querySelector(".listen"));
     play.onclick=()=>{
-      if(type==="fast"){playSong(song,eq,{max:6});if(!t0){t0=performance.now();const tm=$view.querySelector("#tm");timerInt=setInterval(()=>{const left=Math.max(0,8-Math.floor((performance.now()-t0)/1000));tm.textContent=left;tm.classList.toggle("low",left<=3);if(left<=0)clearInterval(timerInt);},200);}}
+      if(type==="fast"){playSong(song,eq,{max:9});if(!t0){t0=performance.now();const tm=$view.querySelector("#tm");timerInt=setInterval(()=>{const left=Math.max(0,8-Math.floor((performance.now()-t0)/1000));tm.textContent=left;tm.classList.toggle("low",left<=3);if(left<=0)clearInterval(timerInt);},200);}}
       else if(type==="firstnote")playSong(song,eq,{max,band:false});
       else if(type==="meter"){whenReady(a=>{const beat=60/song.bpm,t=a.currentTime+.1;for(let k=0;k<song.bpb*4;k++)click(t+k*beat,k%song.bpb===0);});setTimeout(()=>playSong(song,eq),(song.bpb*4*60/song.bpm)*1000+200);}
       else playSong(song,eq);};
@@ -1070,7 +1074,7 @@ function gCuerpo(){
    for(let k=0;k<4;k++){click(a.currentTime+.3+k*beat,k===0);playTimers.push(setTimeout(()=>{cnt.textContent=4-k;cnt.className="cnt show";},(.3+k*beat)*1000));}
    playTimers.push(setTimeout(()=>{cnt.className="cnt";},(.3+4*beat)*1000));
    segs.forEach(g=>{const so2={...g.so,bpm:B.bpm,notes:g.notes,pickup:g.pick};accompany(so2,t0+(g.start-g.pick)*beat,beat);
-     let t=(g.start-g.pick)*beat;g.notes.forEach(([n,d])=>{if(t0+t>=a.currentTime)bell(NOTES[n][1],t0+t,.45);t+=d*beat;});
+     let t=(g.start-g.pick)*beat;g.notes.forEach(([n,d])=>{if(t0+t>=a.currentTime)leadVoice(NOTES[n][1],t0+t,d*beat);t+=d*beat;});
      if(B.medley)playTimers.push(setTimeout(()=>{nowEl.textContent="Ahora suena: «"+g.so.title+"»";nowEl.classList.add("pop");setTimeout(()=>nowEl.classList.remove("pop"),400);},(t0+g.start*beat-a.currentTime)*1000));});
    if(demo)chart.forEach(n=>{bodyHit(n.lane,t0+n.t);playTimers.push(setTimeout(()=>{press(n.lane,true);},(t0+n.t-a.currentTime)*1000));});
    loop();});
