@@ -462,6 +462,18 @@ body.on-levels .gfoot{display:none}
 .nowp{text-align:center;font-weight:800;background:#fff6d6;border:3px solid #14101A;border-radius:10px;padding:6px;margin-bottom:8px}
 .nowp.pop{animation:pulseb .4s}
 .trivia-ico{width:70px;height:70px;margin:0 auto 12px;border-radius:50%;background:var(--n4);border:4px solid #14101A;display:grid;place-items:center;font:400 30px var(--arcade);color:#14101A;box-shadow:4px 4px 0 #14101A}
+
+/* detectives */
+.detbadge{width:84px;height:84px;margin:4px auto 10px;border-radius:50%;background:var(--n1);color:#fff;border:5px solid #14101A;box-shadow:5px 5px 0 #14101A;display:grid;place-items:center;font:400 38px var(--arcade)}
+.detbadge.small{width:60px;height:60px;font-size:26px;background:var(--n3)}
+.vcard{background:#fffdf3;border:4px solid #14101A;border-radius:14px;padding:12px 14px;box-shadow:4px 4px 0 #14101A;margin-top:12px}
+.vcard .vt{font-family:var(--display);font-size:21px;font-weight:800;color:#14101A;border-bottom:3px dashed #e0a400;padding-bottom:4px;margin-bottom:6px}
+.vcard dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:0 0 6px}
+.vcard dt{font:400 9.5px var(--arcade);color:#C8102E;padding-top:4px}.vcard dd{margin:0;font-weight:800}
+.vcard p{margin:0;font-weight:700;color:#56617a;font-size:15px}
+.vcard.locked{background:#eef1f7;box-shadow:none;border-style:dashed}.vcard.locked .vt{color:#9aa4bd;border-color:#c5ccdb}
+.vcard .lk{text-align:center}
+.albumg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 12px}
 </style>
 </head>
 <body>
@@ -532,7 +544,17 @@ SONGS.push(
   notes:seq("A:1 B:.5 c:.5 c:1 d:1 c:.5 B:.5 c:1 F:1 G:1 A:1 G:.5 A:.5 G:1 F:2"),
   frag:"A B c c d c B c F G A G A G F", fact:"Es un villancico tradicional español: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."}
 );
-const PLACES=["Canarias","España","Japón","Ghana","Estados Unidos","Austria","Alemania","Inglaterra","Ucrania"];
+SONGS.push(
+ {id:"adeste",title:"Adeste fideles (Venid, fieles)",place:"Francia",color:"--n3",bpm:96,bpb:4,pickup:1,style:"suave",timbre:"coro",
+  notes:seq("G:1 c:2 G:1 c:1 d:2 G:2 e:1 d:1 e:1 f:1 e:2 d:2"),
+  frag:"G c c G c d G e d e f e d", fact:"Se escribió en latín: «Adeste fideles» significa «Venid, fieles»."},
+ {id:"firstnoel",title:"The First Noel",place:"Inglaterra",color:"--n2",bpm:100,bpb:3,pickup:1,style:"suave",timbre:"coro",
+  notes:seq("E:.5 D:.5 C:1.5 D:.5 E:.5 F:.5 G:2 A:.5 B:.5 c:1 B:1 A:1 G:2 A:.5 B:.5 c:1 B:1 A:1 G:1 A:1 B:1 c:1 G:1 F:1 E:2"),
+  frag:"E D C D E F G A B c B A G", fact:"«Nowell» es una forma antigua inglesa de decir «Navidad»."}
+);
+const TIMBRE={nochepaz:"coro",alegria:"coro",shchedryk:"violin",tannenbaum:"flauta",campana:"flauta",chiquirritin:"flauta",dimenino:"violin",arrorro:"flauta",peces:"violin",wewish:"carillon",jingle:"carillon"};
+SONGS.forEach(s=>{if(!s.timbre&&TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
+const PLACES=["Canarias","España","Japón","Ghana","Estados Unidos","Austria","Alemania","Inglaterra","Ucrania","Francia"];
 
 const PAIRS=[
  ["Ranchos de Pascua","Lanzarote"],["Daiku","Novena de Beethoven"],["Highlife","Ghana"],["Afishapa","«Feliz Navidad» en akan"],
@@ -566,7 +588,7 @@ const FILL={bank:["Lanzarote","lastimero","Beethoven","Año Nuevo","tambores","c
 ]};
 
 const STATIONS=[
- {id:"escucha",k:"Nivel 1",title:"¿Qué canción es?",desc:"Escucha la melodía, adivina la canción y llévala a su país.",color:"--n1",on:"#fff"},
+ {id:"escucha",k:"Nivel 1",title:"Detectives de villancicos",desc:"Escucha, adivina y descubre quién, cuándo y dónde nació cada villancico.",color:"--n1",on:"#fff"},
  {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Reconoce el ritmo y tócalo en el pandero.",color:"--n4",on:"#14101A"},
  {id:"carillon",k:"Nivel 3",title:"Toca el carillón",desc:"Toca un fragmento de cada canción sin fallar.",color:"--n2",on:"#fff"},
  {id:"regalos",k:"Nivel 4",title:"Regalos sonoros",desc:"Abre los regalos y encuentra las parejas que suenan igual.",color:"--n3",on:"#fff"},
@@ -638,11 +660,23 @@ function leadVoice(f,t,dur){const a=ac(),g=a.createGain(),o1=a.createOscillator(
  const d=Math.max(.18,dur*.92);o1.type="triangle";o1.frequency.value=f/2;o2.type="sine";o2.frequency.value=f;g2.gain.value=.35;
  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.42,t+.012);g.gain.exponentialRampToValueAtTime(.22,t+Math.min(.15,d*.5));g.gain.setValueAtTime(.22,t+d*.85);g.gain.exponentialRampToValueAtTime(.0001,t+d+.06);
  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out());o1.start(t);o2.start(t);o1.stop(t+d+.1);o2.stop(t+d+.1);bell(f,t,.16);}
+function voiceNote(tb,f,t,dur){if(!tb||tb==="carillon")return leadVoice(f,t,dur);
+ const a=ac(),g=a.createGain(),d=Math.max(.2,dur*.95),fr=f/2;
+ const vib=a.createOscillator(),vg=a.createGain();vib.frequency.value=5.2;vg.gain.value=fr*.012;vib.connect(vg);
+ const oscs=[];const add=(type,mult,det)=>{const o=a.createOscillator();o.type=type;o.frequency.value=fr*mult;o.detune.value=det;vg.connect(o.frequency);oscs.push(o);return o;};
+ let att=.05,peak=.3;
+ if(tb==="coro"){const f1=a.createBiquadFilter(),f2=a.createBiquadFilter(),mix=a.createGain();f1.type="bandpass";f1.frequency.value=650;f1.Q.value=4;f2.type="bandpass";f2.frequency.value=1100;f2.Q.value=5;
+   [-9,0,8].forEach(dt=>{const o=add("sawtooth",1,dt);o.connect(f1);o.connect(f2);});f1.connect(mix);f2.connect(mix);mix.gain.value=2.2;mix.connect(g);att=.09;peak=.34;}
+ if(tb==="flauta"){const o=add("sine",2,0);o.connect(g);const o2=add("sine",4,0);const g2=a.createGain();g2.gain.value=.08;o2.connect(g2);g2.connect(g);
+   const n=a.createBufferSource(),nf=a.createBiquadFilter(),ng=a.createGain();n.buffer=noiseBuf();nf.type="bandpass";nf.frequency.value=f*2;nf.Q.value=2;ng.gain.value=.03;n.connect(nf);nf.connect(ng);ng.connect(g);n.start(t);n.stop(t+d+.1);att=.04;peak=.32;}
+ if(tb==="violin"){const lp=a.createBiquadFilter();lp.type="lowpass";lp.frequency.value=2600;lp.Q.value=1.5;const o=add("sawtooth",2,0);o.connect(lp);lp.connect(g);att=.07;peak=.2;}
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+att);g.gain.setValueAtTime(peak,t+d*.8);g.gain.exponentialRampToValueAtTime(.0001,t+d+.12);g.connect(out());
+ vib.start(t);vib.stop(t+d+.2);oscs.forEach(o=>{o.start(t);o.stop(t+d+.2);});}
 let playTimers=[];
 function playSong(song,onNote,opts={}){whenReady(()=>{playTimers.forEach(clearTimeout);playTimers=[];const a=ac(),beat=60/song.bpm;let t=.08;const t0=a.currentTime;
  const notes=opts.max?song.notes.slice(0,opts.max):song.notes;
  if(opts.band!==false)accompany({...song,notes},t0+.08,beat);
- notes.forEach(([n,d],i)=>{leadVoice(NOTES[n][1],t0+t,d*beat);if(onNote)playTimers.push(setTimeout(()=>onNote(n,i),t*1000));t+=d*beat;});
+ notes.forEach(([n,d],i)=>{voiceNote(opts.timbre||song.timbre,NOTES[n][1],t0+t,d*beat);if(onNote)playTimers.push(setTimeout(()=>onNote(n,i),t*1000));t+=d*beat;});
  if(onNote)playTimers.push(setTimeout(()=>onNote(null,-1),(t+.3)*1000));});}
 
 /* ================== UTILIDADES ================== */
@@ -704,76 +738,89 @@ const TRIVIA=[
  ["¿Qué pequeño instrumento de cuerda es típico de Canarias?","El timple",["El ukelele","El laúd"]],
  ["¿Cómo se llama el estilo musical más popular de Ghana?","Highlife",["Reggae","Salsa"]]
 ];
+/* Fichas de historia: autor, año y lugar */
+const CARDS={
+ nochepaz:{autor:"Franz Xaver Gruber (música) y Joseph Mohr (letra)",ano:"1818",lugar:"Oberndorf (Austria)",dato:"Se estrenó en la misa del gallo de 1818 y hoy está traducida a cientos de idiomas."},
+ jingle:{autor:"James Lord Pierpont",ano:"1857",lugar:"Estados Unidos",dato:"Su título original era «One Horse Open Sleigh»: un trineo tirado por un caballo."},
+ alegria:{autor:"Ludwig van Beethoven (música) y Friedrich Schiller (letra)",ano:"1824",lugar:"Viena (Austria)",dato:"Es el final de su Novena Sinfonía. Hoy es el himno de Europa y en Japón miles de personas la cantan en diciembre."},
+ tannenbaum:{autor:"Ernst Anschütz (letra), sobre una melodía popular",ano:"1824",lugar:"Leipzig (Alemania)",dato:"Anschütz era maestro y organista. La melodía es una canción popular del siglo XVI."},
+ adeste:{autor:"John Francis Wade",ano:"1751",lugar:"Douai (Francia)",dato:"Wade era un inglés que vivía en Francia. La publicó en 1751, aunque la escribió unos años antes, hacia 1743."},
+ firstnoel:{autor:"Popular (anónimo)",ano:"1823",lugar:"Cornualles (Inglaterra)",dato:"Se publicó por primera vez en 1823, en una colección de Davies Gilbert."},
+ shchedryk:{autor:"Mykola Leontóvych (arreglo)",ano:"1916",lugar:"Ucrania",dato:"Era una canción popular para celebrar el Año Nuevo. En inglés se llama «Carol of the Bells»."},
+ wewish:{autor:"Popular (anónimo)",ano:"",lugar:"Inglaterra",dato:"Los cantores iban de casa en casa y pedían «figgy pudding», un pudin de higos."},
+ campana:{autor:"Popular (anónimo)",ano:"",lugar:"Andalucía (España)",dato:"Su autor es desconocido y se canta en todos los países de habla hispana."},
+ chiquirritin:{autor:"Popular (anónimo)",ano:"",lugar:"Navarra (España)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
+ peces:{autor:"Popular (anónimo)",ano:"",lugar:"España",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
+ dimenino:{autor:"Popular (anónimo)",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
+ arrorro:{autor:"Popular canario",ano:"",lugar:"Canarias",dato:"Es la nana tradicional de Canarias. Teobaldo Power la usó en sus «Cantos canarios», de donde sale el himno de Canarias."}
+};
+/* Villancicos solo de historia (sin melodía en el juego) */
+const TCARDS=[
+ {title:"Hacia Belén va una burra",autor:"Popular (anónimo)",ano:"",lugar:"Castilla-La Mancha (otros dicen que Andalucía)",dato:"La burra va cargada de chocolate, con su molinillo y su anafre, un hornillo antiguo."},
+ {title:"Feliz Navidad",autor:"José Feliciano",ano:"1970",lugar:"Puerto Rico",dato:"Su autor, José Feliciano, es un cantante y guitarrista puertorriqueño. Mezcla español e inglés."},
+ {title:"Blanca Navidad",autor:"Irving Berlin",ano:"1942",lugar:"Estados Unidos",dato:"La cantó Bing Crosby en la película «Holiday Inn»."},
+ {title:"Rodolfo, el reno de la nariz roja",autor:"Johnny Marks",ano:"1949",lugar:"Estados Unidos",dato:"Nació de un cuento de 1939 escrito por Robert L. May."},
+ {title:"El tamborilero",autor:"Katherine K. Davis",ano:"1941",lugar:"Estados Unidos",dato:"Su autora era una pianista estadounidense que la firmó con otro nombre."}
+];
+const FIELD_Q={autor:t=>`¿Quién compuso «${t}»?`,ano:t=>`¿En qué año nació «${t}»?`,lugar:t=>`¿Dónde nació «${t}»?`};
+function cardOf(id){const c=CARDS[id];const s=SONGS.find(x=>x.id===id);return {...c,title:s.title,id};}
+function allCards(){return [...Object.keys(CARDS).map(cardOf),...TCARDS.map((c,i)=>({...c,id:"t"+i}))];}
+function askable(c){const f=["lugar"];if(c.ano)f.push("ano");if(!/Popular/.test(c.autor))f.push("autor");return f;}
+function histQ(c){const fs=askable(c);const f=fs[Math.floor(Math.random()*fs.length)];const pool=[...new Set(allCards().map(x=>x[f]).filter(v=>v&&v!==c[f]))];
+ return {f,q:FIELD_Q[f](c.title),correct:c[f],opts:shuffle([c[f],...shuffle(pool).slice(0,2)])};}
+function album(){let a={};try{a=JSON.parse(localStorage.getItem("vueltaAlbum")||"{}");}catch(e){}return a;}
+function saveCard(id){const a=album();a[id]=1;try{localStorage.setItem("vueltaAlbum",JSON.stringify(a));}catch(e){}}
+function cardHTML(c,got){return `<div class="vcard ${got?"":"locked"}"><div class="vt">${got?c.title:"?"}</div>${got?`<dl><dt>Autor</dt><dd>${c.autor}</dd><dt>Año</dt><dd>${c.ano||"Tradicional"}</dd><dt>Lugar</dt><dd>${c.lugar}</dd></dl><p>${c.dato}</p>`:`<p class="lk">Cromo por descubrir</p>`}</div>`;}
 function gEscucha(){
  const st=STATIONS[0];
- const songs=shuffle(SONGS).slice(0,10);
- const stypes=shuffle(["title","instrument","ab","meter","fast","tf","firstnote","tempo","country","title"]);
- const triv=shuffle(TRIVIA).slice(0,5);
- const plan=[];let si=0,ti=0;for(let k=0;k<15;k++){if(k%3===2&&ti<triv.length)plan.push({kind:"trivia",q:triv[ti++]});else plan.push({kind:stypes[si%stypes.length],song:songs[si++]});}
- let i=0,score=0;
- const others=(song,k)=>shuffle(SONGS.filter(x=>x!==song)).slice(0,k);
- function eqHTML(c){return `<div class="eq big" aria-hidden="true">${Array.from({length:16},()=>`<span style="--c:var(${c})"></span>`).join("")}</div>`;}
- function animEq(root){const bars=[...root.querySelectorAll(".eq span")];return (n,k)=>{bars.forEach((b,j)=>b.style.height=n?(8+Math.abs(Math.sin((j+1)*(k+2)))*38)+"px":"8px");};}
- function round(){
-  if(i>=plan.length) return finish(st,score,plan.length);
-  const P=plan[i],type=P.kind,song=P.song;
-  let q="",sub="",correct=null,opts=[],audio=true,max=0,noteOpts=false,extraHTML="";
-  if(type==="trivia"){audio=false;q=P.q[0];sub="Pregunta de cultura navideña.";correct=P.q[1];opts=shuffle([P.q[1],...P.q[2]]);}
-  if(type==="title"){q="¿Qué canción es?";sub="Escucha la melodía con toda la banda y elige el título.";correct=song.title;opts=shuffle([song,...others(song,3)]).map(x=>x.title);}
-  if(type==="fast"){q="¡Rápido! Solo suena el principio";sub="Adivina la canción con las primeras notas. Si aciertas en menos de 8 segundos, ganas puntos extra.";correct=song.title;opts=shuffle([song,...others(song,2)]).map(x=>x.title);max=6;}
-  if(type==="ab"){q=`¿Cuál de las dos es «${song.title}»?`;sub="Escucha la melodía A y la melodía B y elige.";}
-  if(type==="tf"){q="¿Verdadero o falso?";sub="Escucha la canción y lee la frase.";}
-  if(type==="country"){q="¿De dónde es esta canción?";sub="Escúchala y elige su lugar de origen.";correct=song.place;opts=shuffle([song.place,...shuffle(PLACES.filter(p=>p!==song.place)).slice(0,3)]);}
-  if(type==="instrument"){q="¿Qué acompaña a la melodía?";sub="Escucha con atención el fondo: ¿qué instrumentos suenan además del carillón?";correct=STYLE_NAME[song.style];opts=shuffle([correct,...shuffle(Object.values(STYLE_NAME).filter(x=>x!==correct)).slice(0,2)]);}
-  if(type==="meter"){q="¿Cuántos tiempos tiene cada compás?";sub="Escucha y cuenta: 1-2, 1-2-3 o 1-2-3-4. El primer tiempo suena más fuerte.";correct=`${song.bpb} tiempos`;opts=["2 tiempos","3 tiempos","4 tiempos"];}
-  if(type==="tempo"){q="¿Cómo es el tempo de esta canción?";sub="¿Va despacio, a velocidad normal o deprisa?";correct=song.bpm<100?"Lento":song.bpm>=125?"Rápido":"Moderado";opts=["Lento","Moderado","Rápido"];}
-  if(type==="firstnote"){q="¿Con qué nota empieza la melodía?";sub="Escucha las primeras notas y busca la primera en el carillón de colores.";const f=song.notes[0][0];correct=NOTES[f][0];const near=shuffle(BARS.filter(n=>n!==f&&Math.abs(BARS.indexOf(n)-BARS.indexOf(f))<=3)).slice(0,2);opts=shuffle([f,...near]).map(n=>NOTES[n][0]);noteOpts=true;max=4;}
-  const decoy=song?others(song,1)[0]:null, aFirst=Math.random()<.5;
-  const tfTrue=Math.random()<.5, tfPlace=song?(tfTrue?song.place:shuffle(PLACES.filter(p=>p!==song.place))[0]):"";
-  const label=type==="trivia"?"Pregunta":"Canción";
-  $view.innerHTML=header(st,`${i+1} de ${plan.length}`)+`<div class="panel l1">
-   <div class="phase">${type==="trivia"?"CULTURA NAVIDEÑA":"ESCUCHA"}</div>
-   <div class="q">${q}</div><p class="sub">${sub}</p>
-   ${type==="ab"?`<div class="abrow">${["A","B"].map(L=>`<div class="abcard"><button class="play sm" type="button" data-ab="${L}" aria-label="Escuchar melodía ${L}"></button><b>Melodía ${L}</b>${eqHTML(song.color)}<button class="big gold choose" type="button" data-pick="${L}">¡Es esta!</button></div>`).join("")}</div>`
-     :audio?`<div class="listen"><button class="play" type="button" aria-label="Escuchar"></button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:19px">${type==="fast"?"Pulsa y escucha el principio":"Pulsa para escuchar"}</div>${eqHTML(song.color)}</div>${type==="fast"?'<div class="timer" id="tm">8</div>':""}</div>`:`<div class="trivia-ico" aria-hidden="true">?</div>`}
-   ${type==="tf"?`<div class="statement">«Esta canción es de <b>${tfPlace}</b>».</div>`:""}
-   <div class="opts ${noteOpts?"notes":""}" id="opts"></div><div class="feedback" id="fb"></div>
-   <div class="row"><button class="big gold" type="button" id="next" hidden>Siguiente ▶</button></div></div>`;
-  bindHome($view);window.scrollTo(0,0);
-  const optsEl=$view.querySelector("#opts"), fb=$view.querySelector("#fb"), next=$view.querySelector("#next");
-  let done=false, t0=null, timerInt=null;
-  function reveal(ok,extra){if(done)return;done=true;clearInterval(timerInt);
-    optsEl.querySelectorAll("button").forEach(b=>b.disabled=true);$view.querySelectorAll("[data-pick]").forEach(b=>b.disabled=true);
-    if(ok){score++;addPts(10+(extra||0));fanfare();}else buzz();
-    fb.className="feedback show "+(ok?"good":"badf");
-    if(type==="trivia")fb.innerHTML=(ok?"¡Correcto! ":"¡Casi! ")+`La respuesta es <b>${correct}</b>.`;
-    else{const what={instrument:`El acompañamiento era: <b>${correct}</b>. `,meter:`Tiene <b>${correct}</b> por compás. `,tempo:`Su tempo es <b>${String(correct).toLowerCase()}</b>. `,firstnote:`Empieza en <b>${correct}</b>. `}[type]||"";
-      fb.innerHTML=(ok?`¡Correcto!${extra?` +${extra} puntos extra por tu rapidez.`:""} `:"¡Casi! ")+what+`Era <b>«${song.title}»</b> (${song.place}). ${song.fact}`;}
-    next.hidden=false;next.focus();}
-  function optButtons(list,corr){list.forEach(v=>{const nn=noteOpts?Object.keys(NOTES).find(k=>NOTES[k][0]===v):null;
-    const b=el(`<button class="opt ${noteOpts?"nopt":""}" type="button" ${nn?`style="--nc:var(${NOTES[nn][2]})"`:""}>${v}</button>`);b.dataset.v=v;
-    b.onclick=()=>{if(nn)bell(NOTES[nn][1],undefined,.6);const ok=v===corr;optsEl.querySelectorAll(".opt").forEach(x=>{if(x.dataset.v===corr)x.classList.add("right");});if(!ok)b.classList.add("wrong");
-     let extra=0;if(type==="fast"&&ok&&t0){const secs=(performance.now()-t0)/1000;if(secs<8)extra=Math.round((8-secs)*2);}reveal(ok,extra);};optsEl.appendChild(b);});}
-  if(type==="ab"){
-    const songsAB={A:aFirst?song:decoy,B:aFirst?decoy:song};
-    $view.querySelectorAll("[data-ab]").forEach(btn=>btn.onclick=()=>{const card=btn.closest(".abcard");playSong(songsAB[btn.dataset.ab],animEq(card),{max:16});});
-    $view.querySelectorAll("[data-pick]").forEach(btn=>btn.onclick=()=>{const ok=songsAB[btn.dataset.pick]===song;btn.closest(".abcard").classList.add(ok?"right":"wrong");reveal(ok);});
-  } else if(type==="trivia"){optButtons(opts,correct);}
-  else {
-    const play=$view.querySelector(".listen .play"), eq=animEq($view.querySelector(".listen"));
-    play.onclick=()=>{
-      if(type==="fast"){playSong(song,eq,{max:9});if(!t0){t0=performance.now();const tm=$view.querySelector("#tm");timerInt=setInterval(()=>{const left=Math.max(0,8-Math.floor((performance.now()-t0)/1000));tm.textContent=left;tm.classList.toggle("low",left<=3);if(left<=0)clearInterval(timerInt);},200);}}
-      else if(type==="firstnote")playSong(song,eq,{max,band:false});
-      else if(type==="meter"){whenReady(a=>{const beat=60/song.bpm,t=a.currentTime+.1;for(let k=0;k<song.bpb*4;k++)click(t+k*beat,k%song.bpb===0);});setTimeout(()=>playSong(song,eq),(song.bpb*4*60/song.bpm)*1000+200);}
-      else playSong(song,eq);};
-    if(type==="tf"){[["Verdadero",true],["Falso",false]].forEach(([lab,val])=>{const b=el(`<button class="opt tf" type="button">${lab}</button>`);b.onclick=()=>{const ok=val===tfTrue;b.classList.add(ok?"right":"wrong");reveal(ok);};optsEl.appendChild(b);});}
-    else optButtons(opts,correct);
-    setTimeout(()=>{if(!done)play.click();},350);
-  }
-  if(type!=="trivia")drumroll();
-  next.onclick=()=>{playTimers.forEach(clearTimeout);i++;round();};
- }
- round();
+ function intro(){const a=album(),all=allCards(),n=all.filter(c=>a[c.id]).length;
+  $view.innerHTML=header(st,"")+`<div class="panel det"><div class="detbadge" aria-hidden="true">?</div>
+   <div class="q" style="text-align:center">¿Eres un buen detective de villancicos?</div>
+   <p class="sub" style="text-align:center">Escucha cada villancico, adivina cuál es y descubre <b>quién</b> lo compuso, <b>cuándo</b> y <b>dónde</b> nació. Si aciertas las dos preguntas, ganas su cromo para tu álbum.</p>
+   <div class="row" style="justify-content:center"><button class="big gold" type="button" id="go">¡Empezar la investigación! ▶</button><button class="big line" type="button" id="alb">Mi álbum (${n}/${all.length})</button></div></div>`;
+  bindHome($view);window.scrollTo(0,0);$view.querySelector("#go").onclick=play;$view.querySelector("#alb").onclick=showAlbum;}
+ function showAlbum(){const a=album(),all=allCards();
+  $view.innerHTML=header(st,"Mi álbum")+`<div class="panel"><div class="q">Álbum de villancicos</div><p class="sub">${all.filter(c=>a[c.id]).length} de ${all.length} cromos conseguidos.</p><div class="albumg">${all.map(c=>cardHTML(c,a[c.id])).join("")}</div>
+   <div class="row"><button class="big gold" type="button" id="bk">Volver</button></div></div>`;
+  bindHome($view);window.scrollTo(0,0);$view.querySelector("#bk").onclick=intro;}
+ function play(){
+  const audio=shuffle(Object.keys(CARDS)).slice(0,7).map(id=>({kind:"song",song:SONGS.find(x=>x.id===id),card:cardOf(id)}));
+  const text=shuffle(TCARDS.map((c,i)=>({...c,id:"t"+i}))).slice(0,2).map(c=>({kind:"text",card:c}));
+  const plan=[...audio.slice(0,3),text[0],...audio.slice(3,5),{kind:"older"},...audio.slice(5),text[1]];
+  const max=audio.length*2+text.length+1;let i=0,score=0;
+  function round(){if(i>=plan.length)return finish(st,score,max);
+   const P=plan[i];
+   if(P.kind==="song")return songRound(P);if(P.kind==="text")return textRound(P);return olderRound();}
+  function frame(phase,inner){return header(st,`Caso ${i+1} de ${plan.length}`)+`<div class="panel l1"><div class="phase">${phase}</div>${inner}<div class="feedback" id="fb"></div><div id="cardslot"></div><div class="row"><button class="big gold" type="button" id="nx" hidden>Siguiente caso ▶</button></div></div>`;}
+  function opts(list,corr,cb){const box=$view.querySelector("#op");box.innerHTML="";list.forEach(v=>{const b=el(`<button class="opt" type="button">${v}</button>`);b.onclick=()=>{box.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.textContent===corr)x.classList.add("right");});const ok=v===corr;if(!ok)b.classList.add("wrong");cb(ok);};box.appendChild(b);});}
+  function next(){const nx=$view.querySelector("#nx");nx.hidden=false;nx.focus();nx.onclick=()=>{playTimers.forEach(clearTimeout);i++;round();};}
+  function songRound(P){const s=P.song,c=P.card;let ok1=false;
+   $view.innerHTML=frame("ESCUCHA E INVESTIGA",`<div class="q" id="qq">¿Qué villancico suena?</div><p class="sub" id="ss">Escúchalo con atención. ${({coro:"Lo canta un coro.",flauta:"Lo toca una flauta.",violin:"Lo toca un violín.",carillon:"Lo toca un carillón."})[s.timbre||"carillon"]}</p>
+    <div class="listen"><button class="play" type="button" aria-label="Escuchar"></button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:19px">Pulsa para escuchar</div><div class="eq big" aria-hidden="true">${Array.from({length:16},()=>`<span style="--c:var(${s.color})"></span>`).join("")}</div></div></div>
+    <div class="opts" id="op"></div>`);
+   bindHome($view);window.scrollTo(0,0);drumroll();
+   const bars=[...$view.querySelectorAll(".eq span")];const eq=(n,k)=>bars.forEach((b,j)=>b.style.height=n?(8+Math.abs(Math.sin((j+1)*(k+2)))*38)+"px":"8px");
+   const pl=$view.querySelector(".listen .play");pl.onclick=()=>playSong(s,eq);setTimeout(()=>pl.click(),450);
+   const fb=$view.querySelector("#fb");
+   const titles=shuffle([s.title,...shuffle(Object.keys(CARDS).filter(x=>x!==s.id)).slice(0,3).map(x=>SONGS.find(y=>y.id===x).title)]);
+   opts(titles,s.title,ok=>{ok1=ok;if(ok){score++;addPts(10);fanfare();}else buzz();
+    fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=ok?"¡Bien! Ahora investiga su historia.":`Era <b>«${s.title}»</b>. Ahora investiga su historia.`;
+    setTimeout(()=>{const H=histQ(c);$view.querySelector("#qq").textContent=H.q;$view.querySelector("#ss").textContent="Pista: vuelve a escucharla si quieres.";fb.className="feedback";
+      opts(H.opts,H.correct,ok2=>{if(ok2){score++;addPts(10);fanfare();}else buzz();
+       const got=ok1&&ok2;if(got)saveCard(c.id);
+       fb.className="feedback show "+(ok2?"good":"badf");fb.innerHTML=(ok2?"¡Caso resuelto! ":"¡Casi! ")+(got?"<b>¡Has ganado su cromo!</b>":"Para ganar el cromo hay que acertar las dos preguntas.");
+       $view.querySelector("#cardslot").innerHTML=cardHTML(c,true);next();});},1300);});}
+  function textRound(P){const c=P.card;const H=histQ(c);
+   $view.innerHTML=frame("ARCHIVO DE HISTORIA",`<div class="detbadge small" aria-hidden="true">?</div><div class="q">${H.q}</div><p class="sub">Este villancico no suena en el juego: investiga solo su historia.</p><div class="opts" id="op"></div>`);
+   bindHome($view);window.scrollTo(0,0);const fb=$view.querySelector("#fb");
+   opts(H.opts,H.correct,ok=>{if(ok){score++;addPts(10);fanfare();saveCard(c.id);}else buzz();fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=ok?"¡Correcto! <b>¡Has ganado su cromo!</b>":"¡Casi! Mira su ficha:";$view.querySelector("#cardslot").innerHTML=cardHTML(c,true);next();});}
+  function olderRound(){const dated=allCards().filter(c=>/^\d{4}$/.test(c.ano));const [x,y]=shuffle(dated).filter((c,k,arr)=>k===0||c.ano!==arr[0].ano).slice(0,2);const older=+x.ano<+y.ano?x:y;
+   $view.innerHTML=frame("LÍNEA DEL TIEMPO",`<div class="q">¿Cuál de estos villancicos es más antiguo?</div><p class="sub">Piensa en su historia: ¿cuál nació primero?</p><div class="opts" id="op"></div>`);
+   bindHome($view);window.scrollTo(0,0);const fb=$view.querySelector("#fb");
+   opts(shuffle([x.title,y.title]),older.title,ok=>{if(ok){score++;addPts(10);fanfare();}else buzz();const other=older===x?y:x;
+     fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=`«${older.title}» es de <b>${older.ano}</b> y «${other.title}» de <b>${other.ano}</b>.`;next();});}
+  round();}
+ intro();
 }
 
 /* ================== 2. RELACIONA ================== */
@@ -1074,7 +1121,7 @@ function gCuerpo(){
    for(let k=0;k<4;k++){click(a.currentTime+.3+k*beat,k===0);playTimers.push(setTimeout(()=>{cnt.textContent=4-k;cnt.className="cnt show";},(.3+k*beat)*1000));}
    playTimers.push(setTimeout(()=>{cnt.className="cnt";},(.3+4*beat)*1000));
    segs.forEach(g=>{const so2={...g.so,bpm:B.bpm,notes:g.notes,pickup:g.pick};accompany(so2,t0+(g.start-g.pick)*beat,beat);
-     let t=(g.start-g.pick)*beat;g.notes.forEach(([n,d])=>{if(t0+t>=a.currentTime)leadVoice(NOTES[n][1],t0+t,d*beat);t+=d*beat;});
+     let t=(g.start-g.pick)*beat;g.notes.forEach(([n,d])=>{if(t0+t>=a.currentTime)voiceNote(g.so.timbre,NOTES[n][1],t0+t,d*beat);t+=d*beat;});
      if(B.medley)playTimers.push(setTimeout(()=>{nowEl.textContent="Ahora suena: «"+g.so.title+"»";nowEl.classList.add("pop");setTimeout(()=>nowEl.classList.remove("pop"),400);},(t0+g.start*beat-a.currentTime)*1000));});
    if(demo)chart.forEach(n=>{bodyHit(n.lane,t0+n.t);playTimers.push(setTimeout(()=>{press(n.lane,true);},(t0+n.t-a.currentTime)*1000));});
    loop();});
