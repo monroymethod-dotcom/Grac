@@ -495,7 +495,7 @@ body.on-levels .gfoot{display:none}
 <p><b>Monroy Method®</b> es una marca registrada en la Oficina Española de Patentes y Marcas (OEPM), nº <b>M3699532</b>, clase 41 (educación, formación y entretenimiento). Titular: <b>Rita Monroy Suárez</b>.</p>
 <p><b>GRAC</b> es una saga de videojuegos educativos creada por Monroy Method. Este juego (diseño, estructura de juego, textos, ilustraciones y código) es propiedad de su autora. © 2026 Rita Monroy Suárez. Todos los derechos reservados.</p>
 <p>Queda prohibida su reproducción, copia, modificación, distribución, comunicación pública o venta, total o parcial, sin la autorización previa y por escrito de la titular. Uso permitido: solo el uso educativo dentro del aula autorizado por la titular.</p>
-<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i> (villancicos tradicionales españoles) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p>
+<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i>, <i>La marimorena</i>, <i>Arre borriquito</i> y <i>Ya vienen los Reyes Magos</i> (villancicos tradicionales españoles), <i>Adeste fideles</i> (Wade, 1751) y <i>The First Noel</i> (tradicional inglés) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p>
 <button class="ok" type="button" onclick="document.getElementById('lmodal').hidden=true">ENTENDIDO</button></div></div>
 
 <script>
@@ -551,6 +551,17 @@ SONGS.push(
  {id:"firstnoel",title:"The First Noel",place:"Inglaterra",color:"--n2",bpm:100,bpb:3,pickup:1,style:"suave",timbre:"coro",
   notes:seq("E:.5 D:.5 C:1.5 D:.5 E:.5 F:.5 G:2 A:.5 B:.5 c:1 B:1 A:1 G:2 A:.5 B:.5 c:1 B:1 A:1 G:1 A:1 B:1 c:1 G:1 F:1 E:2"),
   frag:"E D C D E F G A B c B A G", fact:"«Nowell» es una forma antigua inglesa de decir «Navidad»."}
+);
+SONGS.push(
+ {id:"marimorena",title:"La marimorena",place:"España",color:"--n1",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"carillon",
+  notes:seq("C:.5 C:.5 C:.5 D:.5 E:.5 E:.5 G:.5 G:.5 G:.5 G:.5 F:.5 D:1.5 F:.5 F:.5 E:.5 F:.5 G:.5 A:.5 G:.5 F:.5 E:.5 D:.5 D:.5 C:1.5"),
+  frag:"C C C D E E G G G G F D", fact:"«Armar la marimorena» significa armar mucho jaleo: ¡así se celebra la Nochebuena!"},
+ {id:"arre",title:"Arre borriquito",place:"España",color:"--n4",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"flauta",
+  notes:seq("C:.5 C:.5 C:.5 E:.5 C:.5 C:1 C:.5 D:.5 E:.5 F:.5 G:.5 G:1 A:.5 G:.5 F:.5 E:.5 D:.5 C:1.5"),
+  frag:"C C C E C C C D E F G G", fact:"Cuenta el camino a Belén a lomos de un borriquito."},
+ {id:"reyes",title:"Ya vienen los Reyes Magos",place:"España",color:"--n2",bpm:116,bpb:2,pickup:0,style:"pandereta",timbre:"violin",
+  notes:seq("C:.5 E:.5 G:.5 A:.5 G:.5 F:.5 G:.5 E:1.5 C:.5 E:.5 G:.5 A:.5 G:.5 F:.5 G:.5 E:1.5 G:.5 G:.5 G:.5 E:.5 C:.5 D:.5 E:2"),
+  frag:"C E G A G F G E", fact:"Cuenta la llegada de los Reyes Magos, «caminito de Belén»."}
 );
 const TIMBRE={nochepaz:"coro",alegria:"coro",shchedryk:"violin",tannenbaum:"flauta",campana:"flauta",chiquirritin:"flauta",dimenino:"violin",arrorro:"flauta",peces:"violin",wewish:"carillon",jingle:"carillon"};
 SONGS.forEach(s=>{if(!s.timbre&&TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
@@ -749,13 +760,22 @@ const CARDS={
  shchedryk:{autor:"Mykola Leontóvych (arreglo)",ano:"1916",lugar:"Ucrania",dato:"Era una canción popular para celebrar el Año Nuevo. En inglés se llama «Carol of the Bells»."},
  wewish:{autor:"Anónimo",ano:"",lugar:"Inglaterra",dato:"Los cantores iban de casa en casa y pedían «figgy pudding», un pudin de higos."},
  campana:{autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"Su autor es desconocido y se canta en todos los países de habla hispana."},
- chiquirritin:{autor:"Anónimo",ano:"",lugar:"Navarra (España)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
- peces:{autor:"Anónimo",ano:"",lugar:"España",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
+ chiquirritin:{autor:"Anónimo",ano:"",lugar:"Navarra (otros dicen que Andalucía)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
+ peces:{autor:"Anónimo",ano:"",lugar:"Extremadura (España)",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
  dimenino:{autor:"Anónimo",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
+ marimorena:{autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"«Armar la marimorena» significa armar mucho jaleo: ¡así se celebra la Nochebuena!"},
+ arre:{autor:"Anónimo",ano:"",lugar:"España",dato:"Cuenta el camino a Belén a lomos de un borriquito: «que mañana es fiesta y al otro también»."},
+ reyes:{autor:"Anónimo",ano:"",lugar:"Aragón (España)",dato:"Cuenta la llegada de los Reyes Magos «caminito de Belén»."},
  arrorro:{autor:"Anónimo",ano:"",lugar:"Canarias",dato:"Es la nana tradicional de Canarias. Teobaldo Power la usó en sus «Cantos canarios», de donde sale el himno de Canarias."}
 };
 /* Villancicos solo de historia (sin melodía en el juego) */
 const TCARDS=[
+ {title:"Riu, riu, chiu",autor:"Mateo Flecha el Viejo (se le atribuye)",ano:"1556",lugar:"España (se publicó en Venecia)",dato:"Es de los villancicos españoles más antiguos que se conservan. Se publicó en el Cancionero de Upsala, cuyo único ejemplar está en la Universidad de Uppsala (Suecia)."},
+ {title:"Una sobre el mismo mar",autor:"Benito Cabrera",ano:"1994",lugar:"Canarias",dato:"Su autor es timplista. El villancico canta a las islas unidas «sobre el mismo mar»."},
+ {title:"Vamos, vamos pastores",autor:"Anónimo",ano:"",lugar:"Canarias",dato:"Los pastores le llevan al Niño «gofio, turrones y miel»."},
+ {title:"Fum, fum, fum",autor:"Anónimo",ano:"",lugar:"Cataluña (España)",dato:"Es un villancico popular catalán. En castellano empieza «Veinticinco de diciembre»."},
+ {title:"Una pandereta suena",autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"Es uno de los villancicos que se cantan en todos los países de habla hispana."},
+ {title:"En Belén tocan a fuego",autor:"Anónimo",ano:"",lugar:"Castilla y León (España)",dato:"Es un villancico popular castellano."},
  {title:"A Belén, pastores",autor:"Anónimo",ano:"",lugar:"España",dato:"Es un villancico popular español. Su estribillo dice: «A Belén, pastores, debemos marchar, que el Rey de los reyes ha nacido ya»."},
  {title:"Hacia Belén va una burra",autor:"Anónimo",ano:"",lugar:"Castilla-La Mancha (otros dicen que Andalucía)",dato:"La burra va cargada de chocolate, con su molinillo y su anafre, un hornillo antiguo."},
  {title:"Feliz Navidad",autor:"José Feliciano",ano:"1970",lugar:"Puerto Rico",dato:"Su autor, José Feliciano, es un cantante y guitarrista puertorriqueño. Mezcla español e inglés."},
@@ -785,9 +805,10 @@ function gEscucha(){
    <div class="row"><button class="big gold" type="button" id="bk">Volver</button></div></div>`;
   bindHome($view);window.scrollTo(0,0);$view.querySelector("#bk").onclick=intro;}
  function play(){
-  const audio=shuffle(Object.keys(CARDS)).slice(0,7).map(id=>({kind:"song",song:SONGS.find(x=>x.id===id),card:cardOf(id)}));
-  const text=shuffle(TCARDS.map((c,i)=>({...c,id:"t"+i}))).slice(0,2).map(c=>({kind:"text",card:c}));
-  const plan=[...audio.slice(0,3),text[0],...audio.slice(3,5),{kind:"older"},...audio.slice(5),text[1]];
+  const es=["campana","peces","chiquirritin","marimorena","arre","reyes","dimenino","arrorro"],ot=Object.keys(CARDS).filter(x=>!es.includes(x));
+  const audio=shuffle([...shuffle(es).slice(0,4),...shuffle(ot).slice(0,3)]).map(id=>({kind:"song",song:SONGS.find(x=>x.id===id),card:cardOf(id)}));
+  const text=shuffle(TCARDS.map((c,i)=>({...c,id:"t"+i}))).slice(0,3).map(c=>({kind:"text",card:c}));
+  const plan=[...audio.slice(0,3),text[0],...audio.slice(3,5),text[1],{kind:"older"},...audio.slice(5),text[2]];
   const max=audio.length*2+text.length+1;let i=0,score=0;
   function round(){if(i>=plan.length)return finish(st,score,max);
    const P=plan[i];
@@ -1038,7 +1059,7 @@ function gRitmo(){
       if(ok){result(true,acc===1?"¡Perfecto! Has clavado el ritmo.":"¡Muy bien! Casi perfecto.");}
       else{buzz();const {fb,nx}=ui();fb.className="feedback show badf";fb.textContent=ntaps===0?"No he oído ningún golpe. Toca el pandero cuando salga «¡YA!».":`Has acertado ${hit} de ${n} golpes. ${tries<2?"¡Otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{playTimers.forEach(clearTimeout);next();};}}});
     $view.querySelector("#go").onclick=go;ui().retry.onclick=()=>{ui().retry.hidden=true;go();};}
-   if(gid==="adivina"){const pool=SONGS.filter(x=>["jingle","wewish","alegria","nochepaz","campana","shchedryk","tannenbaum","arrorro","peces","chiquirritin"].includes(x.id));
+   if(gid==="adivina"){const pool=SONGS.filter(x=>["jingle","wewish","alegria","nochepaz","campana","shchedryk","tannenbaum","arrorro","peces","chiquirritin","marimorena","arre","reyes"].includes(x.id));
     const song=shuffle(pool)[0];const opts=shuffle([song,...shuffle(pool.filter(x=>x!==song)).slice(0,2)]);
     const hits=[];let t=0;for(const [n,d] of song.notes){if(t>=9)break;hits.push([t,d]);t+=d;}
     const playR=()=>whenReady(a=>{const beat=60/song.bpm,t0=a.currentTime+.2;hits.forEach(([o])=>{hitSound(t0+o*beat);tamb(t0+o*beat,.08);});});
@@ -1076,6 +1097,8 @@ const BODY=[
  {song:"arrorro",bpm:80,pats:["M_C_C_"]},
  {song:"peces",bpm:108,pats:["P_A_","PPA_"]},
  {song:"chiquirritin",bpm:110,pats:["M_A_","MMAC"]},
+ {song:"marimorena",bpm:116,pats:["P_A_","PPAA"]},
+ {song:"arre",bpm:112,pats:["M_A_","MMA_"]},
  {medley:true,title:"Popurrí navideño",bpm:108,parts:[["campana",["M_A_","MMA_"]],["peces",["P_A_","PPA_"]],["chiquirritin",["M_A_","MMAC"]],["jingle",["P_M_A_A_"]],["wewish",["P_A_A_"]],["alegria",["P_A_P_A_","M_M_A_C_"]]]}
 ];
 function bodyHit(lane,t){const a=ac();t=t??a.currentTime;
