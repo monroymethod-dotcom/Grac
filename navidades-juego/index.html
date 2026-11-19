@@ -545,9 +545,9 @@ SONGS.push(
   frag:"A B c c d c B c F G A G A G F", fact:"Es un villancico tradicional español: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."}
 );
 SONGS.push(
- {id:"adeste",title:"Adeste fideles (Venid, fieles)",place:"Francia",color:"--n3",bpm:96,bpb:4,pickup:1,style:"suave",timbre:"coro",
-  notes:seq("G:1 c:2 G:1 c:1 d:2 G:2 e:1 d:1 e:1 f:1 e:2 d:2"),
-  frag:"G c c G c d G e d e f e d", fact:"Se escribió en latín: «Adeste fideles» significa «Venid, fieles»."},
+ {id:"adeste",title:"Adeste fideles (Venid, fieles)",place:"Francia",color:"--n3",bpm:96,bpb:4,pickup:1,style:"suave",timbre:"organo",
+  notes:seq("c:1 c:2 G:1 c:1 d:2 G:2 e:1 d:1 e:1 f:1 e:2 d:2"),
+  frag:"c c G c d G e d e f e d", fact:"Se escribió en latín: «Adeste fideles» significa «Venid, fieles»."},
  {id:"firstnoel",title:"The First Noel",place:"Inglaterra",color:"--n2",bpm:100,bpb:3,pickup:1,style:"suave",timbre:"coro",
   notes:seq("E:.5 D:.5 C:1.5 D:.5 E:.5 F:.5 G:2 A:.5 B:.5 c:1 B:1 A:1 G:2 A:.5 B:.5 c:1 B:1 A:1 G:1 A:1 B:1 c:1 G:1 F:1 E:2"),
   frag:"E D C D E F G A B c B A G", fact:"«Nowell» es una forma antigua inglesa de decir «Navidad»."}
@@ -563,7 +563,8 @@ SONGS.push(
   notes:seq("C:.5 E:.5 G:.5 A:.5 G:.5 F:.5 G:.5 E:1.5 C:.5 E:.5 G:.5 A:.5 G:.5 F:.5 G:.5 E:1.5 G:.5 G:.5 G:.5 E:.5 C:.5 D:.5 E:2"),
   frag:"C E G A G F G E", fact:"Cuenta la llegada de los Reyes Magos, «caminito de Belén»."}
 );
-const TIMBRE={nochepaz:"coro",alegria:"coro",shchedryk:"violin",tannenbaum:"flauta",campana:"flauta",chiquirritin:"flauta",dimenino:"violin",arrorro:"flauta",peces:"violin",wewish:"carillon",jingle:"carillon"};
+SONGS.splice(SONGS.findIndex(x=>x.id==="dimenino"),1);
+const TIMBRE={nochepaz:"coro",alegria:"violin",shchedryk:"violin",tannenbaum:"flauta",campana:"flauta",chiquirritin:"flauta",arrorro:"piano",peces:"piano",wewish:"piano",jingle:"carillon"};
 SONGS.forEach(s=>{if(!s.timbre&&TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
 const PLACES=["Canarias","España","Japón","Ghana","Estados Unidos","Austria","Alemania","Inglaterra","Ucrania","Francia"];
 
@@ -634,7 +635,7 @@ function unlockAudio(){
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&AC&&AC.state!=="running"){try{AC.resume();}catch(e){}}});
 function whenReady(fn){const a=ac();if(a.state==="running")fn(a);else{const pr=a.resume();if(pr&&pr.then)pr.then(()=>fn(a)).catch(()=>fn(a));else fn(a);}}
 let MASTER=null;function out(){const a=ac();if(!MASTER){const c=a.createDynamicsCompressor();c.threshold.value=-14;c.ratio.value=4;const g=a.createGain();g.gain.value=1;g.connect(c);c.connect(a.destination);MASTER=g;}return MASTER;}
-function bell(f,when,vol=.5){const a=ac(),t=when??a.currentTime,o=a.createGain();o.gain.setValueAtTime(.0001,t);o.gain.exponentialRampToValueAtTime(vol,t+.005);o.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(out());
+function bell(f,when,vol=.5){if(typeof sample==="function"&&sample("carillon",f,when??ac().currentTime,1.2,Math.min(1,vol*1.6)))return;const a=ac(),t=when??a.currentTime,o=a.createGain();o.gain.setValueAtTime(.0001,t);o.gain.exponentialRampToValueAtTime(vol,t+.005);o.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(out());
  [[1,1],[2.76,.1],[5.4,.03]].forEach(([m,v])=>{const s=a.createOscillator(),g=a.createGain();s.frequency.value=f*m;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+(m===1?1.5:.35));s.connect(g);g.connect(o);s.start(t);s.stop(t+1.6);});}
 function tone(ok){const a=ac(),t=a.currentTime;(ok?[784,1046.5]:[311,233]).forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.type=ok?"triangle":"square";o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.12);g.gain.exponentialRampToValueAtTime(ok?.15:.06,t+i*.12+.01);g.gain.exponentialRampToValueAtTime(.0001,t+i*.12+.2);o.connect(g);g.connect(out());o.start(t+i*.12);o.stop(t+i*.12+.25);});}
 
@@ -645,12 +646,17 @@ function sleigh(t,v=.18){const a=ac(),s=a.createBufferSource(),f=a.createBiquadF
 function tamb(t,v=.16){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="bandpass";f.frequency.value=3500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.09);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.1);}
 function skin(t,low,v=.55){const a=ac(),o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(low?150:300,t);o.frequency.exponentialRampToValueAtTime(low?55:140,t+.14);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.28);o.connect(g);g.connect(out());o.start(t);o.stop(t+.3);}
 function snare(t,v=.12){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="highpass";f.frequency.value=1500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.06);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.08);}
-const CH={C:[130.81,164.81,196],F:[174.61,220,261.63],G:[196,246.94,293.66],Am:[220,261.63,329.63]};
+const CH={C:[130.81,164.81,196],F:[174.61,220,261.63],G:[196,246.94,293.66],G7:[196,246.94,349.23],Am:[220,261.63,329.63],Dm:[146.83,174.61,220]};
+const HARM={campana:[[0,"C"],[3,"F"],[4,"C"],[7.5,"G"],[8.5,"C"],[11,"F"],[12,"G7"],[13.5,"C"]],arre:[[0,"C"],[5.5,"G"],[7,"F"],[8.5,"C"],[9,"G7"],[9.5,"C"]],adeste:[[0,"C"],[5,"G"],[9,"C"],[10,"G"],[11,"C"],[12,"F"],[13,"C"],[15,"G"]]};
 function chordFor(n,minor){if(minor)return (n==="e"||n==="E")?"C":"Am";return ({C:"C",E:"C",G:"C",c:"C",e:"C",D:"G",B:"G",d:"G",F:"F",A:"F",f:"F"})[n]||"C";}
 function accompany(song,t0,beat){
  let pos=-(song.pickup||0); const bpb=song.bpb||4; const st=song.style;
+ const H=song.harm||(HARM[song.id]&&!song.noHarm?HARM[song.id]:null);
+ if(H){const base=SONGS.find(x=>x.id===song.id);const period=(base?base.notes:song.notes).reduce((a,n)=>a+n[1],0);const total=song.notes.reduce((a,n)=>a+n[1],0);
+   for(let off=0;off<total;off+=period)H.forEach(([b,c],k)=>{const start=off+b;if(start>=total)return;const end=Math.min(total,off+(H[k+1]?H[k+1][0]:period));const t=t0+start*beat,dur=(end-start)*beat,ch=CH[c];
+     oscNote(ch[0]/2,t,dur*.95,"triangle",.16);ch.forEach(f=>oscNote(f,t,dur*.98,"sine",.022,.1));});}
  song.notes.forEach(([n,d])=>{
-  if(pos>=0&&Math.abs(pos%bpb)<1e-6){const t=t0+(pos+(song.pickup||0))*beat;const ch=CH[chordFor(n,song.minor)];const dur=bpb*beat;
+  if(!H&&pos>=0&&Math.abs(pos%bpb)<1e-6){const t=t0+(pos+(song.pickup||0))*beat;const ch=CH[chordFor(n,song.minor)];const dur=bpb*beat;
     oscNote(ch[0]/2,t,dur*.95,"triangle",.16);
     ch.forEach(f=>oscNote(f,t,dur*.98,"sine",.022,.1));
     if(st==="orquesta")skin(t,true,.3);
@@ -671,7 +677,24 @@ function leadVoice(f,t,dur){const a=ac(),g=a.createGain(),o1=a.createOscillator(
  const d=Math.max(.18,dur*.92);o1.type="triangle";o1.frequency.value=f/2;o2.type="sine";o2.frequency.value=f;g2.gain.value=.35;
  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.42,t+.012);g.gain.exponentialRampToValueAtTime(.22,t+Math.min(.15,d*.5));g.gain.setValueAtTime(.22,t+d*.85);g.gain.exponentialRampToValueAtTime(.0001,t+d+.06);
  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out());o1.start(t);o2.start(t);o1.stop(t+d+.1);o2.stop(t+d+.1);bell(f,t,.16);}
-function voiceNote(tb,f,t,dur){if(!tb||tb==="carillon")return leadVoice(f,t,dur);
+/* ---- Instrumentos reales (FluidR3 GM, CC BY 3.0) ---- */
+const SF_INST={carillon:"glockenspiel",piano:"acoustic_grand_piano",flauta:"flute",violin:"violin",coro:"choir_aahs",organo:"church_organ"};
+const SF_OCT={carillon:0,piano:-1,flauta:0,violin:-1,coro:-1,organo:-1};
+const SAMPLES={};const SF_LOADING={};
+const NOTE_NAMES=["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
+function freqName(f){const m=Math.round(69+12*Math.log2(f/440));return NOTE_NAMES[m%12]+(Math.floor(m/12)-1);}
+function loadInst(inst){if(SAMPLES[inst]||SF_LOADING[inst])return SF_LOADING[inst];
+ SF_LOADING[inst]=fetch("assets/sf/"+inst+".json").then(r=>r.json()).then(async data=>{const a=ac();const map={};
+   await Promise.all(Object.entries(data).map(async([k,uri])=>{try{const b64=uri.split(",")[1];const bin=atob(b64);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);
+     map[k]=await new Promise((res,rej)=>a.decodeAudioData(buf.buffer,res,rej));}catch(e){}}));SAMPLES[inst]=map;}).catch(()=>{});return SF_LOADING[inst];}
+function loadAllInst(){Object.values(SF_INST).forEach(loadInst);}
+function sample(tb,f,t,dur,vol){const inst=SF_INST[tb];const map=SAMPLES[inst];if(!map)return false;
+ const ff=f*Math.pow(2,SF_OCT[tb]||0);const buf=map[freqName(ff)];if(!buf)return false;
+ const a=ac(),src=a.createBufferSource(),g=a.createGain();src.buffer=buf;src.connect(g);g.connect(out());
+ const sustain=(tb==="carillon"||tb==="piano")?Math.max(dur,1.2):Math.max(.15,dur*.95);
+ g.gain.setValueAtTime(vol,t);g.gain.setValueAtTime(vol,t+sustain);g.gain.exponentialRampToValueAtTime(.0001,t+sustain+.25);
+ src.start(t);src.stop(t+sustain+.3);return true;}
+function voiceNote(tb,f,t,dur){if(sample(tb||"carillon",f,t,dur,(tb==="coro"||tb==="organo")?.5:.85))return;if(!tb||tb==="carillon")return leadVoice(f,t,dur);
  const a=ac(),g=a.createGain(),d=Math.max(.2,dur*.95),fr=f/2;
  const vib=a.createOscillator(),vg=a.createGain();vib.frequency.value=5.2;vg.gain.value=fr*.012;vib.connect(vg);
  const oscs=[];const add=(type,mult,det)=>{const o=a.createOscillator();o.type=type;o.frequency.value=fr*mult;o.detune.value=det;vg.connect(o.frequency);oscs.push(o);return o;};
@@ -762,7 +785,6 @@ const CARDS={
  campana:{autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"Su autor es desconocido y se canta en todos los países de habla hispana."},
  chiquirritin:{autor:"Anónimo",ano:"",lugar:"Navarra (otros dicen que Andalucía)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
  peces:{autor:"Anónimo",ano:"",lugar:"Extremadura (España)",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
- dimenino:{autor:"Anónimo",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
  marimorena:{autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"«Armar la marimorena» significa armar mucho jaleo: ¡así se celebra la Nochebuena!"},
  arre:{autor:"Anónimo",ano:"",lugar:"España",dato:"Cuenta el camino a Belén a lomos de un borriquito: «que mañana es fiesta y al otro también»."},
  reyes:{autor:"Anónimo",ano:"",lugar:"Aragón (España)",dato:"Cuenta la llegada de los Reyes Magos «caminito de Belén»."},
@@ -770,6 +792,7 @@ const CARDS={
 };
 /* Villancicos solo de historia (sin melodía en el juego) */
 const TCARDS=[
+ {title:"Dime, niño, ¿de quién eres?",autor:"Anónimo",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
  {title:"Riu, riu, chiu",autor:"Mateo Flecha el Viejo (se le atribuye)",ano:"1556",lugar:"España (se publicó en Venecia)",dato:"Es de los villancicos españoles más antiguos que se conservan. Se publicó en el Cancionero de Upsala, cuyo único ejemplar está en la Universidad de Uppsala (Suecia)."},
  {title:"Una sobre el mismo mar",autor:"Benito Cabrera",ano:"1994",lugar:"Canarias",dato:"Su autor es timplista. El villancico canta a las islas unidas «sobre el mismo mar»."},
  {title:"Vamos, vamos pastores",autor:"Anónimo",ano:"",lugar:"Canarias",dato:"Los pastores le llevan al Niño «gofio, turrones y miel»."},
@@ -805,7 +828,7 @@ function gEscucha(){
    <div class="row"><button class="big gold" type="button" id="bk">Volver</button></div></div>`;
   bindHome($view);window.scrollTo(0,0);$view.querySelector("#bk").onclick=intro;}
  function play(){
-  const es=["campana","peces","chiquirritin","marimorena","arre","reyes","dimenino","arrorro"],ot=Object.keys(CARDS).filter(x=>!es.includes(x));
+  const es=["campana","peces","chiquirritin","marimorena","arre","reyes","arrorro"],ot=Object.keys(CARDS).filter(x=>!es.includes(x));
   const audio=shuffle([...shuffle(es).slice(0,4),...shuffle(ot).slice(0,3)]).map(id=>({kind:"song",song:SONGS.find(x=>x.id===id),card:cardOf(id)}));
   const text=shuffle(TCARDS.map((c,i)=>({...c,id:"t"+i}))).slice(0,3).map(c=>({kind:"text",card:c}));
   const plan=[...audio.slice(0,3),text[0],...audio.slice(3,5),text[1],{kind:"older"},...audio.slice(5),text[2]];
@@ -817,7 +840,7 @@ function gEscucha(){
   function opts(list,corr,cb){const box=$view.querySelector("#op");box.innerHTML="";list.forEach(v=>{const b=el(`<button class="opt" type="button">${v}</button>`);b.onclick=()=>{box.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.textContent===corr)x.classList.add("right");});const ok=v===corr;if(!ok)b.classList.add("wrong");cb(ok);};box.appendChild(b);});}
   function next(){const nx=$view.querySelector("#nx");nx.hidden=false;nx.focus();nx.onclick=()=>{playTimers.forEach(clearTimeout);i++;round();};}
   function songRound(P){const s=P.song,c=P.card;let ok1=false;
-   $view.innerHTML=frame("ESCUCHA E INVESTIGA",`<div class="q" id="qq">¿Qué villancico suena?</div><p class="sub" id="ss">Escúchalo con atención. ${({coro:"Lo canta un coro.",flauta:"Lo toca una flauta.",violin:"Lo toca un violín.",carillon:"Lo toca un carillón."})[s.timbre||"carillon"]}</p>
+   $view.innerHTML=frame("ESCUCHA E INVESTIGA",`<div class="q" id="qq">¿Qué villancico suena?</div><p class="sub" id="ss">Escúchalo con atención. ${({coro:"Lo canta un coro.",flauta:"Lo toca una flauta.",violin:"Lo toca un violín.",carillon:"Lo toca un carillón.",piano:"Lo toca un piano.",organo:"Lo toca un órgano."})[s.timbre||"carillon"]}</p>
     <div class="listen"><button class="play" type="button" aria-label="Escuchar"></button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:19px">Pulsa para escuchar</div><div class="eq big" aria-hidden="true">${Array.from({length:16},()=>`<span style="--c:var(${s.color})"></span>`).join("")}</div></div></div>
     <div class="opts" id="op"></div>`);
    bindHome($view);window.scrollTo(0,0);drumroll();
@@ -1144,7 +1167,7 @@ function gCuerpo(){
   whenReady(a=>{t0=a.currentTime+4*beat+.3;
    for(let k=0;k<4;k++){click(a.currentTime+.3+k*beat,k===0);playTimers.push(setTimeout(()=>{cnt.textContent=4-k;cnt.className="cnt show";},(.3+k*beat)*1000));}
    playTimers.push(setTimeout(()=>{cnt.className="cnt";},(.3+4*beat)*1000));
-   segs.forEach(g=>{const so2={...g.so,bpm:B.bpm,notes:g.notes,pickup:g.pick};accompany(so2,t0+(g.start-g.pick)*beat,beat);
+   segs.forEach(g=>{const so2={...g.so,bpm:B.bpm,notes:g.notes,pickup:g.pick,noHarm:!!B.medley};accompany(so2,t0+(g.start-g.pick)*beat,beat);
      let t=(g.start-g.pick)*beat;g.notes.forEach(([n,d])=>{if(t0+t>=a.currentTime)voiceNote(g.so.timbre,NOTES[n][1],t0+t,d*beat);t+=d*beat;});
      if(B.medley)playTimers.push(setTimeout(()=>{nowEl.textContent="Ahora suena: «"+g.so.title+"»";nowEl.classList.add("pop");setTimeout(()=>nowEl.classList.remove("pop"),400);},(t0+g.start*beat-a.currentTime)*1000));});
    if(demo)chart.forEach(n=>{bodyHit(n.lane,t0+n.t);playTimers.push(setTimeout(()=>{press(n.lane,true);},(t0+n.t-a.currentTime)*1000));});
@@ -1395,7 +1418,7 @@ function multiReto(players,perPlayer){
 
 /* ================== RUTAS ================== */
 const GAMES={escucha:gEscucha,ritmo:gRitmo,carillon:gCarillon,regalos:gRegalos,cuerpo:gCuerpo,reto:gReto};
-function render(){playTimers.forEach(clearTimeout);if(typeof stopReto==='function')stopReto();let h=location.hash.slice(1);const li=STATIONS.findIndex(x=>x.id===h);if(li>0&&!unlocked(li))h="";if(GAMES[h]){snowOn(false);document.body.classList.remove("on-levels");$view.innerHTML='<div class="game"></div>';const g=$view.firstElementChild;const real=$view;GAMES[h]();if($view.firstElementChild&&!$view.firstElementChild.classList.contains("game")){const w=document.createElement("div");w.className="game";while($view.firstChild)w.appendChild($view.firstChild);$view.appendChild(w);}}else home();window.scrollTo(0,0);}
+function render(){try{if(AC)loadAllInst();}catch(e){}playTimers.forEach(clearTimeout);if(typeof stopReto==='function')stopReto();let h=location.hash.slice(1);const li=STATIONS.findIndex(x=>x.id===h);if(li>0&&!unlocked(li))h="";if(GAMES[h]){snowOn(false);document.body.classList.remove("on-levels");$view.innerHTML='<div class="game"></div>';const g=$view.firstElementChild;const real=$view;GAMES[h]();if($view.firstElementChild&&!$view.firstElementChild.classList.contains("game")){const w=document.createElement("div");w.className="game";while($view.firstChild)w.appendChild($view.firstChild);$view.appendChild(w);}}else home();window.scrollTo(0,0);}
 function go(id){if(location.hash.slice(1)===id)render();else location.hash=id;}
 window.addEventListener("hashchange",render);
 document.getElementById("home-btn").onclick=()=>go("");
@@ -1432,7 +1455,7 @@ function openLegal(){document.getElementById("lmodal").hidden=false;}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("lmodal").hidden=true;});
 const startEl=document.getElementById("start");
 if(location.hash.length>1)startEl.hidden=true;
-document.getElementById("startBtn").onclick=()=>{unlockAudio();whenReady(a=>["C","E","G","c"].forEach((n,i)=>bell(NOTES[n][1],a.currentTime+.05+i*.09)));startEl.hidden=true;window.scrollTo(0,0);};
+document.getElementById("startBtn").onclick=()=>{unlockAudio();loadAllInst();whenReady(a=>["C","E","G","c"].forEach((n,i)=>bell(NOTES[n][1],a.currentTime+.05+i*.09)));startEl.hidden=true;window.scrollTo(0,0);};
 render();
 </script>
 </body>
