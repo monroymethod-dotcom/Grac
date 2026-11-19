@@ -745,27 +745,28 @@ const CARDS={
  alegria:{autor:"Ludwig van Beethoven (música) y Friedrich Schiller (letra)",ano:"1824",lugar:"Viena (Austria)",dato:"Es el final de su Novena Sinfonía. Hoy es el himno de Europa y en Japón miles de personas la cantan en diciembre."},
  tannenbaum:{autor:"Ernst Anschütz (letra), sobre una melodía popular",ano:"1824",lugar:"Leipzig (Alemania)",dato:"Anschütz era maestro y organista. La melodía es una canción popular del siglo XVI."},
  adeste:{autor:"John Francis Wade",ano:"1751",lugar:"Douai (Francia)",dato:"Wade era un inglés que vivía en Francia. La publicó en 1751, aunque la escribió unos años antes, hacia 1743."},
- firstnoel:{autor:"Popular (anónimo)",ano:"1823",lugar:"Cornualles (Inglaterra)",dato:"Se publicó por primera vez en 1823, en una colección de Davies Gilbert."},
+ firstnoel:{autor:"Anónimo",ano:"1823",lugar:"Cornualles (Inglaterra)",dato:"Se publicó por primera vez en 1823, en una colección de Davies Gilbert."},
  shchedryk:{autor:"Mykola Leontóvych (arreglo)",ano:"1916",lugar:"Ucrania",dato:"Era una canción popular para celebrar el Año Nuevo. En inglés se llama «Carol of the Bells»."},
- wewish:{autor:"Popular (anónimo)",ano:"",lugar:"Inglaterra",dato:"Los cantores iban de casa en casa y pedían «figgy pudding», un pudin de higos."},
- campana:{autor:"Popular (anónimo)",ano:"",lugar:"Andalucía (España)",dato:"Su autor es desconocido y se canta en todos los países de habla hispana."},
- chiquirritin:{autor:"Popular (anónimo)",ano:"",lugar:"Navarra (España)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
- peces:{autor:"Popular (anónimo)",ano:"",lugar:"España",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
- dimenino:{autor:"Popular (anónimo)",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
- arrorro:{autor:"Popular canario",ano:"",lugar:"Canarias",dato:"Es la nana tradicional de Canarias. Teobaldo Power la usó en sus «Cantos canarios», de donde sale el himno de Canarias."}
+ wewish:{autor:"Anónimo",ano:"",lugar:"Inglaterra",dato:"Los cantores iban de casa en casa y pedían «figgy pudding», un pudin de higos."},
+ campana:{autor:"Anónimo",ano:"",lugar:"Andalucía (España)",dato:"Su autor es desconocido y se canta en todos los países de habla hispana."},
+ chiquirritin:{autor:"Anónimo",ano:"",lugar:"Navarra (España)",dato:"«Chiquirritín» quiere decir «pequeñito»: así llaman al Niño en el villancico."},
+ peces:{autor:"Anónimo",ano:"",lugar:"España",dato:"Es uno de los villancicos españoles más populares, también en Latinoamérica."},
+ dimenino:{autor:"Anónimo",ano:"",lugar:"Murcia (España)",dato:"Empieza así: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."},
+ arrorro:{autor:"Anónimo",ano:"",lugar:"Canarias",dato:"Es la nana tradicional de Canarias. Teobaldo Power la usó en sus «Cantos canarios», de donde sale el himno de Canarias."}
 };
 /* Villancicos solo de historia (sin melodía en el juego) */
 const TCARDS=[
- {title:"Hacia Belén va una burra",autor:"Popular (anónimo)",ano:"",lugar:"Castilla-La Mancha (otros dicen que Andalucía)",dato:"La burra va cargada de chocolate, con su molinillo y su anafre, un hornillo antiguo."},
+ {title:"A Belén, pastores",autor:"Anónimo",ano:"",lugar:"España",dato:"Es un villancico popular español. Su estribillo dice: «A Belén, pastores, debemos marchar, que el Rey de los reyes ha nacido ya»."},
+ {title:"Hacia Belén va una burra",autor:"Anónimo",ano:"",lugar:"Castilla-La Mancha (otros dicen que Andalucía)",dato:"La burra va cargada de chocolate, con su molinillo y su anafre, un hornillo antiguo."},
  {title:"Feliz Navidad",autor:"José Feliciano",ano:"1970",lugar:"Puerto Rico",dato:"Su autor, José Feliciano, es un cantante y guitarrista puertorriqueño. Mezcla español e inglés."},
  {title:"Blanca Navidad",autor:"Irving Berlin",ano:"1942",lugar:"Estados Unidos",dato:"La cantó Bing Crosby en la película «Holiday Inn»."},
  {title:"Rodolfo, el reno de la nariz roja",autor:"Johnny Marks",ano:"1949",lugar:"Estados Unidos",dato:"Nació de un cuento de 1939 escrito por Robert L. May."},
  {title:"El tamborilero",autor:"Katherine K. Davis",ano:"1941",lugar:"Estados Unidos",dato:"Su autora era una pianista estadounidense que la firmó con otro nombre."}
 ];
-const FIELD_Q={autor:t=>`¿Quién compuso «${t}»?`,ano:t=>`¿En qué año nació «${t}»?`,lugar:t=>`¿Dónde nació «${t}»?`};
+const FIELD_Q={autor:t=>`¿Quién es el autor de «${t}»?`,ano:t=>`¿En qué año nació «${t}»?`,lugar:t=>`¿Dónde nació «${t}»?`};
 function cardOf(id){const c=CARDS[id];const s=SONGS.find(x=>x.id===id);return {...c,title:s.title,id};}
 function allCards(){return [...Object.keys(CARDS).map(cardOf),...TCARDS.map((c,i)=>({...c,id:"t"+i}))];}
-function askable(c){const f=["lugar"];if(c.ano)f.push("ano");if(!/Popular/.test(c.autor))f.push("autor");return f;}
+function askable(c){const f=["lugar","autor"];if(c.ano)f.push("ano");return f;}
 function histQ(c){const fs=askable(c);const f=fs[Math.floor(Math.random()*fs.length)];const pool=[...new Set(allCards().map(x=>x[f]).filter(v=>v&&v!==c[f]))];
  return {f,q:FIELD_Q[f](c.title),correct:c[f],opts:shuffle([c[f],...shuffle(pool).slice(0,2)])};}
 function album(){let a={};try{a=JSON.parse(localStorage.getItem("vueltaAlbum")||"{}");}catch(e){}return a;}
