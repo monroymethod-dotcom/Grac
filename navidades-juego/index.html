@@ -495,7 +495,7 @@ body.on-levels .gfoot{display:none}
 <p><b>Monroy Method®</b> es una marca registrada en la Oficina Española de Patentes y Marcas (OEPM), nº <b>M3699532</b>, clase 41 (educación, formación y entretenimiento). Titular: <b>Rita Monroy Suárez</b>.</p>
 <p><b>GRAC</b> es una saga de videojuegos educativos creada por Monroy Method. Este juego (diseño, estructura de juego, textos, ilustraciones y código) es propiedad de su autora. © 2026 Rita Monroy Suárez. Todos los derechos reservados.</p>
 <p>Queda prohibida su reproducción, copia, modificación, distribución, comunicación pública o venta, total o parcial, sin la autorización previa y por escrito de la titular. Uso permitido: solo el uso educativo dentro del aula autorizado por la titular.</p>
-<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i>, <i>La marimorena</i>, <i>Arre borriquito</i> y <i>Ya vienen los Reyes Magos</i> (villancicos tradicionales españoles), <i>Adeste fideles</i> (Wade, 1751) y <i>The First Noel</i> (tradicional inglés) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p>
+<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i>, <i>La marimorena</i>, <i>Arre borriquito</i> y <i>Ya vienen los Reyes Magos</i> (villancicos tradicionales españoles), <i>Adeste fideles</i> (Wade, 1751) y <i>The First Noel</i> (tradicional inglés) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p><p>Los sonidos de piano, violín, guitarra y flauta son grabaciones reales de <i>tonejs-instruments</i> (Nicholas Brosowsky), y el del carillón procede de <i>FluidR3 GM SoundFont</i> (Frank Wen) vía <i>midi-js-soundfonts</i> (Benjamin Gleitzman); ambos con licencia Creative Commons Reconocimiento 3.0.</p>
 <button class="ok" type="button" onclick="document.getElementById('lmodal').hidden=true">ENTENDIDO</button></div></div>
 
 <script>
@@ -545,18 +545,18 @@ SONGS.push(
   frag:"A B c c d c B c F G A G A G F", fact:"Es un villancico tradicional español: «Dime, niño, ¿de quién eres, todo vestido de blanco?»."}
 );
 SONGS.push(
- {id:"adeste",title:"Adeste fideles (Venid, fieles)",place:"Francia",color:"--n3",bpm:96,bpb:4,pickup:1,style:"suave",timbre:"organo",
+ {id:"adeste",title:"Adeste fideles (Venid, fieles)",place:"Francia",color:"--n3",bpm:96,bpb:4,pickup:1,style:"suave",timbre:"violin",
   notes:seq("c:1 c:2 G:1 c:1 d:2 G:2 e:1 d:1 e:1 f:1 e:2 d:2"),
   frag:"c c G c d G e d e f e d", fact:"Se escribió en latín: «Adeste fideles» significa «Venid, fieles»."},
- {id:"firstnoel",title:"The First Noel",place:"Inglaterra",color:"--n2",bpm:100,bpb:3,pickup:1,style:"suave",timbre:"coro",
+ {id:"firstnoel",title:"The First Noel",place:"Inglaterra",color:"--n2",bpm:100,bpb:3,pickup:1,style:"suave",timbre:"violin",
   notes:seq("E:.5 D:.5 C:1.5 D:.5 E:.5 F:.5 G:2 A:.5 B:.5 c:1 B:1 A:1 G:2 A:.5 B:.5 c:1 B:1 A:1 G:1 A:1 B:1 c:1 G:1 F:1 E:2"),
   frag:"E D C D E F G A B c B A G", fact:"«Nowell» es una forma antigua inglesa de decir «Navidad»."}
 );
 SONGS.push(
- {id:"marimorena",title:"La marimorena",place:"España",color:"--n1",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"carillon",
+ {id:"marimorena",title:"La marimorena",place:"España",color:"--n1",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"guitarra",
   notes:seq("C:.5 C:.5 C:.5 D:.5 E:.5 E:.5 G:.5 G:.5 G:.5 G:.5 F:.5 D:1.5 F:.5 F:.5 E:.5 F:.5 G:.5 A:.5 G:.5 F:.5 E:.5 D:.5 D:.5 C:1.5"),
   frag:"C C C D E E G G G G F D", fact:"«Armar la marimorena» significa armar mucho jaleo: ¡así se celebra la Nochebuena!"},
- {id:"arre",title:"Arre borriquito",place:"España",color:"--n4",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"flauta",
+ {id:"arre",title:"Arre borriquito",place:"España",color:"--n4",bpm:120,bpb:2,pickup:0,style:"pandereta",timbre:"guitarra",
   notes:seq("C:.5 C:.5 C:.5 E:.5 C:.5 C:1 C:.5 D:.5 E:.5 F:.5 G:.5 G:1 A:.5 G:.5 F:.5 E:.5 D:.5 C:1.5"),
   frag:"C C C E C C C D E F G G", fact:"Cuenta el camino a Belén a lomos de un borriquito."},
  {id:"reyes",title:"Ya vienen los Reyes Magos",place:"España",color:"--n2",bpm:116,bpb:2,pickup:0,style:"pandereta",timbre:"violin",
@@ -564,7 +564,8 @@ SONGS.push(
   frag:"C E G A G F G E", fact:"Cuenta la llegada de los Reyes Magos, «caminito de Belén»."}
 );
 SONGS.splice(SONGS.findIndex(x=>x.id==="dimenino"),1);
-const TIMBRE={nochepaz:"coro",alegria:"violin",shchedryk:"violin",tannenbaum:"flauta",campana:"flauta",chiquirritin:"flauta",arrorro:"piano",peces:"piano",wewish:"piano",jingle:"carillon"};
+const TIMBRE={nochepaz:"guitarra",alegria:"violin",shchedryk:"violin",tannenbaum:"piano",campana:"guitarra",chiquirritin:"guitarra",arrorro:"guitarra",peces:"piano",wewish:"piano",jingle:"piano",afishapa:"piano"};
+SONGS.forEach(s=>{if(TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
 SONGS.forEach(s=>{if(!s.timbre&&TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
 const PLACES=["Canarias","España","Japón","Ghana","Estados Unidos","Austria","Alemania","Inglaterra","Ucrania","Francia"];
 
@@ -634,7 +635,10 @@ function unlockAudio(){
 ["pointerdown","touchend","click","keydown"].forEach(ev=>document.addEventListener(ev,()=>{if(!audioOK)unlockAudio();},{capture:true,passive:true}));
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&AC&&AC.state!=="running"){try{AC.resume();}catch(e){}}});
 function whenReady(fn){const a=ac();if(a.state==="running")fn(a);else{const pr=a.resume();if(pr&&pr.then)pr.then(()=>fn(a)).catch(()=>fn(a));else fn(a);}}
-let MASTER=null;function out(){const a=ac();if(!MASTER){const c=a.createDynamicsCompressor();c.threshold.value=-14;c.ratio.value=4;const g=a.createGain();g.gain.value=1;g.connect(c);c.connect(a.destination);MASTER=g;}return MASTER;}
+let MASTER=null,COMP=null;function out(){const a=ac();if(!COMP){COMP=a.createDynamicsCompressor();COMP.threshold.value=-14;COMP.ratio.value=4;COMP.connect(a.destination);}if(!MASTER){const g=a.createGain();g.gain.value=1;g.connect(COMP);MASTER=g;}return MASTER;}
+/* corta en seco todo lo que esté sonando o programado */
+let AUDIO_GEN=0;function stopAudio(){AUDIO_GEN++;playTimers.forEach(clearTimeout);playTimers=[];if(MASTER&&AC){const old=MASTER;MASTER=null;try{old.gain.cancelScheduledValues(0);old.gain.setValueAtTime(old.gain.value,AC.currentTime);old.gain.linearRampToValueAtTime(0,AC.currentTime+.04);}catch(e){}setTimeout(()=>{try{old.disconnect();}catch(e){}},120);}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button,a");if(!b)return;const tx=b.textContent||"";if(b.id==="nx"||b.id==="next"||/Siguiente|Niveles|Volver|Escuchar|Repetir|Otra|Jugar|Terminar|Menú|▶|←/.test(tx))stopAudio();},true);
 function bell(f,when,vol=.5){if(typeof sample==="function"&&sample("carillon",f,when??ac().currentTime,1.2,Math.min(1,vol*1.6)))return;const a=ac(),t=when??a.currentTime,o=a.createGain();o.gain.setValueAtTime(.0001,t);o.gain.exponentialRampToValueAtTime(vol,t+.005);o.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(out());
  [[1,1],[2.76,.1],[5.4,.03]].forEach(([m,v])=>{const s=a.createOscillator(),g=a.createGain();s.frequency.value=f*m;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+(m===1?1.5:.35));s.connect(g);g.connect(o);s.start(t);s.stop(t+1.6);});}
 function tone(ok){const a=ac(),t=a.currentTime;(ok?[784,1046.5]:[311,233]).forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.type=ok?"triangle":"square";o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.12);g.gain.exponentialRampToValueAtTime(ok?.15:.06,t+i*.12+.01);g.gain.exponentialRampToValueAtTime(.0001,t+i*.12+.2);o.connect(g);g.connect(out());o.start(t+i*.12);o.stop(t+i*.12+.25);});}
@@ -649,18 +653,21 @@ function snare(t,v=.12){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFi
 const CH={C:[130.81,164.81,196],F:[174.61,220,261.63],G:[196,246.94,293.66],G7:[196,246.94,349.23],Am:[220,261.63,329.63],Dm:[146.83,174.61,220]};
 const HARM={campana:[[0,"C"],[3,"F"],[4,"C"],[7.5,"G"],[8.5,"C"],[11,"F"],[12,"G7"],[13.5,"C"]],arre:[[0,"C"],[5.5,"G"],[7,"F"],[8.5,"C"],[9,"G7"],[9.5,"C"]],adeste:[[0,"C"],[5,"G"],[9,"C"],[10,"G"],[11,"C"],[12,"F"],[13,"C"],[15,"G"]]};
 function chordFor(n,minor){if(minor)return (n==="e"||n==="E")?"C":"Am";return ({C:"C",E:"C",G:"C",c:"C",e:"C",D:"G",B:"G",d:"G",F:"F",A:"F",f:"F"})[n]||"C";}
+/* acordes con guitarra o piano de verdad: bajo en el primer tiempo y rasgueo o arpegio en cada pulso */
+function chordReal(song,c,t,beats,beat){const ch=CH[c];if(!ch)return;const inst=(song.timbre==="guitarra")?"piano":"guitarra";const soft=song.style==="suave";
+ const n=Math.max(1,Math.round(beats));
+ for(let k=0;k<n;k++){const tt=t+k*beat;const left=(n-k)*beat;
+   if(k===0){if(!playInst(inst,ch[0]/2,tt,beats*beat,.55))oscNote(ch[0]/2,tt,beats*beat*.95,"triangle",.16);}
+   if(soft){const f=[ch[0],ch[1],ch[2],ch[1]][k%4];if(!playInst(inst,f,tt,beat,.32))oscNote(f,tt,beat*1.1,"triangle",.025);}
+   else{const v=k===0?.3:.2;ch.forEach((f,i)=>{if(!playInst(inst,f,tt+i*.022,Math.min(left,beat*1.2),v))oscNote(f,tt,beat,"sine",.02,.05);});}}}
 function accompany(song,t0,beat){
  let pos=-(song.pickup||0); const bpb=song.bpb||4; const st=song.style;
  const H=song.harm||(HARM[song.id]&&!song.noHarm?HARM[song.id]:null);
  if(H){const base=SONGS.find(x=>x.id===song.id);const period=(base?base.notes:song.notes).reduce((a,n)=>a+n[1],0);const total=song.notes.reduce((a,n)=>a+n[1],0);
-   for(let off=0;off<total;off+=period)H.forEach(([b,c],k)=>{const start=off+b;if(start>=total)return;const end=Math.min(total,off+(H[k+1]?H[k+1][0]:period));const t=t0+start*beat,dur=(end-start)*beat,ch=CH[c];
-     oscNote(ch[0]/2,t,dur*.95,"triangle",.16);ch.forEach(f=>oscNote(f,t,dur*.98,"sine",.022,.1));});}
+   for(let off=0;off<total;off+=period)H.forEach(([b,c],k)=>{const start=off+b;if(start>=total)return;const end=Math.min(total,off+(H[k+1]?H[k+1][0]:period));chordReal(song,c,t0+start*beat,end-start,beat);});}
  song.notes.forEach(([n,d])=>{
-  if(!H&&pos>=0&&Math.abs(pos%bpb)<1e-6){const t=t0+(pos+(song.pickup||0))*beat;const ch=CH[chordFor(n,song.minor)];const dur=bpb*beat;
-    oscNote(ch[0]/2,t,dur*.95,"triangle",.16);
-    ch.forEach(f=>oscNote(f,t,dur*.98,"sine",.022,.1));
-    if(st==="orquesta")skin(t,true,.3);
-    if(st==="suave")for(let k=0;k<bpb;k++)oscNote(ch[k%3],t+k*beat,beat*1.1,"triangle",.025);}
+  if(!H&&pos>=0&&Math.abs(pos%bpb)<1e-6){const t=t0+(pos+(song.pickup||0))*beat;chordReal(song,chordFor(n,song.minor),t,bpb,beat);
+    if(st==="orquesta")skin(t,true,.3);}
   pos+=d;});
  const total=pos+(song.pickup||0);
  for(let k=0;k<total;k++){const t=t0+k*beat;
@@ -677,41 +684,35 @@ function leadVoice(f,t,dur){const a=ac(),g=a.createGain(),o1=a.createOscillator(
  const d=Math.max(.18,dur*.92);o1.type="triangle";o1.frequency.value=f/2;o2.type="sine";o2.frequency.value=f;g2.gain.value=.35;
  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.42,t+.012);g.gain.exponentialRampToValueAtTime(.22,t+Math.min(.15,d*.5));g.gain.setValueAtTime(.22,t+d*.85);g.gain.exponentialRampToValueAtTime(.0001,t+d+.06);
  o1.connect(g);o2.connect(g2);g2.connect(g);g.connect(out());o1.start(t);o2.start(t);o1.stop(t+d+.1);o2.stop(t+d+.1);bell(f,t,.16);}
-/* ---- Instrumentos reales (FluidR3 GM, CC BY 3.0) ---- */
-const SF_INST={carillon:"glockenspiel",piano:"acoustic_grand_piano",flauta:"flute",violin:"violin",coro:"choir_aahs",organo:"church_organ"};
-const SF_OCT={carillon:0,piano:-1,flauta:0,violin:-1,coro:-1,organo:-1};
+/* ---- Instrumentos reales grabados (tonejs-instruments y FluidR3, CC BY 3.0) ---- */
+const INST_FILES={piano:"A2 A3 A4 A5 C2 C3 C4 C5 C6 Ds2 Ds3 Ds4 Ds5 Fs2 Fs3 Fs4 Fs5",violin:"A3 A4 A5 C4 C5 C6 E4 E5 G3 G4 G5",guitarra:"A2 A3 A4 A5 As5 B1 B2 B3 B4 Cs3 Cs4 Cs5 D2 D3 D5 Ds4 E2 E3 E4 E5 Fs2 Fs3 Fs4 Fs5 G3 G5 Gs2 Gs4 Gs5",flauta:"A4 A5 A6 C5 C6 E5 E6"};
+const INST_OCT={piano:-1,violin:-1,guitarra:-1,flauta:0,carillon:0};
 const SAMPLES={};const SF_LOADING={};
-const NOTE_NAMES=["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
-function freqName(f){const m=Math.round(69+12*Math.log2(f/440));return NOTE_NAMES[m%12]+(Math.floor(m/12)-1);}
-function loadInst(inst){if(SAMPLES[inst]||SF_LOADING[inst])return SF_LOADING[inst];
- SF_LOADING[inst]=fetch("assets/sf/"+inst+".json").then(r=>r.json()).then(async data=>{const a=ac();const map={};
-   await Promise.all(Object.entries(data).map(async([k,uri])=>{try{const b64=uri.split(",")[1];const bin=atob(b64);const buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);
-     map[k]=await new Promise((res,rej)=>a.decodeAudioData(buf.buffer,res,rej));}catch(e){}}));SAMPLES[inst]=map;}).catch(()=>{});return SF_LOADING[inst];}
-function loadAllInst(){Object.values(SF_INST).forEach(loadInst);}
-function sample(tb,f,t,dur,vol){const inst=SF_INST[tb];const map=SAMPLES[inst];if(!map)return false;
- const ff=f*Math.pow(2,SF_OCT[tb]||0);const buf=map[freqName(ff)];if(!buf)return false;
- const a=ac(),src=a.createBufferSource(),g=a.createGain();src.buffer=buf;src.connect(g);g.connect(out());
- const sustain=(tb==="carillon"||tb==="piano")?Math.max(dur,1.2):Math.max(.15,dur*.95);
- g.gain.setValueAtTime(vol,t);g.gain.setValueAtTime(vol,t+sustain);g.gain.exponentialRampToValueAtTime(.0001,t+sustain+.25);
- src.start(t);src.stop(t+sustain+.3);return true;}
-function voiceNote(tb,f,t,dur){if(sample(tb||"carillon",f,t,dur,(tb==="coro"||tb==="organo")?.5:.85))return;if(!tb||tb==="carillon")return leadVoice(f,t,dur);
- const a=ac(),g=a.createGain(),d=Math.max(.2,dur*.95),fr=f/2;
- const vib=a.createOscillator(),vg=a.createGain();vib.frequency.value=5.2;vg.gain.value=fr*.012;vib.connect(vg);
- const oscs=[];const add=(type,mult,det)=>{const o=a.createOscillator();o.type=type;o.frequency.value=fr*mult;o.detune.value=det;vg.connect(o.frequency);oscs.push(o);return o;};
- let att=.05,peak=.3;
- if(tb==="coro"){const f1=a.createBiquadFilter(),f2=a.createBiquadFilter(),mix=a.createGain();f1.type="bandpass";f1.frequency.value=650;f1.Q.value=4;f2.type="bandpass";f2.frequency.value=1100;f2.Q.value=5;
-   [-9,0,8].forEach(dt=>{const o=add("sawtooth",1,dt);o.connect(f1);o.connect(f2);});f1.connect(mix);f2.connect(mix);mix.gain.value=2.2;mix.connect(g);att=.09;peak=.34;}
- if(tb==="flauta"){const o=add("sine",2,0);o.connect(g);const o2=add("sine",4,0);const g2=a.createGain();g2.gain.value=.08;o2.connect(g2);g2.connect(g);
-   const n=a.createBufferSource(),nf=a.createBiquadFilter(),ng=a.createGain();n.buffer=noiseBuf();nf.type="bandpass";nf.frequency.value=f*2;nf.Q.value=2;ng.gain.value=.03;n.connect(nf);nf.connect(ng);ng.connect(g);n.start(t);n.stop(t+d+.1);att=.04;peak=.32;}
- if(tb==="violin"){const lp=a.createBiquadFilter();lp.type="lowpass";lp.frequency.value=2600;lp.Q.value=1.5;const o=add("sawtooth",2,0);o.connect(lp);lp.connect(g);att=.07;peak=.2;}
- g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+att);g.gain.setValueAtTime(peak,t+d*.8);g.gain.exponentialRampToValueAtTime(.0001,t+d+.12);g.connect(out());
- vib.start(t);vib.stop(t+d+.2);oscs.forEach(o=>{o.start(t);o.stop(t+d+.2);});}
+const SEMI={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function nameMidi(n){const m=n.match(/^([A-G])(s|b)?(-?\d)$/);return (+m[3]+1)*12+SEMI[m[1]]+(m[2]==="s"?1:m[2]==="b"?-1:0);}
+function freqMidi(f){return 69+12*Math.log2(f/440);}
+function dec(buf){const a=ac();return new Promise((res,rej)=>a.decodeAudioData(buf,res,rej));}
+function loadInst(inst){if(SF_LOADING[inst])return SF_LOADING[inst];const map={};
+ if(inst==="carillon"){SF_LOADING[inst]=fetch("assets/sf/glockenspiel.json").then(r=>r.json()).then(data=>Promise.all(Object.entries(data).map(async([k,uri])=>{try{const bin=atob(uri.split(",")[1]);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);map[nameMidi(k)]=await dec(u.buffer);}catch(e){}}))).then(()=>{SAMPLES[inst]=map;}).catch(()=>{});}
+ else SF_LOADING[inst]=Promise.all(INST_FILES[inst].split(" ").map(async n=>{try{const r=await fetch("assets/inst/"+inst+"/"+n+".mp3");map[nameMidi(n)]=await dec(await r.arrayBuffer());}catch(e){}})).then(()=>{SAMPLES[inst]=map;});
+ return SF_LOADING[inst];}
+function loadAllInst(){return Promise.all(["piano","guitarra","violin","flauta","carillon"].map(loadInst));}
+function readyInst(ms=6000){return Promise.race([loadAllInst(),new Promise(r=>setTimeout(r,ms))]);}
+/* toca una nota real: f = frecuencia exacta que debe sonar */
+function playInst(inst,f,t,dur,vol){const map=SAMPLES[inst];if(!map)return false;const keys=Object.keys(map).map(Number);if(!keys.length)return false;
+ const m=freqMidi(f);let best=null,bd=99;keys.forEach(k=>{const d=Math.abs(m-k);if(d<bd){bd=d;best=k;}});if(bd>7)return false;
+ const a=ac(),src=a.createBufferSource(),g=a.createGain();src.buffer=map[best];src.playbackRate.value=Math.pow(2,(m-best)/12);src.connect(g);g.connect(out());
+ const ring=(inst==="piano"||inst==="guitarra"||inst==="carillon");const sus=ring?Math.min(2.4,Math.max(dur+.5,1)):Math.max(.15,dur*.97);const rel=ring?.35:.12;
+ g.gain.setValueAtTime(vol,t);g.gain.setValueAtTime(vol,t+sus);g.gain.exponentialRampToValueAtTime(.0001,t+sus+rel);src.start(t);src.stop(t+sus+rel+.05);return true;}
+const TB_VOL={piano:.9,guitarra:1,violin:.75,flauta:.8,carillon:.85};
+function sample(tb,f,t,dur,vol){tb=INST_OCT[tb]===undefined?"piano":tb;return playInst(tb,f*Math.pow(2,INST_OCT[tb]),t,dur,vol);}
+function voiceNote(tb,f,t,dur){tb=tb||"carillon";if(INST_OCT[tb]===undefined)tb="piano";if(sample(tb,f,t,dur,TB_VOL[tb]))return;leadVoice(f,t,dur);}
 let playTimers=[];
-function playSong(song,onNote,opts={}){whenReady(()=>{playTimers.forEach(clearTimeout);playTimers=[];const a=ac(),beat=60/song.bpm;let t=.08;const t0=a.currentTime;
+function playSong(song,onNote,opts={}){stopAudio();const gen=AUDIO_GEN;whenReady(()=>readyInst().then(()=>{if(gen!==AUDIO_GEN)return;const a=ac(),beat=60/song.bpm;let t=.08;const t0=a.currentTime;
  const notes=opts.max?song.notes.slice(0,opts.max):song.notes;
  if(opts.band!==false)accompany({...song,notes},t0+.08,beat);
  notes.forEach(([n,d],i)=>{voiceNote(opts.timbre||song.timbre,NOTES[n][1],t0+t,d*beat);if(onNote)playTimers.push(setTimeout(()=>onNote(n,i),t*1000));t+=d*beat;});
- if(onNote)playTimers.push(setTimeout(()=>onNote(null,-1),(t+.3)*1000));});}
+ if(onNote)playTimers.push(setTimeout(()=>onNote(null,-1),(t+.3)*1000));}));}
 
 /* ================== UTILIDADES ================== */
 const $view=document.getElementById("view");
@@ -838,9 +839,9 @@ function gEscucha(){
    if(P.kind==="song")return songRound(P);if(P.kind==="text")return textRound(P);return olderRound();}
   function frame(phase,inner){return header(st,`Caso ${i+1} de ${plan.length}`)+`<div class="panel l1"><div class="phase">${phase}</div>${inner}<div class="feedback" id="fb"></div><div id="cardslot"></div><div class="row"><button class="big gold" type="button" id="nx" hidden>Siguiente caso ▶</button></div></div>`;}
   function opts(list,corr,cb){const box=$view.querySelector("#op");box.innerHTML="";list.forEach(v=>{const b=el(`<button class="opt" type="button">${v}</button>`);b.onclick=()=>{box.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.textContent===corr)x.classList.add("right");});const ok=v===corr;if(!ok)b.classList.add("wrong");cb(ok);};box.appendChild(b);});}
-  function next(){const nx=$view.querySelector("#nx");nx.hidden=false;nx.focus();nx.onclick=()=>{playTimers.forEach(clearTimeout);i++;round();};}
+  function next(){const nx=$view.querySelector("#nx");nx.hidden=false;nx.focus();nx.onclick=()=>{stopAudio();i++;round();};}
   function songRound(P){const s=P.song,c=P.card;let ok1=false;
-   $view.innerHTML=frame("ESCUCHA E INVESTIGA",`<div class="q" id="qq">¿Qué villancico suena?</div><p class="sub" id="ss">Escúchalo con atención. ${({coro:"Lo canta un coro.",flauta:"Lo toca una flauta.",violin:"Lo toca un violín.",carillon:"Lo toca un carillón.",piano:"Lo toca un piano.",organo:"Lo toca un órgano."})[s.timbre||"carillon"]}</p>
+   $view.innerHTML=frame("ESCUCHA E INVESTIGA",`<div class="q" id="qq">¿Qué villancico suena?</div><p class="sub" id="ss">Escúchalo con atención. ${({guitarra:"Lo toca una guitarra.",flauta:"Lo toca una flauta.",violin:"Lo toca un violín.",carillon:"Lo toca un carillón.",piano:"Lo toca un piano."})[s.timbre||"carillon"]}</p>
     <div class="listen"><button class="play" type="button" aria-label="Escuchar"></button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:19px">Pulsa para escuchar</div><div class="eq big" aria-hidden="true">${Array.from({length:16},()=>`<span style="--c:var(${s.color})"></span>`).join("")}</div></div></div>
     <div class="opts" id="op"></div>`);
    bindHome($view);window.scrollTo(0,0);drumroll();
@@ -952,7 +953,7 @@ function gOrdena(){
 
 
 /* ================== 5. FASES 2 Y 3 ================== */
-function playFrag(song,notes,onNote){whenReady(a=>{playTimers.forEach(clearTimeout);playTimers=[];const beat=60/song.bpm;let t=.1;const t0=a.currentTime;
+function playFrag(song,notes,onNote){whenReady(a=>{stopAudio();playTimers=[];const beat=60/song.bpm;let t=.1;const t0=a.currentTime;
  notes.forEach((n,i)=>{const d=(song.notes[i]||[0,1])[1];bell(NOTES[n][1],t0+t,.6);if(onNote)playTimers.push(setTimeout(()=>onNote(i),t*1000));t+=Math.max(.5,d)*beat;});});}
 function notaPerdida(st,g1,m1){
  const rounds=shuffle(SONGS).slice(0,5);let r=0,good=0;
@@ -996,7 +997,7 @@ function tituloIncompleto(st,g,m){
     const ok=b.textContent===ans;if(!ok)b.classList.add("wrong");hole.textContent=ans;hole.classList.add(ok?"okfill":"badfill");
     if(ok){good++;fanfare();}else buzz();setTimeout(()=>playSong(song,null,{max:10}),700);
     fb.className="feedback show "+(ok?"good":"badf");fb.textContent=ok?"¡Correcto!":`Era «${pre} ${ans}».`;nx.hidden=false;});
-  nx.onclick=()=>{playTimers.forEach(clearTimeout);r++;round();};}
+  nx.onclick=()=>{stopAudio();r++;round();};}
  round();
 }
 
@@ -1029,7 +1030,7 @@ const RGAMES=[
 function gRitmo(){
  const st=STATIONS[1];const bpm=88;let best={};try{best=JSON.parse(localStorage.getItem("vueltaRitmo")||"{}");}catch(e){}
  const saveBest=(id,s)=>{if(s>(best[id]??-1)){best[id]=s;try{localStorage.setItem("vueltaRitmo",JSON.stringify(best));}catch(e){}}};
- function menu(){playTimers.forEach(clearTimeout);const n=RGAMES.filter(g=>g.id in best).length;
+ function menu(){stopAudio();const n=RGAMES.filter(g=>g.id in best).length;
   $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Juegos de ritmo</div><p class="sub">Elige un juego. Juega a los 2 para terminar el nivel.</p>
    <div class="rgames">${RGAMES.map(g=>`<button class="rgame" type="button" data-g="${g.id}" style="--sc:var(${g.col});--on:${g.on}"><b>${g.name}</b><span>${g.desc}</span><span class="stars">${starStr(best[g.id]||0)}</span></button>`).join("")}</div>
    <div class="row"><button class="big gold" type="button" id="endlvl" ${n<2?"disabled":""}>Terminar el nivel</button></div></div>`;
@@ -1044,12 +1045,12 @@ function gRitmo(){
    $view.innerHTML=header(st,G.name)+`<div class="panel result"><div class="q">${s>=2?"¡Gran ritmo!":"¡Sigue practicando!"}</div><div class="s">${starStr(s)}</div><p style="font-weight:800;font-size:19px">${good} de ${total} aciertos</p><div class="row" style="justify-content:center"><button class="big line" type="button" id="rp">Repetir</button><button class="big gold" type="button" id="mn">Otro juego</button></div></div>`;
    bindHome($view);$view.querySelector("#rp").onclick=()=>play(gid);$view.querySelector("#mn").onclick=menu;}
   function ui(){return {fb:$view.querySelector("#fb"),nx:$view.querySelector("#nx"),retry:$view.querySelector("#retry")};}
-  function result(ok,msg,canRetry){const {fb,nx,retry}=ui();if(ok){good++;addPts(10);fanfare();}else buzz();fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=msg;nx.hidden=false;nx.onclick=()=>{playTimers.forEach(clearTimeout);next();};if(canRetry&&!ok){retry.hidden=false;}}
+  function result(ok,msg,canRetry){const {fb,nx,retry}=ui();if(ok){good++;addPts(10);fanfare();}else buzz();fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=msg;nx.hidden=false;nx.onclick=()=>{stopAudio();next();};if(canRetry&&!ok){retry.hidden=false;}}
   /* grabador común para tocar en el pandero */
   function recorder(tokens,showNotation,onJudge){
    const beat=60/bpm,nb=rBeats(tokens);const pd=$view.querySelector("#pd"),ci=$view.querySelector("#ci"),tl=$view.querySelector("#tl");let rec=false,taps=[],start=0;
    pd.addEventListener("pointerdown",e=>{e.preventDefault();hitSound(ac().currentTime);pd.classList.add("hitp");setTimeout(()=>pd.classList.remove("hitp"),120);if(rec)taps.push(ac().currentTime-start);});
-   return function go(){if(rec)return;playTimers.forEach(clearTimeout);taps=[];tl.innerHTML="";whenReady(a=>{start=a.currentTime+.15+4*beat;
+   return function go(){if(rec)return;stopAudio();taps=[];tl.innerHTML="";whenReady(a=>{start=a.currentTime+.15+4*beat;
      for(let k=0;k<4;k++){click(a.currentTime+.15+k*beat,k===0);playTimers.push(setTimeout(()=>{ci.textContent=4-k;ci.className="countin show";},(.15+k*beat)*1000));}
      for(let k=0;k<nb;k++)oscNote(520,start+k*beat,.05,"triangle",.03,.003);
      playTimers.push(setTimeout(()=>{rec=true;ci.textContent="¡YA!";pd.classList.add("live");},(.15+4*beat-.25)*1000));
@@ -1077,7 +1078,7 @@ function gRitmo(){
       if(gid==="eco"){const h=$view.querySelector("#hid");h.classList.remove("hiddenR");h.innerHTML=rhythmSVG(tokens);}
       const {retry}=ui();
       if(ok){result(true,acc===1?"¡Perfecto! Has clavado el ritmo.":"¡Muy bien! Casi perfecto.");}
-      else{buzz();const {fb,nx}=ui();fb.className="feedback show badf";fb.textContent=ntaps===0?"No he oído ningún golpe. Toca el pandero cuando salga «¡YA!».":`Has acertado ${hit} de ${n} golpes. ${tries<2?"¡Otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{playTimers.forEach(clearTimeout);next();};}}});
+      else{buzz();const {fb,nx}=ui();fb.className="feedback show badf";fb.textContent=ntaps===0?"No he oído ningún golpe. Toca el pandero cuando salga «¡YA!».":`Has acertado ${hit} de ${n} golpes. ${tries<2?"¡Otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{stopAudio();next();};}}});
     $view.querySelector("#go").onclick=go;ui().retry.onclick=()=>{ui().retry.hidden=true;go();};}
    if(gid==="adivina"){const pool=SONGS.filter(x=>["jingle","wewish","alegria","nochepaz","campana","shchedryk","tannenbaum","arrorro","peces","chiquirritin","marimorena","arre","reyes"].includes(x.id));
     if(!songOrder)songOrder=shuffle(pool);const song=songOrder[r%songOrder.length];const opts=shuffle([song,...shuffle(pool.filter(x=>x!==song)).slice(0,2)]);
@@ -1183,7 +1184,7 @@ function gCuerpo(){
    else{combo=0;show("¡A destiempo!","bad");}}
   $view.querySelectorAll(".bbtn").forEach(b=>b.addEventListener("pointerdown",e=>{e.preventDefault();press(b.dataset.l);}));
   const kh=e=>{const l=LANES.find(x=>x.key===e.key.toLowerCase());if(l){e.preventDefault();press(l.id);}};document.addEventListener("keydown",kh);
-  const stopAll=()=>{ended=true;cancelAnimationFrame(raf);playTimers.forEach(clearTimeout);document.removeEventListener("keydown",kh);};
+  const stopAll=()=>{ended=true;cancelAnimationFrame(raf);stopAudio();document.removeEventListener("keydown",kh);};
   window.addEventListener("hashchange",stopAll,{once:true});
   $view.querySelector("#quit").onclick=()=>{stopAll();chooseMode(B);};
   function endRun(){stopAll();
@@ -1278,7 +1279,7 @@ function gSimon(){
    }else{busy=true;lives--;buzz();bars[n].classList.add("no");setTimeout(()=>bars[n].classList.remove("no"),300);hud();
      if(lives<=0)return setTimeout(()=>end(false),900);
      msg.textContent="¡Uy! Escucha otra vez";msg.className="smsg bad";setTimeout(playSeq,1300);}}
- function end(won){playTimers.forEach(clearTimeout);
+ function end(won){stopAudio();
    const s=score>=40?3:score>=18?2:score>0?1:0;addPts(score);
    finish(st,s===3?10:s===2?7:s===1?3:0,10);
    const r=$view.querySelector(".result p");if(r)r.textContent=`Has repetido ${score} notas${songsDone?` y descubierto ${songsDone} canción${songsDone>1?"es":""}`:""}.`;}
@@ -1376,7 +1377,7 @@ function soloReto(){
    sc.textContent=score+" pts";setTimeout(()=>{if(retoTimer)next();},ok?650:1300);});}
  drumroll();next();
  retoTimer=setInterval(()=>{left=Math.max(0,(end0-performance.now())/1000);tb.style.width=(left/60*100)+"%";tl.textContent=Math.ceil(left);tl.classList.toggle("low",left<=10);
-   if(left<=0){stopReto();playTimers.forEach(clearTimeout);let best=0;try{best=+localStorage.getItem("vueltaRecord")||0;if(score>best)localStorage.setItem("vueltaRecord",score);}catch(e){}
+   if(left<=0){stopReto();stopAudio();let best=0;try{best=+localStorage.getItem("vueltaRecord")||0;if(score>best)localStorage.setItem("vueltaRecord",score);}catch(e){}
      addPts(Math.round(score/10));fanfare();
      $view.innerHTML=header(R,"")+`<div class="panel result"><div class="q">¡Se acabó el tiempo!</div><p class="bigscore">${score}</p><p style="font-weight:800">${hits} aciertos de ${total} preguntas</p><p style="font-weight:800;color:#56617a">${score>best?"¡Nuevo récord!":`Récord: ${best} puntos`}</p><div class="row" style="justify-content:center"><button class="big gold" type="button" id="again">Otra vez</button><button class="big line" type="button" id="back">Elegir reto</button></div></div>`;
      bindHome($view);$view.querySelector("#again").onclick=soloReto;$view.querySelector("#back").onclick=gReto;}},100);
@@ -1396,7 +1397,7 @@ function multiReto(players,perPlayer){
   bindHome($view);window.scrollTo(0,0);drumroll();
   const qa=$view.querySelector("#qa"),fb=$view.querySelector("#fb"),tb=$view.querySelector("#tb"),tl=$view.querySelector("#tl"),nx=$view.querySelector("#nx");
   qa.innerHTML=qHTML(q);
-  function result(ok,timeout){stopReto();playTimers.forEach(clearTimeout);
+  function result(ok,timeout){stopReto();stopAudio();
    const pts=ok?100+Math.round(left*10):0;p.score+=pts;
    if(ok)fanfare();else buzz();
    fb.className="feedback show "+(ok?"good":"badf");fb.innerHTML=ok?`¡Correcto, ${p.name}! +${pts} puntos`:(timeout?"¡Se acabó el tiempo! ":"¡Fallo! ")+`Era «${q.answer}».`;
@@ -1415,7 +1416,7 @@ function multiReto(players,perPlayer){
 
 /* ================== RUTAS ================== */
 const GAMES={escucha:gEscucha,ritmo:gRitmo,carillon:gCarillon,regalos:gRegalos,cuerpo:gCuerpo,reto:gReto};
-function render(){try{if(AC)loadAllInst();}catch(e){}playTimers.forEach(clearTimeout);if(typeof stopReto==='function')stopReto();let h=location.hash.slice(1);const li=STATIONS.findIndex(x=>x.id===h);if(li>0&&!unlocked(li))h="";if(GAMES[h]){snowOn(false);document.body.classList.remove("on-levels");$view.innerHTML='<div class="game"></div>';const g=$view.firstElementChild;const real=$view;GAMES[h]();if($view.firstElementChild&&!$view.firstElementChild.classList.contains("game")){const w=document.createElement("div");w.className="game";while($view.firstChild)w.appendChild($view.firstChild);$view.appendChild(w);}}else home();window.scrollTo(0,0);}
+function render(){try{if(AC)loadAllInst();}catch(e){}stopAudio();if(typeof stopReto==='function')stopReto();let h=location.hash.slice(1);const li=STATIONS.findIndex(x=>x.id===h);if(li>0&&!unlocked(li))h="";if(GAMES[h]){snowOn(false);document.body.classList.remove("on-levels");$view.innerHTML='<div class="game"></div>';const g=$view.firstElementChild;const real=$view;GAMES[h]();if($view.firstElementChild&&!$view.firstElementChild.classList.contains("game")){const w=document.createElement("div");w.className="game";while($view.firstChild)w.appendChild($view.firstChild);$view.appendChild(w);}}else home();window.scrollTo(0,0);}
 function go(id){if(location.hash.slice(1)===id)render();else location.hash=id;}
 window.addEventListener("hashchange",render);
 document.getElementById("home-btn").onclick=()=>go("");
