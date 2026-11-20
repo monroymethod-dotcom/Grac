@@ -388,6 +388,16 @@ body.on-levels .gfoot{display:none}
 .pandero span{font:400 13px var(--arcade);color:#8a5a2b}
 .pandero.live{box-shadow:0 6px 0 #14101A,inset 0 0 0 6px #c99a5b,0 0 0 8px var(--n4)}
 .pandero.hitp{transform:scale(.96)}
+.rsyl span.on{background:var(--n2);color:#14101A;border-radius:6px}
+.meterlbl{font-weight:800;font-size:13px;color:#56617a;text-align:center;margin-bottom:2px}
+.barc{text-align:center;font-weight:800;color:#56617a;min-height:20px}
+.pandero.perc{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.pandero.perc b{font-size:58px;line-height:1}
+.scorebox{background:#fff;border:3px solid #14101A;border-radius:14px;padding:4px;margin:8px 0}
+.score{width:100%;height:auto;display:block}
+.score .done{opacity:.3}
+.score .cur{filter:drop-shadow(0 0 4px #e53935) drop-shadow(0 0 2px #e53935)}
+.score .lbl.cur rect{stroke:#14101A;stroke-width:2}
+.score .play{filter:drop-shadow(0 0 5px #1e63d6)}
 .countin{text-align:center;font:400 28px var(--arcade);min-height:36px;color:var(--n1);opacity:0}.countin.show{opacity:1}
 .tline{display:grid;gap:6px;margin-top:8px}
 .lane{position:relative;height:26px;background:#f3f5fa;border-radius:8px;margin-left:44px}
@@ -495,9 +505,10 @@ body.on-levels .gfoot{display:none}
 <p><b>Monroy Method®</b> es una marca registrada en la Oficina Española de Patentes y Marcas (OEPM), nº <b>M3699532</b>, clase 41 (educación, formación y entretenimiento). Titular: <b>Rita Monroy Suárez</b>.</p>
 <p><b>GRAC</b> es una saga de videojuegos educativos creada por Monroy Method. Este juego (diseño, estructura de juego, textos, ilustraciones y código) es propiedad de su autora. © 2026 Rita Monroy Suárez. Todos los derechos reservados.</p>
 <p>Queda prohibida su reproducción, copia, modificación, distribución, comunicación pública o venta, total o parcial, sin la autorización previa y por escrito de la titular. Uso permitido: solo el uso educativo dentro del aula autorizado por la titular.</p>
-<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i>, <i>La marimorena</i>, <i>Arre borriquito</i> y <i>Ya vienen los Reyes Magos</i> (villancicos tradicionales españoles), <i>Adeste fideles</i> (Wade, 1751) y <i>The First Noel</i> (tradicional inglés) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p><p>Los sonidos de piano, violín, guitarra y flauta son grabaciones reales de <i>tonejs-instruments</i> (Nicholas Brosowsky), y el del carillón procede de <i>FluidR3 GM SoundFont</i> (Frank Wen) vía <i>midi-js-soundfonts</i> (Benjamin Gleitzman); ambos con licencia Creative Commons Reconocimiento 3.0.</p>
+<p>Las melodías de <i>Campana sobre campana</i>, <i>Oh, árbol de Navidad</i> y <i>We Wish You a Merry Christmas</i> (tradicionales), el <i>Himno de la alegría</i> (Beethoven, 1824), <i>Noche de paz</i> (Gruber, 1818), <i>Jingle Bells</i> (Pierpont, 1857) <i>Shchedryk</i> (Leontóvych, 1916) el <i>Arrorró</i> (nana tradicional canaria), <i>Los peces en el río</i>, <i>Ay del chiquirritín</i> y <i>Dime, niño, ¿de quién eres?</i>, <i>La marimorena</i>, <i>Arre borriquito</i> y <i>Ya vienen los Reyes Magos</i> (villancicos tradicionales españoles), <i>Adeste fideles</i> (Wade, 1751) y <i>The First Noel</i> (tradicional inglés) son de dominio público. <i>¡Afishapa!</i> es una pieza original creada para este proyecto.</p><p>Los sonidos de piano, violín, guitarra y flauta son grabaciones reales de <i>tonejs-instruments</i> (Nicholas Brosowsky), y el del carillón procede de <i>FluidR3 GM SoundFont</i> (Frank Wen) vía <i>midi-js-soundfonts</i> (Benjamin Gleitzman); ambos con licencia Creative Commons Reconocimiento 3.0.</p><p>Los instrumentos de percusión son grabaciones de la Versilian Community Sample Library (Versilian Studios), de dominio público (CC0). Las partituras se han dibujado con VexFlow (licencia MIT).</p>
 <button class="ok" type="button" onclick="document.getElementById('lmodal').hidden=true">ENTENDIDO</button></div></div>
 
+<script src="assets/scores.js"></script>
 <script>
 /* ================== DATOS ================== */
 const NOTES={C:["Do",523.25,"--n-C"],D:["Re",587.33,"--n-D"],E:["Mi",659.25,"--n-E"],F:["Fa",698.46,"--n-F"],G:["Sol",783.99,"--n-G"],A:["La",880,"--n-A"],B:["Si",987.77,"--n-B"],c:["Do'",1046.5,"--n-C"],d:["Re'",1174.66,"--n-D"],e:["Mi'",1318.51,"--n-E"],f:["Fa'",1396.91,"--n-F"]};
@@ -564,6 +575,7 @@ SONGS.push(
   frag:"C E G A G F G E", fact:"Cuenta la llegada de los Reyes Magos, «caminito de Belén»."}
 );
 SONGS.splice(SONGS.findIndex(x=>x.id==="dimenino"),1);
+SONGS.forEach(s=>{const sc=window.SCORES&&SCORES[s.id];if(sc)s.frag=s.notes.slice(0,sc.n).map(x=>x[0]).join(" ");});
 const TIMBRE={nochepaz:"guitarra",alegria:"violin",shchedryk:"violin",tannenbaum:"piano",campana:"guitarra",chiquirritin:"guitarra",arrorro:"guitarra",peces:"piano",wewish:"piano",jingle:"piano",afishapa:"piano"};
 SONGS.forEach(s=>{if(TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
 SONGS.forEach(s=>{if(!s.timbre&&TIMBRE[s.id])s.timbre=TIMBRE[s.id];});
@@ -602,7 +614,7 @@ const FILL={bank:["Lanzarote","lastimero","Beethoven","Año Nuevo","tambores","c
 
 const STATIONS=[
  {id:"escucha",k:"Nivel 1",title:"Detectives de villancicos",desc:"Escucha, adivina y descubre quién, cuándo y dónde nació cada villancico.",color:"--n1",on:"#fff"},
- {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Escucha ritmos: adivina el villancico y elige el ritmo escrito.",color:"--n4",on:"#14101A"},
+ {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Reconoce ritmos escritos y tócalos con percusión sobre los villancicos.",color:"--n4",on:"#14101A"},
  {id:"carillon",k:"Nivel 3",title:"Toca el carillón",desc:"Toca un fragmento de cada canción sin fallar.",color:"--n2",on:"#fff"},
  {id:"regalos",k:"Nivel 4",title:"Regalos sonoros",desc:"Abre los regalos y encuentra las parejas que suenan igual.",color:"--n3",on:"#fff"},
  {id:"cuerpo",k:"Nivel 5",title:"Percusión corporal",desc:"Sigue los villancicos con pies, muslos, palmas y pitos.",color:"--n1",on:"#fff"}
@@ -646,10 +658,10 @@ function tone(ok){const a=ac(),t=a.currentTime;(ok?[784,1046.5]:[311,233]).forEa
 /* ---- acompañamiento: bajo, acordes y percusión ---- */
 let NOISE=null;function noiseBuf(){const a=ac();if(!NOISE){NOISE=a.createBuffer(1,a.sampleRate*.5,a.sampleRate);const d=NOISE.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}return NOISE;}
 function oscNote(f,t,dur,type,vol,att=.02){const a=ac(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(out());o.start(t);o.stop(t+dur+.05);}
-function sleigh(t,v=.18){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="highpass";f.frequency.value=6500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.15);}
-function tamb(t,v=.16){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="bandpass";f.frequency.value=3500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.09);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.1);}
-function skin(t,low,v=.55){const a=ac(),o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(low?150:300,t);o.frequency.exponentialRampToValueAtTime(low?55:140,t+.14);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.28);o.connect(g);g.connect(out());o.start(t);o.stop(t+.3);}
-function snare(t,v=.12){const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="highpass";f.frequency.value=1500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.06);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.08);}
+function sleigh(t,v=.18){if(playPerc("cascabeles",t,Math.min(1,v*3.5)))return;const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="highpass";f.frequency.value=6500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.15);}
+function tamb(t,v=.16){if(playPerc("pandereta",t,Math.min(1,v*4)))return;const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="bandpass";f.frequency.value=3500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.09);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.1);}
+function skin(t,low,v=.55){if(playPerc(low?"bombo":"pandero",t,Math.min(1,v*1.5)))return;const a=ac(),o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(low?150:300,t);o.frequency.exponentialRampToValueAtTime(low?55:140,t+.14);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.28);o.connect(g);g.connect(out());o.start(t);o.stop(t+.3);}
+function snare(t,v=.12){if(playPerc("maracas",t,Math.min(1,v*5)))return;const a=ac(),s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=noiseBuf();f.type="highpass";f.frequency.value=1500;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.06);s.connect(f);f.connect(g);g.connect(out());s.start(t);s.stop(t+.08);}
 const CH={C:[130.81,164.81,196],F:[174.61,220,261.63],G:[196,246.94,293.66],G7:[196,246.94,349.23],Am:[220,261.63,329.63],Dm:[146.83,174.61,220]};
 const HARM={campana:[[0,"C"],[3,"F"],[4,"C"],[7.5,"G"],[8.5,"C"],[11,"F"],[12,"G7"],[13.5,"C"]],arre:[[0,"C"],[5.5,"G"],[7,"F"],[8.5,"C"],[9,"G7"],[9.5,"C"]],adeste:[[0,"C"],[5,"G"],[9,"C"],[10,"G"],[11,"C"],[12,"F"],[13,"C"],[15,"G"]]};
 function chordFor(n,minor){if(minor)return (n==="e"||n==="E")?"C":"Am";return ({C:"C",E:"C",G:"C",c:"C",e:"C",D:"G",B:"G",d:"G",F:"F",A:"F",f:"F"})[n]||"C";}
@@ -696,7 +708,11 @@ function loadInst(inst){if(SF_LOADING[inst])return SF_LOADING[inst];const map={}
  if(inst==="carillon"){SF_LOADING[inst]=fetch("assets/sf/glockenspiel.json").then(r=>r.json()).then(data=>Promise.all(Object.entries(data).map(async([k,uri])=>{try{const bin=atob(uri.split(",")[1]);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);map[nameMidi(k)]=await dec(u.buffer);}catch(e){}}))).then(()=>{SAMPLES[inst]=map;}).catch(()=>{});}
  else SF_LOADING[inst]=Promise.all(INST_FILES[inst].split(" ").map(async n=>{try{const r=await fetch("assets/inst/"+inst+"/"+n+".mp3");map[nameMidi(n)]=await dec(await r.arrayBuffer());}catch(e){}})).then(()=>{SAMPLES[inst]=map;});
  return SF_LOADING[inst];}
-function loadAllInst(){return Promise.all(["piano","guitarra","violin","flauta","carillon"].map(loadInst));}
+const PERC={pandereta:{n:"Pandereta",ico:"🪇",a:"la pandereta"},claves:{n:"Claves",ico:"🥢",a:"las claves"},triangulo:{n:"Triángulo",ico:"🔺",a:"el triángulo"},cascabeles:{n:"Cascabeles",ico:"🔔",a:"los cascabeles"},cajachina:{n:"Caja china",ico:"🪵",a:"la caja china"},maracas:{n:"Maracas",ico:"🪇",a:"las maracas"},bombo:{n:"Bombo",ico:"🥁",a:"el bombo"},cajon:{n:"Cajón",ico:"📦",a:"el cajón"},pandero:{n:"Pandero",ico:"🥁",a:"el pandero"}};
+const PBUF={};let PLOAD=null;
+function loadPerc(){if(PLOAD)return PLOAD;PLOAD=Promise.all(Object.keys(PERC).map(async k=>{try{const r=await fetch("assets/perc/"+k+".mp3");PBUF[k]=await dec(await r.arrayBuffer());}catch(e){}}));return PLOAD;}
+function playPerc(k,t,vol=1){const b=PBUF[k];if(!b||!AC)return false;const a=AC,src=a.createBufferSource(),g=a.createGain();src.buffer=b;g.gain.value=vol;src.connect(g);g.connect(out());src.start(t);return true;}
+function loadAllInst(){return Promise.all(["piano","guitarra","violin","flauta","carillon"].map(loadInst).concat([loadPerc()]));}
 function readyInst(ms=6000){return Promise.race([loadAllInst(),new Promise(r=>setTimeout(r,ms))]);}
 /* toca una nota real: f = frecuencia exacta que debe sonar */
 function playInst(inst,f,t,dur,vol){const map=SAMPLES[inst];if(!map)return false;const keys=Object.keys(map).map(Number);if(!keys.length)return false;
@@ -891,7 +907,7 @@ function gRelaciona(){
 /* ================== 3. CARILLÓN ================== */
 function gCarillon(){
  const st=STATIONS[2]; let cur=0; const res={};
- $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Toca el fragmento sin fallar</div><p class="sub">Elige una canción, escúchala y tócala en el carillón. Toca al menos 4 canciones y pulsa «Terminar la prueba». Si pides pista, se ilumina la lámina.</p>
+ $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Lee la partitura y tócala</div><p class="sub">Elige una canción. En la partitura ves las notas (con su color y su nombre) y el ritmo. Escúchala y tócala en el carillón. Toca al menos 4 canciones y pulsa «Terminar la prueba». Si pides pista, se ilumina la lámina.</p>
   <div class="tabs" id="tabs"></div><div class="target" id="tg"></div><div class="row"><span class="meter" id="meter"></span></div>
   <div class="glock" id="gl" role="group" aria-label="Carillón"></div>
   <div class="row"><button class="big line" type="button" id="listen">Escuchar el fragmento</button><button class="big line" type="button" id="hint">Pista</button><button class="big line" type="button" id="restart">Empezar de nuevo</button><button class="big gold" type="button" id="end">Terminar la prueba</button></div>
@@ -904,20 +920,23 @@ function gCarillon(){
  let frag=[],pos=0,errs=0;
  function drawTabs(){tabs.innerHTML="";SONGS.forEach((s,k)=>{const t=el(`<button class="tab ${k===cur?"on":""}" type="button">${s.title} <span class="st">${res[s.id]!=null?"★".repeat(res[s.id]):""}</span></button>`);t.onclick=()=>{cur=k;load();};tabs.appendChild(t);});}
  function load(){drawTabs();const s=SONGS[cur];frag=s.frag.split(" ");pos=0;errs=0;fb.className="feedback";
-   tg.innerHTML=frag.map((n,k)=>`<span class="tn${k===0?" cur":""}" style="background:var(${NOTES[n][2]})">${NOTES[n][0]}</span>`).join("");
+   const sc=window.SCORES&&SCORES[s.id];
+   tg.innerHTML=sc?`<div class="scorebox">${sc.svg}</div>`:frag.map((n,k)=>`<span class="tn${k===0?" cur":""}" style="background:var(${NOTES[n][2]})">${NOTES[n][0]}</span>`).join("");
+   markScore();
    Object.values(bars).forEach(b=>b.classList.remove("hint"));upd();}
+ function markScore(play){for(let i=0;i<frag.length;i++)tg.querySelectorAll(".fi"+i).forEach(g=>{g.classList.toggle("done",i<pos&&play==null);g.classList.toggle("cur",i===pos&&play==null);g.classList.toggle("play",i===play);});}
  function upd(){meter.textContent=`Nota ${Math.min(pos+1,frag.length)} de ${frag.length} · Fallos: ${errs}`;}
  function hit(n){bell(NOTES[n][1]);const b=bars[n];b.classList.add("hit");setTimeout(()=>b.classList.remove("hit"),150);
    if(pos>=frag.length)return;
-   const spans=tg.querySelectorAll(".tn");
-   if(n===frag[pos]){spans[pos].classList.remove("cur");spans[pos].classList.add("ok");Object.values(bars).forEach(x=>x.classList.remove("hint"));pos++;
-     if(pos<frag.length)spans[pos].classList.add("cur");
+   const spans=tg.querySelectorAll(".tn");const hasScore=!!tg.querySelector(".score");
+   if(n===frag[pos]){if(!hasScore){spans[pos].classList.remove("cur");spans[pos].classList.add("ok");}Object.values(bars).forEach(x=>x.classList.remove("hint"));pos++;
+     markScore();if(pos<frag.length){if(!hasScore)spans[pos].classList.add("cur");}
      else{const s=errs===0?3:errs<=2?2:1;const id=SONGS[cur].id;const prev=res[id]||0;res[id]=Math.max(prev,s);if(s>prev)addPts((s-prev)*5);
        fb.className="feedback show good";fb.textContent=errs===0?"¡Perfecto, sin ningún fallo! ★★★":`¡Conseguido con ${errs} fallo${errs>1?"s":""}! ${"★".repeat(s)}`;tone(true);drawTabs();
        if(Object.keys(res).length>=4)fb.textContent+=" Cuando quieras, pulsa «Terminar la prueba».";}
    }else{errs++;b.classList.add("no");setTimeout(()=>b.classList.remove("no"),300);}
    upd();}
- $view.querySelector("#listen").onclick=()=>{const s=SONGS[cur];const short={...s,notes:s.notes.slice(0,frag.length)};playSong(short,(n)=>{if(n){bars[n].classList.add("hit");setTimeout(()=>bars[n].classList.remove("hit"),150);}});};
+ $view.querySelector("#listen").onclick=()=>{const s=SONGS[cur];const short={...s,notes:s.notes.slice(0,frag.length)};playSong(short,(n,i)=>{if(n){bars[n].classList.add("hit");setTimeout(()=>bars[n].classList.remove("hit"),150);markScore(i);}else markScore();});};
  $view.querySelector("#hint").onclick=()=>{if(pos<frag.length)bars[frag[pos]].classList.add("hint");};
  $view.querySelector("#restart").onclick=load;
  $view.querySelector("#end").onclick=()=>{const total=Object.values(res).reduce((a,b)=>a+b,0);finish(st,total,Math.max(4,Object.keys(res).length)*3);};
@@ -1005,6 +1024,7 @@ function tituloIncompleto(st,g,m){
 const RPAT=[
  {t:["ta","ta","taa"],song:"Jingle Bells"},{t:["ta","ta","ta","ta"],song:"Himno de la alegría"},{t:["ta","ta","titi","ta"]},{t:["titi","titi","ta","su"]},{t:["ta","su","ta","ta"]},
  {t:["taa","ta","ta"]},{t:["titi","ta","titi","ta"]},{t:["ta","titi","ta","su"]},{t:["titi","titi","titi","ta"]},{t:["su","ta","titi","ta"]},{t:["taa","titi","ta"]},{t:["ta","ta","su","titi"]}];
+const PPAT={2:[["ta","ta"],["titi","ta"],["ta","titi"],["titi","titi"]],3:[["ta","ta","ta"],["taa","ta"],["ta","titi","ta"],["titi","ta","titi"]],4:[["ta","ta","ta","ta"],["ta","ta","taa"],["titi","ta","titi","ta"],["ta","titi","ta","su"]]};
 const RSYL={ta:"ta",titi:"ti-ti",taa:"ta-a",su:"sh"};
 function rOnsets(t){let b=0,o=[];t.forEach(x=>{if(x==="ta"){o.push(b);b+=1;}else if(x==="titi"){o.push(b,b+.5);b+=1;}else if(x==="taa"){o.push(b);b+=2;}else b+=1;});return o;}
 function rhythmSVG(t){const W=56,h=78;let x=10,g="";
@@ -1016,15 +1036,15 @@ function rhythmSVG(t){const W=56,h=78;let x=10,g="";
   if(k==="su")g+=`<path d="M${c-3} 18 L${c+6} 30 L${c-2} 40 L${c+6} 52 Q${c-8} 46 ${c+1} 62" fill="none" stroke="#14101A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
   x+=w;});
  return `<svg class="rsvg" viewBox="0 0 ${x+10} ${h}" role="img" aria-label="${t.map(k=>RSYL[k]).join(" ")}"><line x1="4" y1="68" x2="${x+6}" y2="68" stroke="#cdd6e5" stroke-width="2"/>${g}</svg><div class="rsyl">${t.map(k=>`<span style="flex:${k==="taa"?2:1}">${RSYL[k]}</span>`).join("")}</div>`;}
-function click(t,strong){oscNote(strong?1600:1150,t,.06,"square",.08,.003);}
-function hitSound(t){skin(t,true,.5);tamb(t,.12);}
+function click(t,strong){if(playPerc("claves",t,strong?1:.55))return;oscNote(strong?1600:1150,t,.06,"square",.08,.003);}
+function hitSound(t){if(playPerc("pandero",t,1))return;skin(t,true,.5);tamb(t,.12);}
 const rBeats=t=>t.reduce((a,k)=>a+(k==="taa"?2:1),0);
 function playRhythm(t,bpm,{countIn=true}={},onBeat){whenReady(a=>{const beat=60/bpm;const t0=a.currentTime+.15;const ci=countIn?4:0;const nb=rBeats(t);
  for(let k=0;k<ci;k++){click(t0+k*beat,k===0);if(onBeat)playTimers.push(setTimeout(()=>onBeat("c",k),(.15+k*beat)*1000));}
  rOnsets(t).forEach(o=>hitSound(t0+(ci+o)*beat));
  for(let k=0;k<nb;k++)oscNote(520,t0+(ci+k)*beat,.05,"triangle",.03,.003);});}
 const RGAMES=[
- {id:"adivina",name:"¿Qué villancico es?",desc:"Solo suena el ritmo, sin melodía. ¿Lo reconoces?",col:"--n3",on:"#fff"},
+ {id:"acompana",name:"Toca con el villancico",desc:"Suena el villancico y tú tocas el ritmo escrito con un instrumento de percusión.",col:"--n3",on:"#fff"},
  {id:"reconoce",name:"Reconoce el ritmo",desc:"Escucha y elige el ritmo escrito.",col:"--n1",on:"#fff"}
 ];
 function gRitmo(){
@@ -1038,7 +1058,7 @@ function gRitmo(){
   $view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>play(b.dataset.g));
   $view.querySelector("#endlvl").onclick=()=>{const v=RGAMES.map(g=>best[g.id]||0);finish(st,v.reduce((a,b)=>a+b,0),v.length*3);};}
  function play(gid0){const G=gid0==="mix"?{name:"Ritmo navideño"}:RGAMES.find(x=>x.id===gid0);let CUR=G;let r=0,good=0;const total=gid0==="mix"?10:8;
-  const easy=shuffle(RPAT.slice(0,6)),hard=shuffle(RPAT.slice(6)),pats=[easy[0],easy[1],easy[2],easy[3],hard[0],hard[1],hard[2],hard[3]];let songOrder=null;
+  const easy=shuffle(RPAT.slice(0,6)),hard=shuffle(RPAT.slice(6)),pats=[easy[0],easy[1],easy[2],easy[3],hard[0],hard[1],hard[2],hard[3]];let songOrder=null,instOrder=null;
   function frame(inner){return header(st,`${G.name} · ${r+1} de ${total}`)+`<div class="panel"><div class="phase">${CUR.name.toUpperCase()}</div>${inner}<div class="feedback" id="fb"></div><div class="row"><button class="big line" type="button" id="retry" hidden>Repetir</button><button class="big gold" type="button" id="nx" hidden>Siguiente ▶</button></div></div>`;}
   function next(){r++;if(r>=total)return done();round();}
   function done(){if(gid0==="mix"){addPts(0);return finish(st,good,total);}const gid=gid0;const s=good>=7?3:good>=5?2:good>=2?1:0;saveBest(gid,s);if(s>=2)fanfare();else buzz();
@@ -1061,7 +1081,7 @@ function gRitmo(){
        tl.innerHTML=`<div class="lane"><span class="lbl">Ritmo</span>${exp.map(e=>`<i class="mk exp" style="left:${e/(nb*beat)*100}%"></i>`).join("")}</div><div class="lane"><span class="lbl">Tú</span>${taps.map((t,i)=>t>-.3&&t<nb*beat+.3?`<i class="mk ${used.has(i)?"okm":"badm"}" style="left:${Math.max(0,Math.min(100,t/(nb*beat)*100))}%"></i>`:"").join("")}</div>`;
        onJudge(acc,hit,exp.length,taps.length);},(.15+(4+nb)*beat+.35)*1000));});};}
   const padHTML=`<div class="countin" id="ci"></div><button class="pandero" type="button" id="pd" aria-label="Pandero: toca aquí"><span>¡TOCA AQUÍ!</span></button><div class="tline" id="tl"></div>`;
-  function round(){const gid=gid0==="mix"?(r%2?"reconoce":"adivina"):gid0;CUR=RGAMES.find(x=>x.id===gid)||G;const pat=pats[gid0==="mix"?r>>1:r];
+  function round(){const gid=gid0==="mix"?(r%2?"reconoce":"acompana"):gid0;CUR=RGAMES.find(x=>x.id===gid)||G;const pat=pats[gid0==="mix"?r>>1:r];
    if(gid==="reconoce"){const opts=shuffle([pat,...shuffle(RPAT.filter(x=>x.t.join()!==pat.t.join())).slice(0,2)]);
     $view.innerHTML=frame(`<div class="q">¿Qué ritmo suena?</div><p class="sub">Primero 4 golpes de cuenta y después el ritmo.</p><div class="row" style="margin:0 0 12px"><button class="big gold" type="button" id="ls">▶ Escuchar</button></div><div class="ropts">${opts.map((o,i)=>`<button class="ropt" type="button" data-i="${i}">${rhythmSVG(o.t)}</button>`).join("")}</div>`);
     bindHome($view);window.scrollTo(0,0);$view.querySelector("#ls").onclick=()=>playRhythm(pat.t,bpm);setTimeout(()=>playRhythm(pat.t,bpm),500);
@@ -1080,6 +1100,40 @@ function gRitmo(){
       if(ok){result(true,acc===1?"¡Perfecto! Has clavado el ritmo.":"¡Muy bien! Casi perfecto.");}
       else{buzz();const {fb,nx}=ui();fb.className="feedback show badf";fb.textContent=ntaps===0?"No he oído ningún golpe. Toca el pandero cuando salga «¡YA!».":`Has acertado ${hit} de ${n} golpes. ${tries<2?"¡Otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{stopAudio();next();};}}});
     $view.querySelector("#go").onclick=go;ui().retry.onclick=()=>{ui().retry.hidden=true;go();};}
+   if(gid==="acompana"){const k=r>>1;
+    if(!songOrder){const fit=SONGS.filter(x=>{const tot=x.notes.reduce((a,n)=>a+n[1],0);return (tot-(x.pickup||0))/x.bpb*x.bpb*60/x.bpm>=7&&x.bpm<=132;});songOrder=shuffle(fit);instOrder=shuffle(Object.keys(PERC));}
+    const s=songOrder[k%songOrder.length],inst=instOrder[k%instOrder.length],P=PERC[inst];const tokens=PPAT[s.bpb][Math.min(k,PPAT[s.bpb].length-1)];
+    const beat=60/s.bpm,bpb=s.bpb,pk=s.pickup||0,tot=s.notes.reduce((a,n)=>a+n[1],0);const K=Math.max(2,Math.min(Math.floor((tot-pk)/bpb),Math.round(13/(bpb*beat))));
+    const end=pk+K*bpb;const ex=[];{let acc=0;for(const [n,d] of s.notes){if(acc>=end-1e-6)break;const dd=Math.min(d,end-acc);ex.push([n,dd]);acc+=dd;}}
+    const ons1=rOnsets(tokens),exp=[];for(let b=0;b<K;b++)ons1.forEach(o=>exp.push((b*bpb+o)*beat));
+    const tStarts=[];{let b=0;tokens.forEach(x=>{tStarts.push(b);b+=x==="taa"?2:1;});}
+    let tries=0,rec=false,taps=[],tDown=0;
+    $view.innerHTML=frame(`<div class="q">Toca este ritmo con ${P.a} mientras suena «${s.title}»</div>
+     <div class="rshow" id="rs"><div class="meterlbl">Compás de ${bpb}/4 · se repite en cada compás</div>${rhythmSVG(tokens)}</div>
+     <p class="sub">Primero escucha el ejemplo. Después pulsa «¡A tocar!»: tras la cuenta, toca el ritmo en el instrumento durante todo el fragmento.</p>
+     <div class="row" style="margin:0 0 10px"><button class="big line" type="button" id="ls">▶ Escuchar el ejemplo</button><button class="big gold" type="button" id="go">¡A tocar!</button></div>
+     <div class="countin" id="ci"></div><div class="barc" id="bc"></div><button class="pandero perc" type="button" id="pd" aria-label="${P.n}: toca aquí"><b>${P.ico}</b><span>${P.n.toUpperCase()}</span></button><div class="tline" id="tl"></div>`);
+    bindHome($view);window.scrollTo(0,0);
+    const pd=$view.querySelector("#pd"),ci=$view.querySelector("#ci"),bc=$view.querySelector("#bc"),tl=$view.querySelector("#tl"),spans=[...$view.querySelectorAll("#rs .rsyl span")];
+    pd.addEventListener("pointerdown",e=>{e.preventDefault();const a=ac();playPerc(inst,a.currentTime,1);pd.classList.add("hitp");setTimeout(()=>pd.classList.remove("hitp"),110);if(rec)taps.push(a.currentTime-tDown);});
+    function run(demo){stopAudio();const gen=AUDIO_GEN;taps=[];tl.innerHTML="";bc.textContent="";
+     whenReady(()=>readyInst().then(()=>{if(gen!==AUDIO_GEN)return;const a=ac(),t0=a.currentTime+.2;tDown=t0+bpb*beat;
+      for(let q=0;q<bpb;q++){click(t0+q*beat,q===0);playTimers.push(setTimeout(()=>{ci.textContent=demo?"":(bpb-q);ci.className="countin show";},(.2+q*beat)*1000));}
+      const tMel=tDown-pk*beat;accompany({...s,notes:ex,style:""},tMel,beat);let tt=tMel;ex.forEach(([n,d])=>{voiceNote(s.timbre,NOTES[n][1],tt,d*beat);tt+=d*beat;});
+      if(demo)exp.forEach(e=>playPerc(inst,tDown+e,1));
+      for(let b=0;b<K;b++){playTimers.push(setTimeout(()=>{bc.textContent=`Compás ${b+1} de ${K}`;},(tDown-a.currentTime+b*bpb*beat)*1000));
+        tStarts.forEach((o,j)=>playTimers.push(setTimeout(()=>{spans.forEach((x,i)=>x.classList.toggle("on",i===j));},(tDown-a.currentTime+(b*bpb+o)*beat)*1000)));}
+      if(!demo){playTimers.push(setTimeout(()=>{rec=true;ci.textContent="¡YA!";pd.classList.add("live");},(tDown-a.currentTime-.3)*1000));}
+      playTimers.push(setTimeout(()=>{spans.forEach(x=>x.classList.remove("on"));ci.className="countin";bc.textContent="";if(demo)return;rec=false;pd.classList.remove("live");judge();},(tDown-a.currentTime+K*bpb*beat+.4)*1000));}));}
+    window.__acomp={exp,tDown:()=>tDown};
+    function judge(){tries++;const tol=Math.min(.16,beat*.3);const used=new Set();let hit=0;
+      exp.forEach(e=>{let bi=-1,bd=9;taps.forEach((t,i)=>{if(!used.has(i)&&Math.abs(t-e)<bd){bd=Math.abs(t-e);bi=i;}});if(bi>=0&&bd<=tol){used.add(bi);hit++;}});
+      const L=K*bpb*beat,extra=taps.filter((t,i)=>!used.has(i)&&t>-.3&&t<L+.3).length,acc=hit/(exp.length+extra);
+      tl.innerHTML=`<div class="lane"><span class="lbl">Ritmo</span>${exp.map(e=>`<i class="mk exp" style="left:${e/L*100}%"></i>`).join("")}</div><div class="lane"><span class="lbl">Tú</span>${taps.map((t,i)=>t>-.3&&t<L+.3?`<i class="mk ${used.has(i)?"okm":"badm"}" style="left:${Math.max(0,Math.min(100,t/L*100))}%"></i>`:"").join("")}</div>`;
+      const {retry,fb,nx}=ui();
+      if(acc>=.6){result(true,(acc>=.9?"¡Perfecto! Has tocado el ritmo a la vez que el villancico. ":"¡Muy bien! ")+`Has acertado ${hit} de ${exp.length} golpes.`);}
+      else{buzz();fb.className="feedback show badf";fb.textContent=taps.length===0?`No he oído ningún golpe. Toca ${P.a} cuando salga «¡YA!».`:`Has acertado ${hit} de ${exp.length} golpes. ${tries<2?"¡Inténtalo otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{stopAudio();next();};}}}
+    $view.querySelector("#ls").onclick=()=>run(true);$view.querySelector("#go").onclick=()=>run(false);ui().retry.onclick=()=>{ui().retry.hidden=true;ui().fb.className="feedback";run(false);};}
    if(gid==="adivina"){const pool=SONGS.filter(x=>["jingle","wewish","alegria","nochepaz","campana","shchedryk","tannenbaum","arrorro","peces","chiquirritin","marimorena","arre","reyes"].includes(x.id));
     if(!songOrder)songOrder=shuffle(pool);const song=songOrder[r%songOrder.length];const opts=shuffle([song,...shuffle(pool.filter(x=>x!==song)).slice(0,2)]);
     const hits=[];let t=0;for(const [n,d] of song.notes){if(t>=9)break;hits.push([t,d]);t+=d;}
