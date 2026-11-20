@@ -601,7 +601,7 @@ const FILL={bank:["Lanzarote","lastimero","Beethoven","Año Nuevo","tambores","c
 
 const STATIONS=[
  {id:"escucha",k:"Nivel 1",title:"Detectives de villancicos",desc:"Escucha, adivina y descubre quién, cuándo y dónde nació cada villancico.",color:"--n1",on:"#fff"},
- {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Reconoce el ritmo y tócalo en el pandero.",color:"--n4",on:"#14101A"},
+ {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Escucha ritmos: adivina el villancico y elige el ritmo escrito.",color:"--n4",on:"#14101A"},
  {id:"carillon",k:"Nivel 3",title:"Toca el carillón",desc:"Toca un fragmento de cada canción sin fallar.",color:"--n2",on:"#fff"},
  {id:"regalos",k:"Nivel 4",title:"Regalos sonoros",desc:"Abre los regalos y encuentra las parejas que suenan igual.",color:"--n3",on:"#fff"},
  {id:"cuerpo",k:"Nivel 5",title:"Percusión corporal",desc:"Sigue los villancicos con pies, muslos, palmas y pitos.",color:"--n1",on:"#fff"}
@@ -1036,11 +1036,11 @@ function gRitmo(){
   bindHome($view);window.scrollTo(0,0);
   $view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>play(b.dataset.g));
   $view.querySelector("#endlvl").onclick=()=>{const v=RGAMES.map(g=>best[g.id]||0);finish(st,v.reduce((a,b)=>a+b,0),v.length*3);};}
- function play(gid){const G=RGAMES.find(x=>x.id===gid);let r=0,good=0;const total=8;
+ function play(gid0){const G=gid0==="mix"?{name:"Ritmo navideño"}:RGAMES.find(x=>x.id===gid0);let CUR=G;let r=0,good=0;const total=gid0==="mix"?10:8;
   const easy=shuffle(RPAT.slice(0,6)),hard=shuffle(RPAT.slice(6)),pats=[easy[0],easy[1],easy[2],easy[3],hard[0],hard[1],hard[2],hard[3]];let songOrder=null;
-  function frame(inner){return header(st,`${G.name} · ${r+1} de ${total}`)+`<div class="panel"><div class="phase">${G.name.toUpperCase()}</div>${inner}<div class="feedback" id="fb"></div><div class="row"><button class="big line" type="button" id="retry" hidden>Repetir</button><button class="big gold" type="button" id="nx" hidden>Siguiente ▶</button></div></div>`;}
+  function frame(inner){return header(st,`${G.name} · ${r+1} de ${total}`)+`<div class="panel"><div class="phase">${CUR.name.toUpperCase()}</div>${inner}<div class="feedback" id="fb"></div><div class="row"><button class="big line" type="button" id="retry" hidden>Repetir</button><button class="big gold" type="button" id="nx" hidden>Siguiente ▶</button></div></div>`;}
   function next(){r++;if(r>=total)return done();round();}
-  function done(){const s=good>=7?3:good>=5?2:good>=2?1:0;saveBest(gid,s);if(s>=2)fanfare();else buzz();
+  function done(){if(gid0==="mix"){addPts(0);return finish(st,good,total);}const gid=gid0;const s=good>=7?3:good>=5?2:good>=2?1:0;saveBest(gid,s);if(s>=2)fanfare();else buzz();
    $view.innerHTML=header(st,G.name)+`<div class="panel result"><div class="q">${s>=2?"¡Gran ritmo!":"¡Sigue practicando!"}</div><div class="s">${starStr(s)}</div><p style="font-weight:800;font-size:19px">${good} de ${total} aciertos</p><div class="row" style="justify-content:center"><button class="big line" type="button" id="rp">Repetir</button><button class="big gold" type="button" id="mn">Otro juego</button></div></div>`;
    bindHome($view);$view.querySelector("#rp").onclick=()=>play(gid);$view.querySelector("#mn").onclick=menu;}
   function ui(){return {fb:$view.querySelector("#fb"),nx:$view.querySelector("#nx"),retry:$view.querySelector("#retry")};}
@@ -1060,7 +1060,7 @@ function gRitmo(){
        tl.innerHTML=`<div class="lane"><span class="lbl">Ritmo</span>${exp.map(e=>`<i class="mk exp" style="left:${e/(nb*beat)*100}%"></i>`).join("")}</div><div class="lane"><span class="lbl">Tú</span>${taps.map((t,i)=>t>-.3&&t<nb*beat+.3?`<i class="mk ${used.has(i)?"okm":"badm"}" style="left:${Math.max(0,Math.min(100,t/(nb*beat)*100))}%"></i>`:"").join("")}</div>`;
        onJudge(acc,hit,exp.length,taps.length);},(.15+(4+nb)*beat+.35)*1000));});};}
   const padHTML=`<div class="countin" id="ci"></div><button class="pandero" type="button" id="pd" aria-label="Pandero: toca aquí"><span>¡TOCA AQUÍ!</span></button><div class="tline" id="tl"></div>`;
-  function round(){const pat=pats[r];
+  function round(){const gid=gid0==="mix"?(r%2?"reconoce":"adivina"):gid0;CUR=RGAMES.find(x=>x.id===gid)||G;const pat=pats[gid0==="mix"?r>>1:r];
    if(gid==="reconoce"){const opts=shuffle([pat,...shuffle(RPAT.filter(x=>x.t.join()!==pat.t.join())).slice(0,2)]);
     $view.innerHTML=frame(`<div class="q">¿Qué ritmo suena?</div><p class="sub">Primero 4 golpes de cuenta y después el ritmo.</p><div class="row" style="margin:0 0 12px"><button class="big gold" type="button" id="ls">▶ Escuchar</button></div><div class="ropts">${opts.map((o,i)=>`<button class="ropt" type="button" data-i="${i}">${rhythmSVG(o.t)}</button>`).join("")}</div>`);
     bindHome($view);window.scrollTo(0,0);$view.querySelector("#ls").onclick=()=>playRhythm(pat.t,bpm);setTimeout(()=>playRhythm(pat.t,bpm),500);
@@ -1103,7 +1103,7 @@ function gRitmo(){
       if(!ok)bs.insertAdjacentHTML("beforeend",`<p class="sub" style="margin:8px 0 0">El ritmo correcto era:</p>${rhythmSVG(target)}`);result(ok,ok?"¡Ritmo construido a la perfección!":"¡Casi! Compara tu ritmo con el correcto.");};}
   }
   round();}
- menu();
+ play("mix");
 }
 
 /* ================== 5. PERCUSIÓN CORPORAL ================== */
