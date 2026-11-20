@@ -1023,27 +1023,24 @@ function playRhythm(t,bpm,{countIn=true}={},onBeat){whenReady(a=>{const beat=60/
  rOnsets(t).forEach(o=>hitSound(t0+(ci+o)*beat));
  for(let k=0;k<nb;k++)oscNote(520,t0+(ci+k)*beat,.05,"triangle",.03,.003);});}
 const RGAMES=[
- {id:"reconoce",name:"Reconoce el ritmo",desc:"Escucha y elige el ritmo escrito.",col:"--n1",on:"#fff"},
- {id:"toca",name:"Toca el ritmo",desc:"Lee el ritmo y tócalo en el pandero.",col:"--n4",on:"#14101A"},
- {id:"eco",name:"Eco rítmico",desc:"Escucha sin mirar y repítelo. ¡Cada vez más largo!",col:"--n2",on:"#fff"},
  {id:"adivina",name:"¿Qué villancico es?",desc:"Solo suena el ritmo, sin melodía. ¿Lo reconoces?",col:"--n3",on:"#fff"},
- {id:"construye",name:"Construye el ritmo",desc:"Escucha y monta el ritmo con las figuras.",col:"--n1",on:"#fff"}
+ {id:"reconoce",name:"Reconoce el ritmo",desc:"Escucha y elige el ritmo escrito.",col:"--n1",on:"#fff"}
 ];
 function gRitmo(){
  const st=STATIONS[1];const bpm=88;let best={};try{best=JSON.parse(localStorage.getItem("vueltaRitmo")||"{}");}catch(e){}
  const saveBest=(id,s)=>{if(s>(best[id]??-1)){best[id]=s;try{localStorage.setItem("vueltaRitmo",JSON.stringify(best));}catch(e){}}};
- function menu(){playTimers.forEach(clearTimeout);const n=Object.keys(best).length;
-  $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Juegos de ritmo</div><p class="sub">Elige un juego. Juega al menos 2 para terminar el nivel.</p>
+ function menu(){playTimers.forEach(clearTimeout);const n=RGAMES.filter(g=>g.id in best).length;
+  $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Juegos de ritmo</div><p class="sub">Elige un juego. Juega a los 2 para terminar el nivel.</p>
    <div class="rgames">${RGAMES.map(g=>`<button class="rgame" type="button" data-g="${g.id}" style="--sc:var(${g.col});--on:${g.on}"><b>${g.name}</b><span>${g.desc}</span><span class="stars">${starStr(best[g.id]||0)}</span></button>`).join("")}</div>
    <div class="row"><button class="big gold" type="button" id="endlvl" ${n<2?"disabled":""}>Terminar el nivel</button></div></div>`;
   bindHome($view);window.scrollTo(0,0);
   $view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>play(b.dataset.g));
-  $view.querySelector("#endlvl").onclick=()=>{const v=Object.values(best);finish(st,v.reduce((a,b)=>a+b,0),Math.max(2,v.length)*3);};}
- function play(gid){const G=RGAMES.find(x=>x.id===gid);let r=0,good=0;const total=5;
-  const easy=shuffle(RPAT.slice(0,6)),hard=shuffle(RPAT.slice(6)),pats=[easy[0],easy[1],easy[2],hard[0],hard[1]];
+  $view.querySelector("#endlvl").onclick=()=>{const v=RGAMES.map(g=>best[g.id]||0);finish(st,v.reduce((a,b)=>a+b,0),v.length*3);};}
+ function play(gid){const G=RGAMES.find(x=>x.id===gid);let r=0,good=0;const total=8;
+  const easy=shuffle(RPAT.slice(0,6)),hard=shuffle(RPAT.slice(6)),pats=[easy[0],easy[1],easy[2],easy[3],hard[0],hard[1],hard[2],hard[3]];let songOrder=null;
   function frame(inner){return header(st,`${G.name} · ${r+1} de ${total}`)+`<div class="panel"><div class="phase">${G.name.toUpperCase()}</div>${inner}<div class="feedback" id="fb"></div><div class="row"><button class="big line" type="button" id="retry" hidden>Repetir</button><button class="big gold" type="button" id="nx" hidden>Siguiente ▶</button></div></div>`;}
   function next(){r++;if(r>=total)return done();round();}
-  function done(){const s=good>=5?3:good>=3?2:good>=1?1:0;saveBest(gid,s);if(s>=2)fanfare();else buzz();
+  function done(){const s=good>=7?3:good>=5?2:good>=2?1:0;saveBest(gid,s);if(s>=2)fanfare();else buzz();
    $view.innerHTML=header(st,G.name)+`<div class="panel result"><div class="q">${s>=2?"¡Gran ritmo!":"¡Sigue practicando!"}</div><div class="s">${starStr(s)}</div><p style="font-weight:800;font-size:19px">${good} de ${total} aciertos</p><div class="row" style="justify-content:center"><button class="big line" type="button" id="rp">Repetir</button><button class="big gold" type="button" id="mn">Otro juego</button></div></div>`;
    bindHome($view);$view.querySelector("#rp").onclick=()=>play(gid);$view.querySelector("#mn").onclick=menu;}
   function ui(){return {fb:$view.querySelector("#fb"),nx:$view.querySelector("#nx"),retry:$view.querySelector("#retry")};}
@@ -1083,7 +1080,7 @@ function gRitmo(){
       else{buzz();const {fb,nx}=ui();fb.className="feedback show badf";fb.textContent=ntaps===0?"No he oído ningún golpe. Toca el pandero cuando salga «¡YA!».":`Has acertado ${hit} de ${n} golpes. ${tries<2?"¡Otra vez!":"Puedes repetir o seguir."}`;retry.hidden=false;if(tries>=2){nx.hidden=false;nx.onclick=()=>{playTimers.forEach(clearTimeout);next();};}}});
     $view.querySelector("#go").onclick=go;ui().retry.onclick=()=>{ui().retry.hidden=true;go();};}
    if(gid==="adivina"){const pool=SONGS.filter(x=>["jingle","wewish","alegria","nochepaz","campana","shchedryk","tannenbaum","arrorro","peces","chiquirritin","marimorena","arre","reyes"].includes(x.id));
-    const song=shuffle(pool)[0];const opts=shuffle([song,...shuffle(pool.filter(x=>x!==song)).slice(0,2)]);
+    if(!songOrder)songOrder=shuffle(pool);const song=songOrder[r%songOrder.length];const opts=shuffle([song,...shuffle(pool.filter(x=>x!==song)).slice(0,2)]);
     const hits=[];let t=0;for(const [n,d] of song.notes){if(t>=9)break;hits.push([t,d]);t+=d;}
     const playR=()=>whenReady(a=>{const beat=60/song.bpm,t0=a.currentTime+.2;hits.forEach(([o])=>{hitSound(t0+o*beat);tamb(t0+o*beat,.08);});});
     $view.innerHTML=frame(`<div class="q">¿Qué villancico tiene este ritmo?</div><p class="sub">Solo suena el ritmo del principio, tocado en el pandero, sin melodía.</p><div class="row" style="margin:0 0 12px"><button class="big gold" type="button" id="ls">▶ Escuchar el ritmo</button></div><div class="opts" id="op">${opts.map(o=>`<button class="opt" type="button">${o.title}</button>`).join("")}</div>`);
