@@ -53,7 +53,7 @@ main{max-width:1180px;margin:0 auto;padding:12px max(2vw,10px) 20px;display:flex
 .prog i{display:block;height:100%;border-right:2px solid var(--ink)}
 .prog i:last-of-type{border-right:0}
 .prog b{position:absolute;top:-3px;bottom:-3px;width:4px;background:var(--red);left:0;pointer-events:none}
-.hwy{position:relative;height:clamp(210px,calc(100vh - 560px),480px);border:4px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--night)}
+.hwy{position:relative;height:clamp(200px,calc(100vh - 615px),480px);border:4px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--night)}
 .hwy canvas{display:block;width:100%;height:100%}
 .count{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center}
 .count div{font-family:"Press Start 2P",monospace;color:#fff;text-shadow:4px 4px 0 var(--ink);font-size:clamp(12px,2.4vw,20px);line-height:1.6}
@@ -124,7 +124,13 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
     </div>
     <div class="grp">
       <label class="tempo">Tempo <input type="range" id="tempo" min="60" max="150" step="2" value="104"><span id="tval">104</span></label>
-      <button class="btn" id="tMel" aria-pressed="true" title="El carrillón toca la melodía para seguirla">Melodía guía</button>
+      <label class="tempo" title="La parte que se ve en la pista y en el carrillón">Mi parte
+        <select id="part" style="border:0;background:none;font-weight:900"><option value="0">Voz 1 · melodía</option><option value="1">Voz 2</option><option value="2">Acompañamiento</option></select></label>
+      <button class="btn" id="tMel" aria-pressed="true" title="El carrillón de la pantalla toca tu parte para seguirla">Guía de mi parte</button>
+      <span class="tempo" style="gap:6px">Suenan
+        <button class="btn" id="s0" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Voz 1</button>
+        <button class="btn" id="s1" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Voz 2</button>
+        <button class="btn" id="s2" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Acomp.</button></span>
       <button class="btn" id="tAcc" aria-pressed="true">Piano</button>
       <button class="btn" id="tPerc" aria-pressed="true" title="Cascabeles, bombo y palmas">Percusión</button>
       <button class="btn" id="tMet" aria-pressed="false">Metrónomo</button>
@@ -148,10 +154,12 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
 
 <div class="ov" id="ovGuide" hidden><div class="card">
   <h3 class="px">Guía docente</h3>
-  <p>Todas las melodías están en <b>Do mayor</b> y son <b>estribillos</b> en <b>Do mayor</b> y, al final, en <b>Sol mayor</b>. Caben en un carrillón de Sol grave a Re agudo; para la parte en Sol se añade la lámina <b>Fa♯</b> (más estrecha, con borde discontinuo). El enlace antes del cambio de tono lo avisa en pantalla. Así el alumnado pasa de una canción a otra sin cambiar de láminas ni de posición.</p>
+  <p>Las piezas están en <b>Do mayor</b> (estribillos, y la estrofa completa de «Fa la la») y la última en <b>Sol mayor</b>. Caben en un carrillón de Sol grave a Re agudo más la lámina <b>Fa♯</b> (más estrecha, con borde discontinuo), que se usa en la pieza final y una sola vez en «Fa la la». El enlace antes del cambio de tono lo avisa en pantalla.</p>
   <ul>
     <li><b>Empezar</b>: cuenta 4 tiempos y arranca el popurrí. Las canciones van seguidas; entre una y otra hay un <b>compás de enlace</b> con cuenta atrás y el título de la siguiente (puedes poner 0, 1 o 2 compases).</li>
-    <li><b>Melodía guía</b> encendida: el carrillón de la pantalla toca y se ilumina solo; sirve para escuchar y aprender. Apagada: toca el alumnado y la página cuenta los aciertos.</li>
+    <li><b>Mi parte</b>: elige qué se ve en la pista y en el carrillón: <b>Voz 1</b> (melodía), <b>Voz 2</b> (armonía a distancia de tercera o sexta por debajo, con el mismo ritmo) o <b>Acompañamiento</b> (bajo de las notas de cada acorde: fundamental y quinta en las piezas alegres, notas largas en Adeste y en el vals final). Así cada grupo de la clase ensaya su parte.</li>
+    <li><b>Guía de mi parte</b> encendida: el carrillón de la pantalla toca y se ilumina solo con tu parte. Apagada: tu parte la toca el alumnado y la página cuenta los aciertos.</li>
+    <li><b>Suenan</b>: enciende o apaga las otras partes para ensayar por separado o todas juntas. La segunda voz y el acompañamiento se crean solos a partir de la melodía y de los acordes, así que si editas una canción también se actualizan.</li>
     <li>La lámina con <b>borde blanco parpadeante</b> es la siguiente nota. Cuando alguien toca, la lámina se ilumina y suena.</li>
     <li>Pulsa el <b>nombre de una canción</b> o la barra de progreso para saltar a ella (con 4 tiempos de cuenta). Desmarca la casilla para quitarla del popurrí y usa ◀ ▶ para cambiar el orden.</li>
     <li>El tempo se puede cambiar en cualquier momento, también mientras suena.</li>
@@ -197,9 +205,11 @@ fa:.5 fa:.5 mi:.5 fa:.5 | sol:.5 la:.5 sol:.5 fa:.5 | mi re | [C] re:.5 do:2.5 -
  {id:'arre',t:'Arre borriquito',on:1,st:'polka',m:4,k:'C',
   n:`#Estribillo [C] do:.5 do:.5 do:.5 mi:.5 do do | do:.5 re:.5 mi:.5 fa:.5 [G7] sol sol | [F] la:.5 sol:.5 fa:.5 mi:.5 [G7] re [C] do | [G7] si,:.5 la,:.5 sol,:.5 sol:.5 [C] mi mi |
 [C7] do:.5 do:.5 do:.5 mi:.5 do do | [F] do:.5 re:.5 mi:.5 fa:.5 [G7] sol:2 | [F] la:.5 sol:.5 fa:.5 mi:.5 [G7] re [C] do | [G7] si,:.5 la,:.5 sol,:.5 sol:.5 [C] do:2`},
- {id:'deck',t:'Fa la la (Deck the Halls)',on:1,st:'polka',m:4,k:'C',
-  n:`#Estribillo [C] sol:1.5 fa:.5 mi re | do re mi do | [G7] re:.5 mi:.5 fa:.5 re:.5 [C] mi:1.5 re:.5 | [G7] do si, [C] do:2 |
-[C] sol:1.5 fa:.5 [Am] mi re | [F] do re [C] mi do | [Dm] re:.5 mi:.5 fa:.5 re:.5 [C] mi:1.5 re:.5 | [G7] do si, [C] do:2`},
+ {id:'deck',t:'Fa la la (Deck the Halls) · estrofa completa',on:1,st:'polka',m:4,k:'C',
+  n:`#Estrofa [C] sol:1.5 fa:.5 mi re | do re mi do | [G7] re:.5 mi:.5 fa:.5 re:.5 [C] mi:1.5 re:.5 | [G7] do si, [C] do:2 |
+[C] sol:1.5 fa:.5 [Am] mi re | [F] do re [C] mi do | [Dm] re:.5 mi:.5 fa:.5 re:.5 [C] mi:1.5 re:.5 | [G7] do si, [C] do:2 |
+[G7] re:1.5 mi:.5 fa re | [C] mi:1.5 fa:.5 [G] sol re | [D7] mi:.5 fa#:.5 [G] sol la:.5 si:.5 [Am] do' | [G] si [D7] la [G] sol:2 |
+[C] sol:1.5 fa:.5 mi re | do re mi do | [F] la:.5 la:.5 la:.5 la:.5 [C] sol:1.5 fa:.5 | mi [G7] re [C] do:2`},
  {id:'adeste',t:'Adeste Fideles (estrofa)',on:1,st:'arp',m:4,k:'C',
   n:`#Estrofa -:3 [G7] do | [C] do:2 [G] sol, [C] do | [G] re:2 sol,:2 | [C] mi [G] re [C] mi [F] fa | [C] mi:2 [G7] re [C] do |
 [C] do:2 [G] si, [Am] la, | [G] si, [C] do [G] re [Em] mi | [D7] si,:1.5 la,:.5 [G] sol,:2`},
@@ -207,7 +217,7 @@ fa:.5 fa:.5 mi:.5 fa:.5 | sol:.5 la:.5 sol:.5 fa:.5 | mi re | [C] re:.5 do:2.5 -
   n:`#Final -:2 [D7] re | [G] sol sol:.5 la:.5 sol:.5 fa#:.5 | [C] mi mi mi | [A7] la la:.5 si:.5 la:.5 sol:.5 | [D] fa# re re |
 [G7] si si:.5 do':.5 si:.5 la:.5 | [C] sol mi re:.5 re:.5 | [Am] mi [D7] la fa# | [G] sol:3`}
 ];
-const STORE='popurriNavidad_v8';
+const STORE='popurriNavidad_v9';
 let SONGS=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(STORE)||'null');if(Array.isArray(s)&&s.length)return s}catch(e){}return JSON.parse(JSON.stringify(DEFAULT_SONGS))}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(SONGS))}catch(e){}}
@@ -262,6 +272,30 @@ function chordFor(evs,a,b,last){if(last)return AUTO[0];let best=AUTO[0],bs=-1e9;
  AUTO.forEach((c,ci)=>{let s=AUTOW[ci],tot=0;
   for(const e of evs){const o=Math.min(b,e.t+e.d)-Math.max(a,e.t);if(o<=0)continue;tot+=o;const pc=e.midi%12,on=Math.abs(e.t-a)<.01;s+=c.pcs.includes(pc)?o*(on?1.6:1):-o*1.3;if(pc===c.root&&on)s+=.3}
   if(!tot&&ci)s-=1;if(s>bs){bs=s;best=c}});return best}
+/* ---------- segunda voz y acompañamiento de carillón (se generan a partir de la melodía y los acordes) ---------- */
+const SCALE={C:[0,2,4,5,7,9,11],G:[0,2,4,6,7,9,11]};
+function genV2(v1,chordAt,key){let prev=null;return v1.map(e=>{const ch=chordAt(e.t);let sc=SCALE[key]||SCALE.C;
+  if(ch.pcs.includes(6))sc=sc.map(x=>x===5?6:x);if(ch.pcs.includes(5))sc=sc.map(x=>x===6?5:x);
+  const mNct=!ch.pcs.includes(e.midi%12);let best=null,bs=1e9;
+  for(const L of LANES){const iv=e.midi-L;if(iv<0)continue;const pc=L%12;if(!sc.includes(pc))continue;
+   let sv={3:0,4:0,8:1,9:1,7:1.6,5:2.4,0:4}[iv];if(sv===undefined)continue;if(!ch.pcs.includes(pc)&&!mNct)sv+=3;
+   if(prev!=null)sv+=.12*Math.abs(L-prev);if(sv<bs){bs=sv;best=L}}
+  if(best==null)best=e.midi;prev=best;return{t:e.t,d:e.d,midi:best,lane:LANES.indexOf(best)}})}
+const ROOTM={7:67,9:69,11:71,0:72,2:74,4:76,5:77,6:78};
+function genAcc(chs,m,st,len,from){const out=[];
+ for(let k=Math.floor(from+1e-6);k<len;k++){const ch=chs[k],bb=k%m;
+  if(st==='polka'){const pc=bb%2===0?ch.root:ch.fifth;out.push({t:k,d:1,midi:ROOTM[pc]})}
+  else if(st==='waltz'){if(bb===0)out.push({t:k,d:Math.min(m,len-k),midi:ROOTM[ch.root]})}
+  else if(bb===0||k===Math.floor(from+1e-6)||chs[k-1]!==ch){let e=k+1;while(e<len&&e%m!==0&&chs[e]===ch)e++;out.push({t:k,d:e-k,midi:ROOTM[ch.root]})}}
+ return out.filter(e=>e.midi).map(e=>({...e,lane:LANES.indexOf(e.midi)}))}
+function songParts(s){const {notes,chords,labels}=parse(s.n),m=s.m||4,key=s.k||'C',st=s.st||'polka';let q=0;const v1=[];
+ for(const n of notes){if(!n.rest)v1.push({t:q,d:n.d,lane:n.lane,midi:n.midi});q+=n.d}
+ const len=Math.max(m*2,Math.ceil(q/m-1e-9)*m),chs=[];
+ for(let k=0;k<len;k++){if(chords.length)chs.push((chords.filter(c=>c.q<=k+.01).pop()||chords[0]).ci);else{const c0=Math.floor(k/2)*2;chs.push(chordFor(v1,c0,c0+2,c0+2>=len))}}
+ const chordAt=t=>chords.length?(chords.filter(c=>c.q<=t+.01).pop()||chords[0]).ci:chs[Math.min(len-1,Math.floor(t+1e-6))];
+ const v2=genV2(v1,chordAt,key),ac=genAcc(chs,m,st,len,v1.length?v1[0].t:0);
+ return{m,len,key,st,v1,v2,ac,chs,chords,labels}}
+
 /* voces del piano: inversión más cercana a la anterior */
 let lastV=null;
 function voicing(ch){let best=null,bs=1e9;const n=ch.pcs.length;
@@ -284,44 +318,44 @@ function playBeat(a,t){const ch=a.ch,v=voicing(ch),b=bassOf(ch.bass),half=spb/2;
 /* ---------- línea de tiempo del popurrí ---------- */
 let TL=null;
 function buildTL(){TL=computeTL();renderProg();return TL}
-function computeTL(){const br=+$('#bridge').value*4,secs=[],mel=[],acc=[];let p=0;
+function computeTL(){const br=+$('#bridge').value*4,secs=[],parts=[[],[],[]],acc=[];let p=0;
  const list=SONGS.filter(s=>s.on);
  const KEYS={C:['C','G7'],G:['G','D7']};
  list.forEach((s,si)=>{if(si>0&&br){const pk=KEYS[list[si-1].k||'C'],nk=KEYS[s.k||'C'],I=chordInfo(pk[0]),V=chordInfo(nk[1]),mod=pk!==nk;
    secs.push({kind:'bridge',start:p,end:p+br,next:s,m:4,labs:[],mod});
    for(let k=0;k<br;k++)acc.push({t:p+k,ch:k<br/2?I:V,st:'polka',bb:k%4,m:4,chg:k===br/2||k===0,fill:k===br-1});p+=br}
-  const {notes,chords,labels}=parse(s.n),start=p,evs=[],m=s.m||4,st=s.st||'polka';let q=0;
-  for(const n of notes){if(!n.rest)evs.push({t:start+q,d:n.d,lane:n.lane,midi:n.midi,res:null,si:secs.length});q+=n.d}
-  const len=Math.max(m*2,Math.ceil(q/m-1e-9)*m);let prev=null;
-  for(let k=0;k<len;k++){let ch;
-   if(chords.length){const c=chords.filter(c=>c.q<=k+.01).pop()||chords[0];ch=c.ci}
-   else{const c0=Math.floor(k/2)*2;ch=chordFor(evs,start+c0,start+c0+2,c0+2>=len)}
-   acc.push({t:start+k,ch,st,bb:k%m,m,chg:prev!==ch});prev=ch}
-  secs.push({kind:'song',start,end:start+len,song:s,evs,m,labs:labels.map(l=>({t:start+l.q,text:l.text}))});mel.push(...evs);p+=len});
- return{secs,mel,acc,total:p}}
+  const P=songParts(s),start=p,m=P.m,st=P.st,len=P.len,sIdx=secs.length;let prev=null;
+  const evsP=[P.v1,P.v2,P.ac].map((arr,pi)=>arr.map(e=>({t:start+e.t,d:e.d,lane:e.lane,midi:e.midi,res:null,si:sIdx,pi})));
+  for(let k=0;k<len;k++){const ch=P.chs[k];acc.push({t:start+k,ch,st,bb:k%m,m,chg:prev!==ch});prev=ch}
+  secs.push({kind:'song',start,end:start+len,song:s,evsP,evs:evsP[opt.part],m,labs:P.labels.map(l=>({t:start+l.q,text:l.text}))});
+  evsP.forEach((a,pi)=>parts[pi].push(...a));p+=len});
+ return{secs,parts,mel:parts[opt.part],acc,total:p}}
+function setPart(pi){opt.part=pi;if(TL){TL.mel=TL.parts[pi];TL.secs.forEach(s=>{if(s.kind==='song')s.evs=s.evsP[pi]});const b=playing?beatNow():pausedB;TL.mel.forEach(e=>{if(e.t>=b)e.res=null})}
+ hits=0;miss=0;perSong={};stripKey='';$('#strip').dataset.sec='';curSecIdx=-1;document.querySelectorAll('.bar.next').forEach(x=>x.classList.remove('next'));if(!playing)draw(pausedB)}
 const secAt=b=>TL.secs.find(s=>b>=s.start&&b<s.end);
 const songSecs=()=>TL.secs.filter(s=>s.kind==='song');
 
 /* ---------- motor ---------- */
 const $=s=>document.querySelector(s);
 let playing=false,t0=0,spb=60/104,muteBefore=0,schedB=0,timer=null,lastBeat=-99,hits=0,miss=0,perSong={};
-const opt={mel:true,acc:true,met:false,perc:true};
+const opt={mel:true,acc:true,met:false,perc:true,part:0,snd:[true,true,true]};
 const beatNow=()=>playing?(ctx.currentTime-t0)/spb:pausedB;
 let pausedB=-4;
 function start(fromBeat){ac();buildTL();if(!TL.total){$('#score').textContent='Elige alguna canción';return}
- hits=0;miss=0;perSong={};curSecIdx=-1;TL.mel.forEach(e=>e.res=null);seek(fromBeat||0,true);playing=true;document.body.classList.add('playing');
+ hits=0;miss=0;perSong={};curSecIdx=-1;TL.parts.forEach(a=>a.forEach(e=>e.res=null));seek(fromBeat||0,true);playing=true;document.body.classList.add('playing');
  $('#bPlay').textContent='⏸ Pausa';$('#bStop').disabled=false;
  clearInterval(timer);timer=setInterval(schedule,25);requestAnimationFrame(loop)}
 function seek(beat,lead){/* salta a beat, con 4 tiempos de cuenta delante */lastV=null;
  muteBefore=beat;const from=lead?beat-4:beat;t0=ctx.currentTime+.12-from*spb;schedB=from;
- TL.mel.forEach(e=>{if(e.t>=beat)e.res=null});pausedB=from}
+ TL.parts.forEach(a=>a.forEach(e=>{if(e.t>=beat)e.res=null}));pausedB=from}
 function schedule(){if(!playing)return;const until=(ctx.currentTime+.15-t0)/spb;
  const lo=schedB,hi=until;if(hi<=lo)return;
  for(let k=Math.ceil(lo-1e-6);k<hi;k++){if(k<lo-1e-6)continue;const t=t0+k*spb,sec=secAt(k);
   const counting=k<muteBefore,inBr=sec&&sec.kind==='bridge';
   if(counting||inBr||opt.met){const mm=sec?sec.m:4;tick(t,((k-(sec?sec.start:0))%mm+mm)%mm===0,counting||inBr?.3:.14)}}
  for(const a of TL.acc){if(a.t>=lo-1e-6&&a.t<hi&&a.t>=muteBefore){const t=t0+a.t*spb;if(opt.acc)playBeat(a,t);if(opt.perc)drums(a,t)}}
- if(opt.mel)for(const e of TL.mel){if(e.t>=lo&&e.t<hi&&e.t>=muteBefore){bell(e.midi,t0+e.t*spb,.42);const dl=(t0+e.t*spb-ctx.currentTime)*1000;setTimeout(()=>flash(e.lane),Math.max(0,dl))}}
+ TL.parts.forEach((arr,pi)=>{const mine=pi===opt.part;if(!(mine?opt.mel:opt.snd[pi]))return;const vol=[.42,.3,.3][pi]*(mine?1:.85);
+  for(const e of arr){if(e.t>=lo&&e.t<hi&&e.t>=muteBefore){bell(e.midi,t0+e.t*spb,vol);if(mine){const dl=(t0+e.t*spb-ctx.currentTime)*1000;setTimeout(()=>flash(e.lane),Math.max(0,dl))}}}});
  schedB=hi}
 function pause(){if(!playing)return;pausedB=beatNow();playing=false;clearInterval(timer);$('#bPlay').textContent='▶ Seguir';document.body.classList.remove('playing')}
 function resume(){ac();const b=pausedB;t0=ctx.currentTime+.08-b*spb;schedB=b;playing=true;document.body.classList.add('playing');$('#bPlay').textContent='⏸ Pausa';clearInterval(timer);timer=setInterval(schedule,25);requestAnimationFrame(loop)}
@@ -424,6 +458,8 @@ $('#bNext').onclick=()=>{if(!TL)buildTL();const b=TL&&(playing||pausedB!==-4)?be
 $('#bPrev').onclick=()=>{if(!TL)buildTL();const b=playing||pausedB!==-4?Math.max(beatNow(),muteBefore):0;const ss=songSecs();let cur=ss.filter(x=>x.start<=b+.01).pop();if(cur&&b-cur.start<3){cur=ss[ss.indexOf(cur)-1]||cur}jumpTo(cur||ss[0])};
 $('#tempo').oninput=e=>{const bpm=+e.target.value;$('#tval').textContent=bpm;const b=playing?beatNow():null;spb=60/bpm;if(playing){t0=ctx.currentTime-b*spb;schedB=b}};
 [['#tMel','mel'],['#tAcc','acc'],['#tMet','met'],['#tPerc','perc']].forEach(([id,k])=>{$(id).onclick=()=>{opt[k]=!opt[k];$(id).setAttribute('aria-pressed',opt[k]);if(k==='mel'&&TL){const b=beatNow();TL.mel.forEach(e=>{if(e.t>b)e.res=null});hits=0;miss=0;perSong={}}}});
+$('#part').onchange=e=>{setPart(+e.target.value);[0,1,2].forEach(i=>$('#s'+i).disabled=i===opt.part)};
+[0,1,2].forEach(i=>{$('#s'+i).onclick=()=>{opt.snd[i]=!opt.snd[i];$('#s'+i).setAttribute('aria-pressed',opt.snd[i])}});$('#s0').disabled=true;
 $('#bridge').onchange=()=>{if(TL&&playing){changed()}else{TL=null;renderProg()}};
 $('#bFull').onclick=()=>{try{const r=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(()=>{})}catch(e){}};
 
