@@ -31,9 +31,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:4px soli
 .btn:disabled{opacity:.45;cursor:default}
 main{max-width:1180px;margin:0 auto;padding:12px max(2vw,10px) 20px;display:flex;flex-direction:column;gap:10px}
 .card{background:var(--paper);color:var(--ink);border:4px solid var(--ink);border-radius:14px;padding:10px 12px;box-shadow:0 5px 0 var(--ink)}
-.setlist{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.setlist{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 0 4px;border-top:2px dashed #0002}
 .setlist .lbl{font-size:10px;margin-right:4px}
-.song{display:flex;align-items:center;gap:6px;border:3px solid var(--ink);border-radius:10px;background:#fff;padding:4px 8px 4px 6px;font-weight:900;font-size:14px;box-shadow:0 3px 0 var(--ink)}
+.song{display:flex;align-items:center;gap:5px;border:2px solid var(--ink);border-radius:999px;background:#fff;padding:2px 6px 2px 4px;font-weight:900;font-size:13px;box-shadow:0 2px 0 var(--ink)}
 .song input{width:20px;height:20px;accent-color:var(--red)}
 .song.off{opacity:.5}
 .song.cur{background:var(--gold)}
@@ -125,7 +125,10 @@ code{background:#efe9da;border-radius:4px;padding:0 4px}
 table.res{width:100%;border-collapse:collapse;margin:6px 0 12px}
 table.res td,table.res th{border:2px solid var(--ink);padding:4px 8px;text-align:left}
 .foot{color:#cfe6d4;font-size:12px;text-align:center;padding:4px 0 12px}
-body.playing #setlist{display:none}
+#setlist[hidden]{display:none}
+.ib[aria-expanded=true]{background:var(--gold)}
+.snd-warn{background:#fff3c4;border:2px solid var(--ink);border-radius:10px;padding:6px 10px;font-weight:800;font-size:14px;color:var(--ink)}
+.snd-warn[hidden]{display:none}
 body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{display:none}body.playing main{gap:8px;padding-top:8px}
 .xylo{--bh:clamp(96px,17vh,190px)}
 @media (max-width:640px){.now{grid-template-columns:1fr}.now .b{text-align:left}.bar small{display:none}}
@@ -142,7 +145,6 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
 </header>
 
 <main>
-  <section class="card setlist" id="setlist" aria-label="Orden del popurrí"></section>
 
   <section class="card dock" aria-label="Controles">
     <div class="row1">
@@ -151,6 +153,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
         <button class="ib" id="bStop" disabled title="Parar" aria-label="Parar">■</button>
         <button class="ib" id="bPrev" title="Canción anterior" aria-label="Canción anterior">⏮</button>
         <button class="ib" id="bNext" title="Canción siguiente" aria-label="Canción siguiente">⏭</button>
+        <button class="ib" id="bObras" aria-expanded="false" aria-controls="setlist">Obras ▾</button>
       </div>
       <div class="parts" role="radiogroup" aria-label="Mi parte">
         <span class="lbl">Mi parte</span>
@@ -169,6 +172,8 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
         <label title="Compases de silencio entre canciones">Enlace <select id="bridge"><option value="0">0</option><option value="1" selected>1</option><option value="2">2</option></select></label>
       </div>
     </div>
+    <div class="setlist" id="setlist" hidden aria-label="Orden del popurrí"></div>
+    <div class="snd-warn" id="sndWarn" hidden>¿No se oye? Sube el volumen del dispositivo y, en iPad o iPhone, quita el modo silencio (el interruptor lateral o la campana del centro de control).</div>
     <div class="row2" aria-live="polite">
       <span class="now-a"><small>Ahora</small> <b id="nowT">—</b></span>
       <span class="score" id="score">Pulsa Empezar</span>
@@ -192,7 +197,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
     <li><b>Guía de mi parte</b> encendida: el carrillón de la pantalla toca y se ilumina solo con tu parte. Apagada: tu parte la toca el alumnado y la página cuenta los aciertos.</li>
     <li><b>Suenan</b>: enciende o apaga las otras partes para ensayar por separado o todas juntas. La segunda voz y el acompañamiento se crean solos a partir de la melodía y de los acordes, así que si editas una canción también se actualizan.</li>
     <li>La lámina con <b>borde blanco parpadeante</b> es la siguiente nota. Cuando alguien toca, la lámina se ilumina y suena.</li>
-    <li>Pulsa el <b>nombre de una canción</b> o la barra de progreso para saltar a ella (con 4 tiempos de cuenta). Desmarca la casilla para quitarla del popurrí y usa ◀ ▶ para cambiar el orden.</li>
+    <li>Pulsa <b>Obras</b> para ver el orden. Pulsa el <b>nombre de una canción</b> o la barra de progreso para saltar a ella (con 4 tiempos de cuenta). Desmarca la casilla para quitarla del popurrí y usa ◀ ▶ para cambiar el orden.</li>
     <li>El tempo se puede cambiar en cualquier momento, también mientras suena.</li>
   </ul>
   <p><b>Editar canciones</b>: cada nota se escribe con su nombre y, si hace falta, dos puntos y la duración en tiempos.</p>
@@ -275,7 +280,17 @@ function chordInfo(name){const m=name.match(/^([A-G][b#]?)(maj7|m7|m|dim|7|6|sus
 
 /* ---------- audio ---------- */
 let ctx,master;
-function ac(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();const comp=ctx.createDynamicsCompressor();master=ctx.createGain();master.gain.value=.9;master.connect(comp);comp.connect(ctx.destination)}if(ctx.state==='suspended')ctx.resume()}
+let unlocked=false;
+function ac(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();const comp=ctx.createDynamicsCompressor();master=ctx.createGain();master.gain.value=.9;master.connect(comp);comp.connect(ctx.destination)}
+ if(ctx.state!=='running'){try{const r=ctx.resume();if(r&&r.catch)r.catch(()=>{})}catch(e){}}
+ if(!unlocked){unlocked=true;
+  try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+  try{const a=new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');a.loop=true;a.volume=0.01;a.setAttribute('playsinline','');const r=a.play();if(r&&r.catch)r.catch(()=>{})}catch(e){}
+  try{const b=ctx.createBuffer(1,1,22050),src=ctx.createBufferSource();src.buffer=b;src.connect(ctx.destination);src.start(0)}catch(e){}
+  const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(ios){$('#sndWarn').hidden=false;setTimeout(()=>$('#sndWarn').hidden=true,10000)}
+  setTimeout(()=>{if(ctx.state!=='running')$('#sndWarn').hidden=false},900)}}
+document.addEventListener('pointerdown',()=>{try{ac()}catch(e){}},{once:true,capture:true});
 const hz=m=>440*2**((m-69)/12);
 function bell(m,t,v=.5){const f=hz(m)*2;[[1,1,1.6],[2.76,.22,.35],[5.4,.07,.12]].forEach(([r,a,dec])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f*r;
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v*a,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+dec);o.connect(g);g.connect(master);o.start(t);o.stop(t+dec+.05)})}
@@ -474,7 +489,7 @@ function renderSet(){let k=0;$('#setlist').innerHTML='<span class="px lbl">ORDEN
  return `<div class="song${s.on?'':' off'}" data-id="${s.id}"><span class="num">${num}</span><input type="checkbox" ${s.on?'checked':''} data-i="${i}" aria-label="Incluir ${s.t}"><button class="go2" data-i="${i}" title="Saltar a esta canción">${s.t}${s.rev?' <span class="warn" title="Transcripción aproximada: revísala">⚠</span>':''}${bad?' <span class="warn">✖</span>':''}</button><button class="btn" style="min-height:28px;padding:0 6px;box-shadow:none;border-width:2px" data-mv="-1" data-i="${i}" aria-label="Mover antes">◀</button><button class="btn" style="min-height:28px;padding:0 6px;box-shadow:none;border-width:2px" data-mv="1" data-i="${i}" aria-label="Mover después">▶</button></div>`}).join('');
  $('#setlist').querySelectorAll('input').forEach(c=>c.onchange=()=>{SONGS[+c.dataset.i].on=c.checked?1:0;save();changed()});
  $('#setlist').querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,j=i+ +b.dataset.mv;if(j<0||j>=SONGS.length)return;[SONGS[i],SONGS[j]]=[SONGS[j],SONGS[i]];save();changed()});
- $('#setlist').querySelectorAll('.go2').forEach(b=>b.onclick=()=>{const s=SONGS[+b.dataset.i];if(!s.on){s.on=1;save();changed()}if(!TL)buildTL();jumpTo(TL.secs.find(x=>x.kind==='song'&&x.song.id===s.id))})}
+ $('#setlist').querySelectorAll('.go2').forEach(b=>b.onclick=()=>{const s=SONGS[+b.dataset.i];if(!s.on){s.on=1;save();changed()}if(!TL)buildTL();jumpTo(TL.secs.find(x=>x.kind==='song'&&x.song.id===s.id));$('#setlist').hidden=true;$('#bObras').setAttribute('aria-expanded',false);$('#bObras').textContent='Obras ▾'})}
 function changed(){renderSet();const wasPlaying=!!TL;if(wasPlaying){const b=beatNow();const cur=secAt(b);buildTL();curSecIdx=-1;stripKey='';$('#strip').dataset.sec='';
   const same=cur&&cur.kind==='song'&&TL.secs.find(s=>s.kind==='song'&&s.song.id===cur.song.id);if(same&&playing)seek(same.start+(b-cur.start),false)}else renderProg()}
 function renderProg(){const tl=TL||computeTL();const p=$('#prog');p.querySelectorAll('i').forEach(x=>x.remove());
@@ -491,6 +506,7 @@ $('#tempo').oninput=e=>{const bpm=+e.target.value;$('#tval').textContent=bpm;con
 [['#tMel','mel'],['#tAcc','acc'],['#tMet','met'],['#tPerc','perc']].forEach(([id,k])=>{$(id).onclick=()=>{opt[k]=!opt[k];$(id).setAttribute('aria-pressed',opt[k]);if(k==='mel'&&TL){const b=beatNow();TL.mel.forEach(e=>{if(e.t>b)e.res=null});hits=0;miss=0;perSong={}}}});
 document.querySelectorAll('[data-part]').forEach(bt=>bt.onclick=()=>{const pi=+bt.dataset.part;setPart(pi);document.querySelectorAll('[data-part]').forEach(x=>x.setAttribute('aria-checked',x===bt));[0,1,2].forEach(i=>$('#s'+i).disabled=i===pi)});
 [0,1,2].forEach(i=>{$('#s'+i).onclick=()=>{opt.snd[i]=!opt.snd[i];$('#s'+i).setAttribute('aria-pressed',opt.snd[i])}});$('#s0').disabled=true;
+$('#bObras').onclick=()=>{const o=$('#setlist').hidden;$('#setlist').hidden=!o;$('#bObras').setAttribute('aria-expanded',o);$('#bObras').textContent=o?'Obras ▴':'Obras ▾'};
 $('#bridge').onchange=()=>{if(TL&&playing){changed()}else{TL=null;renderProg()}};
 $('#bFull').onclick=()=>{try{const r=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(()=>{})}catch(e){}};
 
