@@ -169,7 +169,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
       </div>
       <div class="mini">
         <label title="Tempo">♩ <input type="range" id="tempo" min="60" max="150" step="2" value="104"><span id="tval">104</span></label>
-        <label title="Compases de silencio entre canciones">Enlace <select id="bridge"><option value="0">0</option><option value="1" selected>1</option><option value="2">2</option></select></label>
+        <input type="hidden" id="bridge" value="1">
       </div>
     </div>
     <div class="setlist" id="setlist" hidden aria-label="Orden del popurrí"></div>
@@ -192,7 +192,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
   <h3 class="px">Guía docente</h3>
   <p>Las piezas están en <b>Do mayor</b> (estribillos, y la estrofa completa de «Fa la la») y la última en <b>Sol mayor</b>. Caben en un carrillón de Sol grave a Re agudo más la lámina <b>Fa♯</b> (más estrecha, con borde discontinuo), que se usa en la pieza final y una sola vez en «Fa la la». El enlace antes del cambio de tono lo avisa en pantalla.</p>
   <ul>
-    <li><b>Empezar</b>: cuenta 4 tiempos y arranca el popurrí. Las canciones van seguidas; entre una y otra hay un <b>compás de enlace</b> con cuenta atrás y el título de la siguiente (puedes poner 0, 1 o 2 compases).</li>
+    <li><b>Empezar</b>: cuenta 4 tiempos y arranca el popurrí. Las canciones van seguidas; entre una y otra hay un <b>compás de enlace</b> con cuenta atrás y el título de la siguiente.</li>
     <li><b>Mi parte</b>: elige qué se ve en la pista y en el carrillón: <b>Voz 1</b> (melodía), <b>Voz 2</b> (armonía a distancia de tercera o sexta por debajo, con el mismo ritmo) o <b>Acompañamiento</b> (bajo de las notas de cada acorde: fundamental y quinta en las piezas alegres, notas largas en Adeste y en el vals final). Así cada grupo de la clase ensaya su parte.</li>
     <li><b>Guía de mi parte</b> encendida: el carrillón de la pantalla toca y se ilumina solo con tu parte. Apagada: tu parte la toca el alumnado y la página cuenta los aciertos.</li>
     <li><b>Suenan</b>: enciende o apaga las otras partes para ensayar por separado o todas juntas. La segunda voz y el acompañamiento se crean solos a partir de la melodía y de los acordes, así que si editas una canción también se actualizan.</li>
