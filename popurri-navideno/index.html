@@ -49,11 +49,40 @@ main{max-width:1180px;margin:0 auto;padding:12px max(2vw,10px) 20px;display:flex
 .now .b{text-align:right;color:#5b5870}
 .now small{display:block;font-family:"Press Start 2P",monospace;font-size:9px;color:#8a8799;margin-bottom:4px}
 .score{font-family:"Press Start 2P",monospace;font-size:11px;background:var(--ink);color:var(--gold);padding:8px 10px;border-radius:10px;white-space:nowrap}
+.dock{padding:8px 10px;display:flex;flex-direction:column;gap:7px}
+.row1{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between}
+.tr,.chips,.mini,.parts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ib{height:36px;min-width:36px;padding:0 10px;border:2px solid var(--ink);border-radius:9px;background:#fff;color:var(--ink);font-weight:900;font-size:14px;box-shadow:0 3px 0 var(--ink)}
+.ib:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.ib.r{background:var(--red);color:#fff;min-width:110px}
+.ib:disabled{opacity:.4}
+.parts .lbl,.mini label{font-size:12px;font-weight:900;color:#5b5870}
+.pt{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 0 var(--ink)}
+.pt button{border:0;background:none;font-weight:900;font-size:13px;color:var(--ink);height:30px;display:flex;align-items:center}
+.pt [role=radio]{padding:0 10px 0 12px}
+.pt .spk{padding:0 9px 0 7px;border-left:2px solid #0002;color:var(--ink)}
+.pt [aria-checked=true]{color:#fff}
+.pt.v0:has([aria-checked=true]){background:#e53935}.pt.v1:has([aria-checked=true]){background:#2f7cf6}.pt.v2:has([aria-checked=true]){background:#1f6b3a}
+.pt:has([aria-checked=true]) .spk{color:#fff;opacity:.55}
+.spk .x{display:none}.spk[aria-pressed=false] .x{display:inline}.spk[aria-pressed=false] .w{display:none}.spk[aria-pressed=false]{color:#b23b3b!important;opacity:1!important}
+.spk:disabled{cursor:default}
+.chip{height:30px;padding:0 11px;border:2px solid var(--ink);border-radius:999px;font-weight:900;font-size:13px;background:#d9dbe0;color:#55556a}
+.chip[aria-pressed=true]{background:var(--gold);color:var(--ink)}
+.mini label{display:flex;align-items:center;gap:5px;background:#fff;border:2px solid var(--ink);border-radius:999px;height:30px;padding:0 10px}
+.mini input{width:96px;accent-color:var(--red)}
+.mini select{border:0;background:none;font-weight:900;color:var(--ink)}
+.mini span{font-weight:900;color:var(--ink);min-width:26px}
+.row2{display:flex;align-items:center;gap:10px;border-top:2px dashed #0002;padding-top:6px}
+.row2 small{font-family:"Press Start 2P",monospace;font-size:8px;color:#8a8799;margin-right:4px}
+.row2 b{font-size:clamp(14px,1.9vw,18px)}
+.now-a{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now-b{flex:1;min-width:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#5b5870}
+.row2 .score{font-size:10px;padding:6px 8px}
 .prog{display:flex;height:16px;border:3px solid var(--ink);border-radius:8px;overflow:hidden;background:#fff;position:relative;cursor:pointer}
 .prog i{display:block;height:100%;border-right:2px solid var(--ink)}
 .prog i:last-of-type{border-right:0}
 .prog b{position:absolute;top:-3px;bottom:-3px;width:4px;background:var(--red);left:0;pointer-events:none}
-.hwy{position:relative;height:clamp(200px,calc(100vh - 615px),480px);border:4px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--night)}
+.hwy{position:relative;height:clamp(200px,calc(100vh - 500px),560px);border:4px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--night)}
 .hwy canvas{display:block;width:100%;height:100%}
 .count{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center}
 .count div{font-family:"Press Start 2P",monospace;color:#fff;text-shadow:4px 4px 0 var(--ink);font-size:clamp(12px,2.4vw,20px);line-height:1.6}
@@ -61,12 +90,12 @@ main{max-width:1180px;margin:0 auto;padding:12px max(2vw,10px) 20px;display:flex
 .pop{position:absolute;left:50%;top:38%;transform:translate(-50%,0);font-family:"Press Start 2P",monospace;font-size:clamp(14px,3vw,22px);color:#7dff8a;text-shadow:3px 3px 0 var(--ink);pointer-events:none;opacity:0}
 .pop.show{animation:pop .6s}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}20%{opacity:1;transform:translate(-50%,0) scale(1.1)}100%{opacity:0;transform:translate(-50%,-40px)}}
-.strip{color:var(--ink);display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding:6px 4px;background:#fff;border:3px solid var(--ink);border-radius:10px;min-height:52px;align-items:center;scroll-behavior:smooth}
+.strip{color:var(--ink);display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;padding:6px 4px;background:#fff;border:3px solid var(--ink);border-radius:10px;min-height:44px;padding-top:3px;padding-bottom:3px;align-items:center;scroll-behavior:smooth}
 .strip span{flex:none;min-width:40px;text-align:center;border:2px solid var(--ink);border-radius:8px;padding:3px 6px;font-weight:900;font-size:15px;opacity:.55}
 .strip span.cur{opacity:1;transform:scale(1.18);box-shadow:0 0 0 3px var(--gold)}
 .strip span.past{opacity:.25}
 .strip em{flex:none;width:2px;align-self:stretch;background:#c9c6d6;margin:0 2px}
-.xylo{position:relative;display:flex;gap:clamp(3px,.8vw,8px);align-items:flex-end;justify-content:center;padding:16px clamp(8px,2vw,22px) 18px;background:#8b5a2b;border:4px solid var(--ink);border-radius:16px;box-shadow:0 6px 0 var(--ink)}
+.xylo{position:relative;display:flex;gap:clamp(3px,.8vw,8px);align-items:flex-end;justify-content:center;padding:10px clamp(8px,2vw,22px) 18px;background:#8b5a2b;border:4px solid var(--ink);border-radius:16px;box-shadow:0 6px 0 var(--ink)}
 .xylo:before,.xylo:after{content:"";position:absolute;left:12px;right:12px;height:8px;background:#5d3a17;border-radius:4px}
 .xylo:before{top:34%}.xylo:after{bottom:26%}
 .bar{position:relative;z-index:1;flex:1;max-width:84px;border:3px solid var(--ink);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 2px 6px;box-shadow:0 5px 0 var(--ink);user-select:none;-webkit-user-select:none;touch-action:none;transition:filter .08s}
@@ -98,7 +127,7 @@ table.res td,table.res th{border:2px solid var(--ink);padding:4px 8px;text-align
 .foot{color:#cfe6d4;font-size:12px;text-align:center;padding:4px 0 12px}
 body.playing #setlist{display:none}
 body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{display:none}body.playing main{gap:8px;padding-top:8px}
-.xylo{--bh:clamp(110px,19vh,176px)}
+.xylo{--bh:clamp(96px,17vh,190px)}
 @media (max-width:640px){.now{grid-template-columns:1fr}.now .b{text-align:left}.bar small{display:none}}
 </style>
 </head>
@@ -115,34 +144,36 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
 <main>
   <section class="card setlist" id="setlist" aria-label="Orden del popurrí"></section>
 
-  <section class="card ctrl">
-    <div class="grp">
-      <button class="btn r" id="bPlay">▶ Empezar</button>
-      <button class="btn" id="bStop" disabled>⏹ Parar</button>
-      <button class="btn" id="bPrev" title="Canción anterior">⏮</button>
-      <button class="btn" id="bNext" title="Canción siguiente">⏭</button>
+  <section class="card dock" aria-label="Controles">
+    <div class="row1">
+      <div class="tr">
+        <button class="ib r" id="bPlay" title="Empezar / pausa">▶ Empezar</button>
+        <button class="ib" id="bStop" disabled title="Parar" aria-label="Parar">■</button>
+        <button class="ib" id="bPrev" title="Canción anterior" aria-label="Canción anterior">⏮</button>
+        <button class="ib" id="bNext" title="Canción siguiente" aria-label="Canción siguiente">⏭</button>
+      </div>
+      <div class="parts" role="radiogroup" aria-label="Mi parte">
+        <span class="lbl">Mi parte</span>
+        <span class="pt v0"><button role="radio" data-part="0" aria-checked="true">Voz 1</button><button class="spk" id="s0" aria-pressed="true" aria-label="Sonido de la voz 1" title="Encender o apagar el sonido de esta parte"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><path d="M3 7h3l4-3.5v13L6 13H3z" fill="currentColor"/><path class="w" d="M13 6.5a5 5 0 0 1 0 7M15.5 4a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path class="x" d="M13 7l5 6M18 7l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></span>
+        <span class="pt v1"><button role="radio" data-part="1" aria-checked="false">Voz 2</button><button class="spk" id="s1" aria-pressed="true" aria-label="Sonido de la voz 2" title="Encender o apagar el sonido de esta parte"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><path d="M3 7h3l4-3.5v13L6 13H3z" fill="currentColor"/><path class="w" d="M13 6.5a5 5 0 0 1 0 7M15.5 4a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path class="x" d="M13 7l5 6M18 7l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></span>
+        <span class="pt v2"><button role="radio" data-part="2" aria-checked="false">Acomp.</button><button class="spk" id="s2" aria-pressed="true" aria-label="Sonido del acompañamiento" title="Encender o apagar el sonido de esta parte"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><path d="M3 7h3l4-3.5v13L6 13H3z" fill="currentColor"/><path class="w" d="M13 6.5a5 5 0 0 1 0 7M15.5 4a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path class="x" d="M13 7l5 6M18 7l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></span>
+      </div>
+      <div class="chips">
+        <button class="chip" id="tMel" aria-pressed="true" title="El carrillón de la pantalla toca tu parte">Guía</button>
+        <button class="chip" id="tAcc" aria-pressed="true">Piano</button>
+        <button class="chip" id="tPerc" aria-pressed="true" title="Cascabeles, bombo y palmas">Percusión</button>
+        <button class="chip" id="tMet" aria-pressed="false">Metrónomo</button>
+      </div>
+      <div class="mini">
+        <label title="Tempo">♩ <input type="range" id="tempo" min="60" max="150" step="2" value="104"><span id="tval">104</span></label>
+        <label title="Compases de silencio entre canciones">Enlace <select id="bridge"><option value="0">0</option><option value="1" selected>1</option><option value="2">2</option></select></label>
+      </div>
     </div>
-    <div class="grp">
-      <label class="tempo">Tempo <input type="range" id="tempo" min="60" max="150" step="2" value="104"><span id="tval">104</span></label>
-      <label class="tempo" title="La parte que se ve en la pista y en el carrillón">Mi parte
-        <select id="part" style="border:0;background:none;font-weight:900"><option value="0">Voz 1 · melodía</option><option value="1">Voz 2</option><option value="2">Acompañamiento</option></select></label>
-      <button class="btn" id="tMel" aria-pressed="true" title="El carrillón de la pantalla toca tu parte para seguirla">Guía de mi parte</button>
-      <span class="tempo" style="gap:6px">Suenan
-        <button class="btn" id="s0" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Voz 1</button>
-        <button class="btn" id="s1" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Voz 2</button>
-        <button class="btn" id="s2" aria-pressed="true" style="min-height:32px;padding:2px 8px;box-shadow:none">Acomp.</button></span>
-      <button class="btn" id="tAcc" aria-pressed="true">Piano</button>
-      <button class="btn" id="tPerc" aria-pressed="true" title="Cascabeles, bombo y palmas">Percusión</button>
-      <button class="btn" id="tMet" aria-pressed="false">Metrónomo</button>
-      <label class="tempo" title="Compases de silencio entre canciones para prepararse">Enlace
-        <select id="bridge" style="border:0;background:none;font-weight:900"><option value="0">0</option><option value="1" selected>1 compás</option><option value="2">2 compases</option></select></label>
+    <div class="row2" aria-live="polite">
+      <span class="now-a"><small>Ahora</small> <b id="nowT">—</b></span>
+      <span class="score" id="score">Pulsa Empezar</span>
+      <span class="now-b"><small>Después</small> <b id="nextT">—</b></span>
     </div>
-  </section>
-
-  <section class="card now" aria-live="polite">
-    <div class="a"><small>AHORA</small><span id="nowT">—</span></div>
-    <div class="score" id="score">Pulsa Empezar</div>
-    <div class="b"><small>DESPUÉS</small><span id="nextT">—</span></div>
   </section>
   <div class="prog" id="prog" title="Pulsa para saltar a una canción"><b id="progB"></b></div>
 
@@ -458,7 +489,7 @@ $('#bNext').onclick=()=>{if(!TL)buildTL();const b=TL&&(playing||pausedB!==-4)?be
 $('#bPrev').onclick=()=>{if(!TL)buildTL();const b=playing||pausedB!==-4?Math.max(beatNow(),muteBefore):0;const ss=songSecs();let cur=ss.filter(x=>x.start<=b+.01).pop();if(cur&&b-cur.start<3){cur=ss[ss.indexOf(cur)-1]||cur}jumpTo(cur||ss[0])};
 $('#tempo').oninput=e=>{const bpm=+e.target.value;$('#tval').textContent=bpm;const b=playing?beatNow():null;spb=60/bpm;if(playing){t0=ctx.currentTime-b*spb;schedB=b}};
 [['#tMel','mel'],['#tAcc','acc'],['#tMet','met'],['#tPerc','perc']].forEach(([id,k])=>{$(id).onclick=()=>{opt[k]=!opt[k];$(id).setAttribute('aria-pressed',opt[k]);if(k==='mel'&&TL){const b=beatNow();TL.mel.forEach(e=>{if(e.t>b)e.res=null});hits=0;miss=0;perSong={}}}});
-$('#part').onchange=e=>{setPart(+e.target.value);[0,1,2].forEach(i=>$('#s'+i).disabled=i===opt.part)};
+document.querySelectorAll('[data-part]').forEach(bt=>bt.onclick=()=>{const pi=+bt.dataset.part;setPart(pi);document.querySelectorAll('[data-part]').forEach(x=>x.setAttribute('aria-checked',x===bt));[0,1,2].forEach(i=>$('#s'+i).disabled=i===pi)});
 [0,1,2].forEach(i=>{$('#s'+i).onclick=()=>{opt.snd[i]=!opt.snd[i];$('#s'+i).setAttribute('aria-pressed',opt.snd[i])}});$('#s0').disabled=true;
 $('#bridge').onchange=()=>{if(TL&&playing){changed()}else{TL=null;renderProg()}};
 $('#bFull').onclick=()=>{try{const r=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(()=>{})}catch(e){}};
