@@ -164,7 +164,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
       <div class="chips">
         <button class="chip" id="tMel" aria-pressed="true" title="El carrillón de la pantalla toca tu parte">Guía</button>
         <button class="chip" id="tAcc" aria-pressed="true">Piano</button>
-        <button class="chip" id="tPerc" aria-pressed="true" title="Cascabeles, bombo y palmas">Percusión</button>
+        <button class="chip" id="tPerc" aria-pressed="true" title="Congas, bongós y claves">Percusión</button>
         <button class="chip" id="tMet" aria-pressed="false">Metrónomo</button>
       </div>
       <div class="mini">
@@ -199,6 +199,7 @@ body.playing .top{padding-top:6px;padding-bottom:6px}body.playing .top h1 small{
     <li>La lámina con <b>borde blanco parpadeante</b> es la siguiente nota. Cuando alguien toca, la lámina se ilumina y suena.</li>
     <li>Pulsa <b>Obras</b> para ver el orden. Pulsa el <b>nombre de una canción</b> o la barra de progreso para saltar a ella (con 4 tiempos de cuenta). Desmarca la casilla para quitarla del popurrí y usa ◀ ▶ para cambiar el orden.</li>
     <li>El tempo se puede cambiar en cualquier momento, también mientras suena.</li>
+    <li>Acompañamiento: piano de cola (muestras <i>Salamander Grand Piano</i> de Alexander Holm, licencia CC BY 3.0) y percusión latina de congas, bongós y claves.</li>
   </ul>
   <p><b>Editar canciones</b>: cada nota se escribe con su nombre y, si hace falta, dos puntos y la duración en tiempos.</p>
   <div class="legend"><span>do re mi fa fa# sol la si = octava central</span><span>sol, la, si, = graves</span><span>do' = Do agudo</span><span>:2 blanca · :1 negra (por defecto) · :.5 corchea · :1.5 negra con puntillo</span><span>- silencio</span><span>[C] [G7] [Am] [D7] acorde del piano desde esa nota</span><span>#Estribillo rótulo de sección</span><span>| barra de compás (opcional)</span></div>
@@ -289,12 +290,22 @@ function ac(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)(
   try{const b=ctx.createBuffer(1,1,22050),src=ctx.createBufferSource();src.buffer=b;src.connect(ctx.destination);src.start(0)}catch(e){}
   const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   if(ios){$('#sndWarn').hidden=false;setTimeout(()=>$('#sndWarn').hidden=true,10000)}
-  setTimeout(()=>{if(ctx.state!=='running')$('#sndWarn').hidden=false},900)}}
+  setTimeout(()=>{if(ctx.state!=='running')$('#sndWarn').hidden=false},900)}
+ loadPiano()}
 document.addEventListener('pointerdown',()=>{try{ac()}catch(e){}},{once:true,capture:true});
 const hz=m=>440*2**((m-69)/12);
 function bell(m,t,v=.5){const f=hz(m)*2;[[1,1,1.6],[2.76,.22,.35],[5.4,.07,.12]].forEach(([r,a,dec])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f*r;
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v*a,t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+dec);o.connect(g);g.connect(master);o.start(t);o.stop(t+dec+.05)})}
-function piano(m,t,v,len){const f=hz(m),g=ctx.createGain(),lp=ctx.createBiquadFilter();lp.type='lowpass';
+/* piano de cola: muestras Salamander Grand Piano (CC BY 3.0, Alexander Holm) */
+const PS={},SNAMES=[];[2,3,4,5].forEach(o=>[['C',0],['Ds',3],['Fs',6],['A',9]].forEach(([n,pc])=>SNAMES.push([12*(o+1)+pc,n+o])));SNAMES.push([84,'C6'],[30,'Fs1'],[33,'A1']);
+let pianoLoading=false;
+function loadPiano(){if(pianoLoading||!ctx)return;pianoLoading=true;
+ SNAMES.forEach(([m,n])=>{fetch('piano/'+n+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((res,rej)=>ctx.decodeAudioData(b,res,rej))).then(buf=>{PS[m]=buf}).catch(()=>{})})}
+function piano(m,t,v,len){let best=null,bd=99;for(const k in PS){const d=Math.abs(m-k);if(d<bd){bd=d;best=+k}}
+ if(best===null||bd>4)return pianoSynth(m,t,v,len);
+ const src=ctx.createBufferSource(),g=ctx.createGain(),a=v*2.6,end=t+Math.max(.12,len);src.buffer=PS[best];src.playbackRate.value=2**((m-best)/12);
+ g.gain.setValueAtTime(a,t);g.gain.setValueAtTime(a,end);g.gain.exponentialRampToValueAtTime(.0001,end+.45);src.connect(g);g.connect(master);src.start(t);src.stop(end+.5)}
+function pianoSynth(m,t,v,len){const f=hz(m),g=ctx.createGain(),lp=ctx.createBiquadFilter();lp.type='lowpass';
  lp.frequency.setValueAtTime(Math.min(6000,f*9),t);lp.frequency.exponentialRampToValueAtTime(Math.max(400,f*2.2),t+Math.max(.2,len));
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.005);g.gain.exponentialRampToValueAtTime(v*.4,t+.14);g.gain.exponentialRampToValueAtTime(.0001,t+len+.3);
  lp.connect(g);g.connect(master);
@@ -302,14 +313,22 @@ function piano(m,t,v,len){const f=hz(m),g=ctx.createGain(),lp=ctx.createBiquadFi
 let NB=null;function noiseBuf(){if(!NB){const n=ctx.sampleRate*.5;NB=ctx.createBuffer(1,n,ctx.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1}return NB}
 function hitNoise(t,v,len,type,freq,q){const s=ctx.createBufferSource();s.buffer=noiseBuf();const f=ctx.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q||1;const g=ctx.createGain();
  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+len);s.connect(f);f.connect(g);g.connect(master);s.start(t,Math.random()*.3);s.stop(t+len+.02)}
-const bells=(t,v)=>{hitNoise(t,v,.1,'highpass',7000);hitNoise(t+.014,v*.6,.07,'bandpass',9800,5)};
-const kick=(t,v)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(42,t+.14);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(g);g.connect(master);o.start(t);o.stop(t+.25)};
-const clap=(t,v)=>{[0,.011,.022].forEach(d=>hitNoise(t+d,v*(d?.6:1),.12,'bandpass',1500,1.1))};
-function drums(a,t){const h=spb/2;
- if(a.st==='polka'){if(a.bb%2===0)kick(t,.55);else clap(t,.2);bells(t,.05);bells(t+h,.1)}
- else if(a.st==='waltz'){if(a.bb===0)kick(t,.55);else{bells(t,.09);bells(t+h,.04)}if(a.bb===2)clap(t,.12)}
- else{if(a.bb===0)kick(t,.42);bells(t,.07);bells(t+h,.03);if(a.bb===2)clap(t,.12)}
- if(a.fill)[0,.25,.5,.75].forEach(f=>clap(t+f*spb,.07+f*.16))}
+/* percusión latina: claves, congas y bongós (sintetizados) */
+function drumTone(t,f0,f1,dec,v,type){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+.04);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+dec);o.connect(g);g.connect(master);o.start(t);o.stop(t+dec+.02)}
+const clave=(t,v)=>{drumTone(t,2500,2450,.09,v);drumTone(t,5000,4900,.03,v*.25);hitNoise(t,v*.25,.012,'bandpass',3000,2)};
+const bongo=(t,v,hi)=>{const f=hi?430:300;drumTone(t,f*1.35,f,.14,v);drumTone(t,f*2.3,f*2.2,.05,v*.3);hitNoise(t,v*.35,.018,'bandpass',hi?4200:3200,1.5)};
+const congaOpen=(t,v,low)=>{const f=low?165:220;drumTone(t,f*1.25,f,.42,v);drumTone(t,f*1.6,f*1.55,.12,v*.3,'triangle');hitNoise(t,v*.2,.02,'bandpass',1800,1.2)};
+const congaSlap=(t,v)=>{hitNoise(t,v*.9,.07,'bandpass',2300,1.8);hitNoise(t,v*.4,.04,'highpass',5000);drumTone(t,380,330,.06,v*.4)};
+const congaHeel=(t,v)=>{drumTone(t,150,120,.12,v)};
+function drums(a,t){const h=spb/2,k=a.kk||0;
+ if(a.st==='polka'){const c4=k%4,c8=k%8;
+  if(c8===0||c8===3||c8===5||c8===6)clave(t,.16);if(c8===1)clave(t+h,.16);
+  if(c4===0)congaHeel(t,.32);else if(c4===1)congaSlap(t,.2);else if(c4===2)congaHeel(t,.22);else{congaOpen(t,.34,false);congaOpen(t+h,.36,true)}
+  bongo(t,c4%2===0?.2:.13,true);bongo(t+h,c4===1||c4===3?.15:.1,c4!==1&&c4!==3)}
+ else if(a.st==='waltz'){if(a.bb===0){congaOpen(t,.38,true);clave(t,.14)}else{congaSlap(t,.14);bongo(t,.13,true);bongo(t+h,.09,false)}}
+ else{if(a.bb===0){congaOpen(t,.3,true);clave(t,.12)}else if(a.bb===2){congaOpen(t,.24,false);clave(t,.1)}else bongo(t+h,.09,true)}
+ if(a.fill)[0,.25,.5,.75].forEach((f,i)=>bongo(t+f*spb,.12+i*.05,i%2===0))}
 function tick(t,acc,v=.25){const o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.value=acc?1760:1180;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.05);o.connect(g);g.connect(master);o.start(t);o.stop(t+.06)}
 
 /* acordes automáticos (si una canción no trae acordes escritos) */
@@ -369,10 +388,10 @@ function computeTL(){const br=+$('#bridge').value*4,secs=[],parts=[[],[],[]],acc
  const KEYS={C:['C','G7'],G:['G','D7']};
  list.forEach((s,si)=>{if(si>0&&br){const pk=KEYS[list[si-1].k||'C'],nk=KEYS[s.k||'C'],I=chordInfo(pk[0]),V=chordInfo(nk[1]),mod=pk!==nk;
    secs.push({kind:'bridge',start:p,end:p+br,next:s,m:4,labs:[],mod});
-   for(let k=0;k<br;k++)acc.push({t:p+k,ch:k<br/2?I:V,st:'polka',bb:k%4,m:4,chg:k===br/2||k===0,fill:k===br-1});p+=br}
+   for(let k=0;k<br;k++)acc.push({t:p+k,kk:k,ch:k<br/2?I:V,st:'polka',bb:k%4,m:4,chg:k===br/2||k===0,fill:k===br-1});p+=br}
   const P=songParts(s),start=p,m=P.m,st=P.st,len=P.len,sIdx=secs.length;let prev=null;
   const evsP=[P.v1,P.v2,P.ac].map((arr,pi)=>arr.map(e=>({t:start+e.t,d:e.d,lane:e.lane,midi:e.midi,res:null,si:sIdx,pi})));
-  for(let k=0;k<len;k++){const ch=P.chs[k];acc.push({t:start+k,ch,st,bb:k%m,m,chg:prev!==ch});prev=ch}
+  for(let k=0;k<len;k++){const ch=P.chs[k];acc.push({t:start+k,kk:k,ch,st,bb:k%m,m,chg:prev!==ch});prev=ch}
   secs.push({kind:'song',start,end:start+len,song:s,evsP,evs:evsP[opt.part],m,labs:P.labels.map(l=>({t:start+l.q,text:l.text}))});
   evsP.forEach((a,pi)=>parts[pi].push(...a));p+=len});
  return{secs,parts,mel:parts[opt.part],acc,total:p}}
