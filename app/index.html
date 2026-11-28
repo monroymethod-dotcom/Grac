@@ -72,6 +72,10 @@ body{overflow-x:hidden}
 @keyframes pulse{50%{transform:scale(1.05)}}
 .status{margin:-22px 0 26px;font-size:13px;font-weight:800;min-height:18px;color:rgba(24,16,30,.7)}
 .status.ok{color:var(--green)}
+body.web .grid{display:none}
+.webmsg{display:none;max-width:400px;margin:-8px auto 10px;font-size:16px;font-weight:800;line-height:1.45;color:rgba(24,16,30,.8)}
+body.web .webmsg{display:block}
+.webmsg.ok{color:var(--green)}
 .howto{position:fixed;inset:0;z-index:20;background:rgba(24,16,30,.6);display:none;align-items:center;justify-content:center;padding:18px}
 .howto.on{display:flex}
 .howto .box{background:#fff;border:4px solid var(--ink);border-radius:16px;max-width:420px;width:100%;padding:20px 18px;box-shadow:7px 7px 0 rgba(24,16,30,.75);text-align:left}
@@ -88,6 +92,7 @@ body{overflow-x:hidden}
   <div class="by">by @MonroyMethod <img src="grac/logo.png" alt=""></div>
   <button class="inst" id="inst"><span aria-hidden="true">⬇</span> INSTALAR APP</button>
   <div class="status" id="status"></div>
+  <p class="webmsg" id="webmsg">Instala la app para jugar.<br>Después funciona <b>sin internet</b>.</p>
   <div class="grid"><button class="card red" data-page="grac/index.html"><span class="num">NIVEL 1</span><span class="ic">🎵</span><span class="tx"><b>Notas musicales</b><small>Repasa · Interpreta · Juega</small></span><span class="go">▶</span></button><button class="card yellow" data-page="ritmo/index.html"><span class="num">NIVEL 2</span><span class="ic">🥁</span><span class="tx"><b>El ritmo</b><small>Suma de valores musicales</small></span><span class="go">▶</span></button><button class="card blue" data-page="orquesta/index.html"><span class="num">NIVEL 3</span><span class="ic">🎻</span><span class="tx"><b>La orquesta sinfónica</b><small>Instrumentos y familias</small></span><span class="go">▶</span></button><button class="card green" data-page="navidades-juego/index.html"><span class="num">NIVEL 4</span><span class="ic">🎄</span><span class="tx"><b>Es Navidad</b><small>La vuelta al mundo en Navidad</small></span><span class="go">▶</span></button></div>
   <footer class="legal">
     <p><b>GRAC</b> · M-Marca nacional · Nº Sol. M4253845</p>
@@ -131,10 +136,12 @@ nextB.addEventListener('click',function(){if(cur>=0&&cards[cur+1])open(cur+1)});
 /* instalación */
 var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 var deferred=null,inst=document.getElementById('inst'),howto=document.getElementById('howto'),steps=document.getElementById('steps');
-if(standalone)inst.hidden=true;
+if(standalone||/[?&]jugar\b/.test(location.search))inst.hidden=true;
+else document.body.classList.add('web');
 var ua=navigator.userAgent,isIOS=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),isAndroid=/android/i.test(ua);
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e});
-window.addEventListener('appinstalled',function(){inst.hidden=true;howto.classList.remove('on')});
+function installed(){inst.hidden=true;howto.classList.remove('on');var w=document.getElementById('webmsg');w.classList.add('ok');w.innerHTML='✓ ¡Instalada!<br>Ábrela desde el icono <b>GRAC</b> de tu pantalla de inicio.'}
+window.addEventListener('appinstalled',installed);
 function showSteps(){
   var li;
   if(isIOS){
@@ -148,7 +155,7 @@ function showSteps(){
   steps.innerHTML=li.map(function(x){return '<li>'+x+'</li>'}).join('');howto.classList.add('on');
 }
 inst.addEventListener('click',function(){
-  if(deferred){deferred.prompt();deferred.userChoice.then(function(r){if(r.outcome==='accepted')inst.hidden=true}).finally(function(){deferred=null});}
+  if(deferred){deferred.prompt();deferred.userChoice.then(function(r){if(r.outcome==='accepted')installed()}).finally(function(){deferred=null});}
   else showSteps();
 });
 document.getElementById('howok').addEventListener('click',function(){howto.classList.remove('on')});
