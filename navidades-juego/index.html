@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="../fonts/fonts.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GRAC · La vuelta al mundo en Navidad</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Plan: tablero de juego nocturno con estaciones de colores; tarjetas grandes y táctiles para tablet o pizarra digital. */
@@ -114,6 +111,20 @@ button{font:inherit;cursor:pointer;color:inherit}
 .hole.wrong{border-bottom-color:var(--bad);background:#fdecee}
 
 /* carillón */
+/* láminas con ritmo (carillón) */
+.lams.score{display:flex;width:auto;height:auto;flex-wrap:wrap;align-items:flex-end;gap:8px 6px;background:#fff;border:3px solid #14101A;border-radius:14px;padding:12px 10px 8px;margin:8px 0;width:auto}
+.lam{display:flex;flex-direction:column;align-items:center;gap:4px;width:var(--w);transition:transform .12s,opacity .2s}
+.lam .lb{display:flex;align-items:center;justify-content:center;width:100%;height:var(--h);background:var(--lc);border:3px solid #14101A;border-radius:8px;
+  font-weight:900;font-size:15px;color:#14101A;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18),inset 0 4px 0 rgba(255,255,255,.35);position:relative}
+.lam .lb::before,.lam .lb::after{content:"";position:absolute;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:rgba(20,16,26,.55)}
+.lam .lb::before{top:6px}.lam .lb::after{bottom:8px}
+.lam .lf{font-style:normal;font-family:'Noto Music',serif;font-size:26px;line-height:1;color:#14101A;min-height:28px}
+.lbar{align-self:stretch;width:3px;background:#14101A;border-radius:2px;margin:0 4px}
+.score .lam.done{opacity:.3;filter:none}
+.score .lam.cur{filter:none;transform:translateY(-6px)}
+.score .lam.cur .lb{outline:4px solid #e53935;outline-offset:2px}
+.score .lam.play{transform:translateY(-6px);filter:brightness(1.15)}
+
 .target{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
 .tn{min-width:42px;text-align:center;border-radius:9px;padding:6px 6px;font-weight:800;color:var(--ink);border:3px solid transparent;opacity:.55}
 .tn.cur{opacity:1;border-color:var(--ink);transform:translateY(-3px)}
@@ -484,6 +495,14 @@ body.on-levels .gfoot{display:none}
 .vcard.locked{background:#eef1f7;box-shadow:none;border-style:dashed}.vcard.locked .vt{color:#9aa4bd;border-color:#c5ccdb}
 .vcard .lk{text-align:center}
 .albumg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 12px}
+.legal{font-size:10px!important;line-height:1.3!important;color:#9a95a3!important;opacity:.8;margin-top:6px!important}.legal .lgl{font-size:inherit!important;color:inherit!important}
+#lmodal{background:rgba(20,16,26,.15);backdrop-filter:none;align-items:flex-end;padding:0 12px 24px}
+#lmodal .pbox{max-width:270px;max-height:20vh;padding:8px 10px;gap:5px;border:1px solid #d9d4cc;border-radius:12px;box-shadow:0 6px 24px rgba(20,16,26,.18);background:#fff;color:#5B5566}
+#lmodal .ptitle{font-size:8px;color:#9a95a3;letter-spacing:.5px}
+#lmodal p{font-size:9px;line-height:1.35}
+#lmodal p b{color:#14101A}
+#lmodal .ok{font-size:9px;padding:8px 12px;border:1px solid #14101A;box-shadow:none;background:#14101A}
+footer.gfoot{display:none!important}
 </style>
 </head>
 <body>
@@ -494,13 +513,13 @@ body.on-levels .gfoot{display:none}
   <button class="startbtn" id="startBtn" type="button"><span>▶</span> PRESS START</button>
   <p class="hint">Sube el volumen: vas a escuchar villancicos de todo el mundo.<br><b>¿No suena?</b> Quita el modo silencio del móvil.</p>
   <div class="pixels"><i></i><i></i><i></i><i></i></div>
-  <div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div>
+  <div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div>
 </section>
 <div class="top"><div class="wrap"><button class="brand" id="home-btn" type="button"><img src="assets/grac.png" alt="GRAC"><span class="bt">La vuelta al mundo en Navidad</span></button><span class="pts" id="pts" aria-live="polite">0 puntos</span></div></div>
 <main class="wrap" id="view"></main>
 <footer class="wrap gfoot"><div class="row1"><img class="g" src="assets/grac.png" alt="GRAC"><span class="byt">by @MonroyMethod</span><img class="m" src="assets/monroy.webp" alt="Monroy Method"></div>
 <p class="note">Contenido del proyecto «Navidades del mundo». Las fuentes están en el dossier del alumnado.</p>
-<div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></footer>
+<div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></footer>
 <div id="lmodal" class="pmodal" hidden><div class="pbox"><div class="ptitle">AVISO LEGAL</div>
 <p><b>Monroy Method®</b> es una marca registrada en la Oficina Española de Patentes y Marcas (OEPM), nº <b>M3699532</b>, clase 41 (educación, formación y entretenimiento). Titular: <b>Rita Monroy Suárez</b>.</p>
 <p><b>GRAC</b> es una saga de videojuegos educativos creada por Monroy Method. Este juego (diseño, estructura de juego, textos, ilustraciones y código) es propiedad de su autora. © 2026 Rita Monroy Suárez. Todos los derechos reservados.</p>
@@ -615,9 +634,8 @@ const FILL={bank:["Lanzarote","lastimero","Beethoven","Año Nuevo","tambores","c
 const STATIONS=[
  {id:"escucha",k:"Nivel 1",title:"Detectives de villancicos",desc:"Escucha, adivina y descubre quién, cuándo y dónde nació cada villancico.",color:"--n1",on:"#fff"},
  {id:"ritmo",k:"Nivel 2",title:"Ritmo navideño",desc:"Reconoce ritmos escritos y tócalos con percusión sobre los villancicos.",color:"--n4",on:"#14101A"},
- {id:"carillon",k:"Nivel 3",title:"Toca el carillón",desc:"Toca un fragmento de cada canción sin fallar.",color:"--n2",on:"#fff"},
- {id:"regalos",k:"Nivel 4",title:"Regalos sonoros",desc:"Abre los regalos y encuentra las parejas que suenan igual.",color:"--n3",on:"#fff"},
- {id:"cuerpo",k:"Nivel 5",title:"Percusión corporal",desc:"Sigue los villancicos con pies, muslos, palmas y pitos.",color:"--n1",on:"#fff"}
+ {id:"carillon",k:"Nivel 3",title:"Toca y muévete",desc:"Toca los villancicos en el carillón leyendo las láminas, o síguelos con percusión corporal.",color:"--n2",on:"#fff"},
+ {id:"regalos",k:"Nivel 4",title:"Regalos sonoros",desc:"Abre los regalos y encuentra las parejas que suenan igual.",color:"--n3",on:"#fff"}
 ];
 
 /* ================== ESTADO ================== */
@@ -761,7 +779,7 @@ function home(){
  <button class="retobtn" type="button" data-reto><span class="mt">RETO MUSICAL</span><b>Contrarreloj o de 2 a 4 jugadores</b></button>
  <div class="trees">${Array.from({length:7},treeSVG).join("")}</div>
  <div class="lvtools"><button type="button" data-reset>Empezar de cero</button></div>
- <div class="lvlegal"><div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></div></section>`;
+ <div class="lvlegal"><div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></div></section>`;
  $view.querySelectorAll(".lvb[data-lvl]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lvl;if(!unlocked(i)){b.classList.add("shake");setTimeout(()=>b.classList.remove("shake"),400);tone(false);return;}go(STATIONS[i].id);});
  $view.querySelector("[data-reto]").onclick=()=>go("reto");
  $view.querySelector("[data-reset]").onclick=()=>{state.points=0;state.stars={};state.all=false;save();addPts(0);home();};
@@ -904,10 +922,31 @@ function gRelaciona(){
  };R.appendChild(b);});
 }
 
-/* ================== 3. CARILLÓN ================== */
+/* ================== 3. TOCA Y MUÉVETE ================== */
+function gNivel3(){
+ const st=STATIONS[2];
+ $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">¿Qué quieres hacer?</div><p class="sub">Elige cómo vas a tocar los villancicos.</p>
+  <div class="modes"><button class="mode" type="button" data-m="car" style="--sc:var(--n2);--on:#fff"><span class="mt">CARILLÓN</span><b>Lee las láminas y tócalas</b><span>Cada lámina te dice la nota por su color y su nombre, y el ritmo por su tamaño y su figura.</span></button>
+  <button class="mode" type="button" data-m="cue" style="--sc:var(--n1);--on:#fff"><span class="mt">PERCUSIÓN CORPORAL</span><b>Sigue el villancico con el cuerpo</b><span>Pies, muslos, palmas y pitos al ritmo de la música.</span></button></div></div>`;
+ bindHome($view);window.scrollTo(0,0);
+ $view.querySelector('[data-m="car"]').onclick=gCarillon;
+ $view.querySelector('[data-m="cue"]').onclick=gCuerpo;
+}
+/* ================== 3a. CARILLÓN ================== */
+const FIG={0.25:"\u{1D161}",0.5:"\u{1D160}",0.75:"\u{1D160}\u{1D16D}",1:"\u{1D15F}",1.5:"\u{1D15F}\u{1D16D}",2:"\u{1D15E}",3:"\u{1D15E}\u{1D16D}",4:"\u{1D15D}"};
+function figOf(d){if(FIG[d])return FIG[d];let best=1;Object.keys(FIG).forEach(k=>{if(Math.abs(k-d)<Math.abs(best-d))best=+k});return FIG[best];}
+function lamsHTML(s,n){
+ const bpb=s.bpb||4;let beat=-(s.pickup||0);let h='<div class="lams score">';
+ s.notes.slice(0,n).forEach(([nt,d],k)=>{
+   if(k>0&&beat>0&&Math.abs(beat/bpb-Math.round(beat/bpb))<1e-6)h+='<i class="lbar" aria-hidden="true"></i>';
+   const bi=BARS.indexOf(nt),hh=Math.max(46,92-(bi<0?6:bi)*4),w=Math.round(Math.max(38,22+34*d));
+   h+=`<span class="lam fi${k}" style="--lc:var(${NOTES[nt][2]});--w:${w}px;--h:${hh}px"><b class="lb">${NOTES[nt][0]}</b><em class="lf">${figOf(d)}</em></span>`;
+   beat+=d;});
+ return h+'</div>';
+}
 function gCarillon(){
  const st=STATIONS[2]; let cur=0; const res={};
- $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Lee la partitura y tócala</div><p class="sub">Elige una canción. En la partitura ves las notas (con su color y su nombre) y el ritmo. Escúchala y tócala en el carillón. Toca al menos 4 canciones y pulsa «Terminar la prueba». Si pides pista, se ilumina la lámina.</p>
+ $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Lee las láminas y tócalas</div><p class="sub">Elige una canción. Cada lámina tiene el color y el nombre de su nota; su anchura y la figura de abajo te dicen cuánto dura (el ritmo). Escúchala y tócala en el carillón. Toca al menos 4 canciones y pulsa «Terminar la prueba». Si pides pista, se ilumina la lámina.</p>
   <div class="tabs" id="tabs"></div><div class="target" id="tg"></div><div class="row"><span class="meter" id="meter"></span></div>
   <div class="glock" id="gl" role="group" aria-label="Carillón"></div>
   <div class="row"><button class="big line" type="button" id="listen">Escuchar el fragmento</button><button class="big line" type="button" id="hint">Pista</button><button class="big line" type="button" id="restart">Empezar de nuevo</button><button class="big gold" type="button" id="end">Terminar la prueba</button></div>
@@ -920,8 +959,7 @@ function gCarillon(){
  let frag=[],pos=0,errs=0;
  function drawTabs(){tabs.innerHTML="";SONGS.forEach((s,k)=>{const t=el(`<button class="tab ${k===cur?"on":""}" type="button">${s.title} <span class="st">${res[s.id]!=null?"★".repeat(res[s.id]):""}</span></button>`);t.onclick=()=>{cur=k;load();};tabs.appendChild(t);});}
  function load(){drawTabs();const s=SONGS[cur];frag=s.frag.split(" ");pos=0;errs=0;fb.className="feedback";
-   const sc=window.SCORES&&SCORES[s.id];
-   tg.innerHTML=sc?`<div class="scorebox">${sc.svg}</div>`:frag.map((n,k)=>`<span class="tn${k===0?" cur":""}" style="background:var(${NOTES[n][2]})">${NOTES[n][0]}</span>`).join("");
+   tg.innerHTML=lamsHTML(s,frag.length);
    markScore();
    Object.values(bars).forEach(b=>b.classList.remove("hint"));upd();}
  function markScore(play){for(let i=0;i<frag.length;i++)tg.querySelectorAll(".fi"+i).forEach(g=>{g.classList.toggle("done",i<pos&&play==null);g.classList.toggle("cur",i===pos&&play==null);g.classList.toggle("play",i===play);});}
@@ -1183,7 +1221,7 @@ function bodyHit(lane,t){const a=ac();t=t??a.currentTime;
  if(lane==="A"){nz("bandpass",1400,.5,.03,1.2);nz("bandpass",1100,.45,.12,1);}
  if(lane==="C"){oscNote(2200,t,.04,"sine",.25,.001);nz("highpass",3500,.35,.04);}}
 function gCuerpo(){
- const st=STATIONS[4];let best={};try{best=JSON.parse(localStorage.getItem("vueltaCuerpo")||"{}");}catch(e){}
+ const st=STATIONS[2];let best={};try{best=JSON.parse(localStorage.getItem("vueltaCuerpo")||"{}");}catch(e){}
  const played=()=>Object.keys(best).length;
  $view.innerHTML=header(st,"")+`<div class="panel"><div class="q">Elige un villancico</div>
   <p class="sub">Los iconos caen por las cuatro calles. Cuando lleguen a la línea, haz el gesto con el cuerpo y pulsa su botón. Juega al menos 2 villancicos para terminar el nivel.</p>
@@ -1469,7 +1507,7 @@ function multiReto(players,perPlayer){
 }
 
 /* ================== RUTAS ================== */
-const GAMES={escucha:gEscucha,ritmo:gRitmo,carillon:gCarillon,regalos:gRegalos,cuerpo:gCuerpo,reto:gReto};
+const GAMES={escucha:gEscucha,ritmo:gRitmo,carillon:gNivel3,regalos:gRegalos,cuerpo:gCuerpo,reto:gReto};
 function render(){try{if(AC)loadAllInst();}catch(e){}stopAudio();if(typeof stopReto==='function')stopReto();let h=location.hash.slice(1);const li=STATIONS.findIndex(x=>x.id===h);if(li>0&&!unlocked(li))h="";if(GAMES[h]){snowOn(false);document.body.classList.remove("on-levels");$view.innerHTML='<div class="game"></div>';const g=$view.firstElementChild;const real=$view;GAMES[h]();if($view.firstElementChild&&!$view.firstElementChild.classList.contains("game")){const w=document.createElement("div");w.className="game";while($view.firstChild)w.appendChild($view.firstChild);$view.appendChild(w);}}else home();window.scrollTo(0,0);}
 function go(id){if(location.hash.slice(1)===id)render();else location.hash=id;}
 window.addEventListener("hashchange",render);
@@ -1510,5 +1548,5 @@ if(location.hash.length>1)startEl.hidden=true;
 document.getElementById("startBtn").onclick=()=>{unlockAudio();loadAllInst();whenReady(a=>["C","E","G","c"].forEach((n,i)=>bell(NOTES[n][1],a.currentTime+.05+i*.09)));startEl.hidden=true;window.scrollTo(0,0);};
 render();
 </script>
-</body>
+<script>addEventListener("load",function(){setTimeout(function(){var b=document.getElementById("startBtn");if(b&&b.offsetParent!==null)b.click()},60)})</script></body>
 </html>

@@ -2,168 +2,186 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>GRAC</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#f7f7f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GRAC">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
-:root{--ink:#18101e;--red:#de2c46;--green:#2eb060;--gold:#ffd640;--cyan:#50dcff;--bg:#0b0a1a}
+:root{--ink:#18101e;--red:#de2c46;--yellow:#f4c430;--blue:#1e63d6;--green:#2eb060;--paper:#f7f7f7}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:#fff;font-family:'Press Start 2P',monospace}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:'Nunito',system-ui,sans-serif}
+body{overflow-x:hidden}
+.stripes{position:fixed;left:0;right:0;top:0;height:8px;display:flex;z-index:2}
+.stripes i{flex:1}.stripes i:nth-child(1){background:var(--red)}.stripes i:nth-child(2){background:var(--yellow)}
+.stripes i:nth-child(3){background:var(--blue)}.stripes i:nth-child(4){background:var(--green)}
+.deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.deco img{position:absolute;opacity:.13;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(var(--r2))}}
+.wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:max(46px,env(safe-area-inset-top)) 18px 34px;text-align:center}
+.brand{display:block;width:min(82vw,470px);height:auto;margin:0 auto}
+.by{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0 40px;font-family:'Press Start 2P',monospace;font-size:11px}
+.by img{width:40px;height:40px}
+.tri{display:inline-block;margin:20px 0 30px;font-family:'Press Start 2P',monospace;font-size:13px;color:#fff;background:var(--red);
+  border:3px solid #fff;outline:3px solid var(--ink);border-radius:10px;padding:10px 16px;box-shadow:5px 5px 0 rgba(24,16,30,.75)}
+.grid{display:grid;gap:18px;text-align:left}
+.card{--c:var(--red);--t:#fff;position:relative;text-align:left;display:flex;align-items:center;gap:14px;width:100%;cursor:pointer;font:inherit;color:var(--t);
+  background:var(--c);border:3px solid #fff;outline:3px solid var(--ink);border-radius:16px;padding:16px 18px 16px 16px;
+  box-shadow:7px 7px 0 rgba(24,16,30,.75);transition:transform .08s,box-shadow .08s,filter .15s}
+.card.red{--c:var(--red)}.card.yellow{--c:var(--yellow);--t:var(--ink)}.card.blue{--c:var(--blue)}.card.green{--c:var(--green)}
+.card:hover{filter:brightness(1.07)}
+.card:active{transform:translate(7px,7px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.card:focus-visible{outline-color:var(--ink);outline-width:5px}
+.num{position:absolute;top:-14px;left:14px;font-family:'Press Start 2P',monospace;font-size:11px;color:var(--ink);background:#fff;
+  border:3px solid var(--ink);border-radius:8px;padding:5px 8px}
+.ic{flex:none;width:62px;height:62px;display:grid;place-items:center;font-size:34px;background:#fff;border-radius:50%;border:3px solid var(--ink)}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-family:'Press Start 2P',monospace;font-weight:400;font-size:14px;line-height:1.45}
+.tx small{display:block;margin-top:7px;font-size:14px;font-weight:800;opacity:.92}
+.go{flex:none;font-size:18px;opacity:.9}
+.legal{margin-top:44px;padding-top:18px;border-top:2px solid rgba(24,16,30,.12)}
+.legal p{margin:6px 0;font-size:13px;font-weight:700;color:rgba(24,16,30,.75)}
+.legal b{font-weight:900;color:var(--ink)}
+.legal .copy{margin-top:12px;font-size:12px;opacity:.7}
+#view{position:fixed;left:0;right:0;top:0;bottom:calc(78px + env(safe-area-inset-bottom));background:#000;display:none;z-index:5}
+#view.on{display:block}
+#view iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+#nav{position:fixed;z-index:6;left:0;right:0;bottom:0;display:none;gap:10px;background:var(--ink);
+  padding:10px max(10px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+#nav.on{display:flex}
+#nav button{flex:1;min-height:58px;font-family:'Press Start 2P',monospace;font-size:clamp(10px,3.2vw,15px);line-height:1.4;color:#fff;cursor:pointer;
+  border:3px solid #fff;border-radius:12px;padding:8px 10px;box-shadow:0 5px 0 rgba(0,0,0,.45);transition:transform .08s,box-shadow .08s}
+#nav button:active{transform:translateY(5px);box-shadow:0 0 0 rgba(0,0,0,0)}
+#home{background:var(--red)}
+#next{background:var(--green)}
+#next.yellow{background:var(--yellow);color:var(--ink)}#next.blue{background:var(--blue)}#next.green{background:var(--green)}#next.red{background:var(--red)}
+#next[hidden]{display:none}
+@media (max-width:420px){.tx b{font-size:12px}.ic{width:54px;height:54px;font-size:28px}.legal p{font-size:12px}}
 
-/* ============ JUEGO (existente) ============ */
-.cabinet{width:min(100vw,calc(100vh * 16 / 9));padding:10px}
-.stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:4px solid var(--ink);
-  box-shadow:0 0 0 4px var(--cyan),0 0 0 8px var(--ink),0 18px 40px rgba(0,0,0,.6);overflow:hidden;container-type:inline-size;border-radius:6px}
-.stage video,.stage img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.stage video{opacity:0;transition:opacity .05s}.stage video.on{opacity:1}
-.tap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,6,24,.45)}
-.hidden{display:none!important}
-.start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2cqw;
-  background:#f7f7f7;color:#111;text-align:center}
-.start .head{width:52cqw;height:auto;display:block;margin-bottom:1cqw}
-.start p{color:#111;text-shadow:none!important}
-.start h1{margin:0;font-size:9cqw;color:var(--gold);text-shadow:.5cqw .5cqw 0 var(--ink),-.25cqw 0 0 var(--ink),0 -.25cqw 0 var(--ink)}
-.start p{margin:0;font-size:1.6cqw;line-height:1.7;max-width:70cqw;text-shadow:.2cqw .2cqw 0 var(--ink)}
-.blink{animation:blink 1s steps(2,start) infinite}
-@keyframes blink{to{visibility:hidden}}
-.pbtn{font-family:inherit;color:#fff;cursor:pointer;border:.35cqw solid #fff;outline:.35cqw solid var(--ink);
-  background:var(--red);border-radius:1.6cqw;box-shadow:.8cqw .8cqw 0 rgba(24,16,30,.75);display:flex;align-items:center;gap:1.4cqw;
-  padding:.8cqw 2.2cqw .8cqw .8cqw;transition:transform .08s,box-shadow .08s,background .15s}
-.pbtn:hover{filter:brightness(1.1)}
-.pbtn:active,.pbtn.pressed{transform:translate(.8cqw,.8cqw);box-shadow:0 0 0 rgba(0,0,0,0)}
-.pbtn.ok{background:var(--green)}
-.pbtn:focus-visible{outline:.5cqw solid var(--gold)}
-.pbtn .lg{width:7.4cqw;height:7.4cqw;border-radius:50%;background:#fff url(logo.png) center/100% no-repeat;flex:none}
-.pbtn .lb{font-size:2.3cqw;text-shadow:.25cqw .25cqw 0 var(--ink);white-space:nowrap}
-.pbtn .tri{display:inline-block;width:0;height:0;border-left:1.6cqw solid #fff;border-top:1cqw solid transparent;border-bottom:1cqw solid transparent;margin-right:1.2cqw;vertical-align:-.1cqw}
-.startbtn{padding:1.4cqw 2.6cqw;font-size:2cqw}
-.btnrow{display:flex;gap:2cqw;flex-wrap:wrap;justify-content:center}
-.start .foot{max-width:none!important;text-align:center;position:absolute;left:0;right:0;bottom:2.2cqw;margin:0;font-size:1.2cqw;opacity:.8}
-.btnrow .startbtn .lb{font-size:1.7cqw}
-.pbtn.gold{background:#f4c430;color:#1a1020}.pbtn.gold .lb{text-shadow:none}
-.hot{position:absolute;transform:translate(-50%,-50%);animation:pop2 .35s cubic-bezier(.3,1.6,.6,1) both}
-.hot.pulse{animation:pop2 .35s cubic-bezier(.3,1.6,.6,1) both,pulse 1s ease-in-out .4s infinite}
-@keyframes pop2{from{transform:translate(-50%,-50%) scale(.1)}to{transform:translate(-50%,-50%) scale(1)}}
-@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.05)}}
-.ring{position:absolute;border:.5cqw solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;animation:ring .45s ease-out forwards}
-@keyframes ring{from{width:10cqw;height:5cqw;opacity:1}to{width:42cqw;height:20cqw;opacity:0}}
-.plus{position:absolute;font-size:2cqw;color:var(--gold);text-shadow:.25cqw .25cqw 0 var(--ink);animation:up 1s ease-out forwards;pointer-events:none}
-@keyframes up{to{transform:translateY(-6cqw);opacity:0}}
-.skip{position:absolute;right:1.4cqw;bottom:1.4cqw;font-family:inherit;font-size:1.1cqw;background:rgba(10,10,30,.7);color:#fff;border:.2cqw solid #fff;border-radius:.6cqw;padding:.7cqw 1cqw;cursor:pointer}
-.flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash .25s forwards}
-@keyframes flash{to{opacity:0}}
-.levels{width:min(100vw,1100px);height:100vh;display:flex;flex-direction:column;padding:8px}
-.bar{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#0a0a1e;border:3px solid var(--cyan);border-bottom:none;border-radius:8px 8px 0 0;font-size:11px;flex-wrap:wrap}
-.bar .t{color:var(--gold)}
-.bar .sp{flex:1}
-.bar button{font-family:inherit;font-size:10px;background:var(--red);color:#fff;border:2px solid #fff;border-radius:6px;padding:7px 9px;cursor:pointer}
-.levels iframe{flex:1;width:100%;border:3px solid var(--cyan);border-radius:0 0 8px 8px;background:#fff}
+.inst{display:inline-flex;align-items:center;gap:10px;margin:-14px auto 30px;font-family:'Press Start 2P',monospace;font-size:clamp(13px,4vw,17px);color:#fff;
+  background:var(--blue);border:4px solid #fff;outline:4px solid var(--ink);border-radius:14px;padding:16px 22px;cursor:pointer;box-shadow:6px 6px 0 rgba(24,16,30,.75);
+  animation:pulse 1.6s ease-in-out infinite}
+.inst:active{transform:translate(6px,6px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.inst[hidden]{display:none}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.status{margin:-22px 0 26px;font-size:13px;font-weight:800;min-height:18px;color:rgba(24,16,30,.7)}
+.status.ok{color:var(--green)}
+body.web .grid{display:none}
+.webmsg{display:none;max-width:400px;margin:-8px auto 10px;font-size:16px;font-weight:800;line-height:1.45;color:rgba(24,16,30,.8)}
+body.web .webmsg{display:block}
+.webmsg.ok{color:var(--green)}
+.howto{position:fixed;inset:0;z-index:20;background:rgba(24,16,30,.6);display:none;align-items:center;justify-content:center;padding:18px}
+.howto.on{display:flex}
+.howto .box{background:#fff;border:4px solid var(--ink);border-radius:16px;max-width:420px;width:100%;padding:20px 18px;box-shadow:7px 7px 0 rgba(24,16,30,.75);text-align:left}
+.howto h3{font-family:'Press Start 2P',monospace;font-weight:400;font-size:14px;margin:0 0 14px;color:var(--blue)}
+.howto ol{margin:0 0 16px;padding-left:22px;font-size:16px;font-weight:700;line-height:1.55}
+.howto button{width:100%;font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;background:var(--red);border:3px solid var(--ink);border-radius:10px;padding:14px;cursor:pointer}
 </style>
 </head>
 <body>
-
-<div class="cabinet" id="cab">
-  <div class="stage" id="stage">
-    <img class="poster hidden" id="poster" src="poster1.jpg" alt="">
-    <video id="vid" playsinline webkit-playsinline preload="auto"></video>
-    <div class="start" id="start">
-      <img class="head" src="grac_word.png" alt="GRAC">
-      <p class="blink">INSERT COIN</p>
-      <div class="btnrow">
-        <button class="pbtn startbtn" id="repasa"><span class="lb">📖 REPASA</span></button>
-        <button class="pbtn startbtn ok" id="interpreta"><span class="lb">🔔 INTERPRETA</span></button>
-        <button class="pbtn startbtn gold" id="notas"><span class="lb">🎮 JUEGA</span></button>
-      </div>
-      <p class="foot">@monroymethod</p>
-    </div>
-    <button class="skip hidden" id="skip">SALTAR ▶▶</button>
-  </div>
-</div>
-
-<div class="levels hidden" id="levels">
-  <div class="bar">
-    <span class="t">GRAC</span><span id="bartitle">MUNDO 1 · LA ORQUESTA SINFÓNICA</span><span class="sp"></span>
-    <button id="home">⌂ INICIO</button>
-  </div>
-  <iframe id="game" title="La orquesta sinfónica" src="about:blank"></iframe>
-</div>
-
+<div class="stripes"><i></i><i></i><i></i><i></i></div>
+<div class="deco" id="deco"></div>
+<main class="wrap" id="menu">
+  <img class="brand" src="grac/grac_word.png" alt="GRAC">
+  <div class="by">by @MonroyMethod <img src="grac/logo.png" alt=""></div>
+  <button class="inst" id="inst"><span aria-hidden="true">⬇</span> INSTALAR APP</button>
+  <div class="status" id="status"></div>
+  <p class="webmsg" id="webmsg">Instala la app para jugar.<br>Después funciona <b>sin internet</b>.</p>
+  <div class="grid"><button class="card red" data-page="grac/index.html"><span class="num">NIVEL 1</span><span class="ic">🎵</span><span class="tx"><b>Notas musicales</b><small>Repasa · Interpreta · Juega</small></span><span class="go">▶</span></button><button class="card yellow" data-page="ritmo/index.html"><span class="num">NIVEL 2</span><span class="ic">🥁</span><span class="tx"><b>El ritmo</b><small>Suma de valores musicales</small></span><span class="go">▶</span></button><button class="card blue" data-page="orquesta/index.html"><span class="num">NIVEL 3</span><span class="ic">🎻</span><span class="tx"><b>La orquesta sinfónica</b><small>Instrumentos y familias</small></span><span class="go">▶</span></button><button class="card green" data-page="navidades-juego/index.html"><span class="num">NIVEL 4</span><span class="ic">🎄</span><span class="tx"><b>Es Navidad</b><small>La vuelta al mundo en Navidad</small></span><span class="go">▶</span></button></div>
+  <footer class="legal">
+    <p><b>GRAC</b> · M-Marca nacional · Nº Sol. M4253845</p>
+    <p><b>MONROY METHOD</b> · M-Marca nacional · Nº Sol. M3699532</p>
+    <p class="copy">© 2026 Monroy Method · Todos los derechos reservados</p>
+  </footer>
+</main>
+<div class="howto" id="howto" role="dialog" aria-modal="true" aria-labelledby="howt"><div class="box">
+  <h3 id="howt">INSTALAR APP</h3>
+  <ol id="steps"></ol>
+  <button type="button" id="howok">ENTENDIDO</button>
+</div></div>
+<div id="view"></div>
+<nav id="nav"><button id="home">⌂ IR AL INICIO</button><button id="next">SIGUIENTE NIVEL ▶</button></nav>
 <script>
-const $=id=>document.getElementById(id);
-const stage=$('stage'),vid=$('vid'),poster=$('poster');
-let scene=0,AC=null,fin=false;
-
-function chime(notes){
-  try{
-    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-    const t0=AC.currentTime;
-    notes.forEach((m,i)=>{
-      const o=AC.createOscillator(),g=AC.createGain(),f=440*Math.pow(2,(m-69)/12),t=t0+i*0.06;
-      o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.01);
-      g.gain.exponentialRampToValueAtTime(.001,t+.6);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.65);
-    });
-  }catch(e){}
+(function(){
+var D=document.getElementById('deco'),SP=[[3,30,70,'grac/cplus.png',-12],[84,10,64,'grac/logo.png',10],[-2,46,90,'grac/logo.png',8],[86,40,80,'grac/cplus.png',14],
+ [6,78,66,'grac/cplus.png',10],[82,74,86,'grac/logo.png',-10],[44,92,60,'grac/logo.png',6],
+ [14,4,52,'grac/logo.png',-8],[64,2,46,'grac/logo.png',12],[92,24,58,'grac/logo.png',-6],[10,58,56,'grac/logo.png',14],
+ [90,58,50,'grac/logo.png',-14],[22,90,70,'grac/logo.png',-4],[70,88,54,'grac/logo.png',9],[30,66,44,'grac/logo.png',-10],[60,20,42,'grac/logo.png',7]];
+SP.forEach(function(d,k){var im=document.createElement('img');im.src=d[3];im.style.left=d[0]+'%';im.style.top=d[1]+'%';im.style.width=d[2]+'px';
+ im.style.transform='rotate('+d[4]+'deg)';im.style.setProperty('--r2',(d[4]+6)+'deg');im.style.animationDelay=(k*-1.1)+'s';if(d[3].indexOf('cplus')>=0)im.style.mixBlendMode='multiply';D.appendChild(im)});
+var view=document.getElementById('view'),menu=document.getElementById('menu'),st=document.getElementById('status');
+var pendingReload=false;
+var cards=[].slice.call(document.querySelectorAll('.card')),cur=-1,nav=document.getElementById('nav'),nextB=document.getElementById('next');
+function open(i){
+  cur=i;view.innerHTML='';var f=document.createElement('iframe');
+  f.setAttribute('allow','autoplay; fullscreen');
+  view.appendChild(f);f.src=cards[i].dataset.page;view.classList.add('on');nav.classList.add('on');menu.style.display='none';
+  var n=cards[i+1];
+  if(n){nextB.hidden=false;nextB.className=n.className.replace('card','').trim();nextB.textContent='SIGUIENTE NIVEL ▶'}else nextB.hidden=true;
 }
+function close(){
+  if(pendingReload){location.reload();return}
+  view.classList.remove('on');nav.classList.remove('on');view.innerHTML='';menu.style.display='';cur=-1;window.scrollTo(0,0);
+}
+cards.forEach(function(c,i){c.addEventListener('click',function(){open(i)})});
+document.getElementById('home').addEventListener('click',close);
+nextB.addEventListener('click',function(){if(cur>=0&&cards[cur+1])open(cur+1)});
 
-/* ---- juego ---- */
-function clear(){stage.querySelectorAll('.hot:not(.pressed),.tap').forEach(e=>e.remove())}
-const warmed={};
-function warm(n){if(warmed[n])return;warmed[n]=1;try{fetch('scene'+n+'.mp4').catch(()=>{});const im=new Image();im.src='poster'+n+'.jpg'}catch(e){}}
-function play(n){
-  clear();scene=n;fin=false;warm(n+1);
-  poster.src='poster'+n+'.jpg';
-  poster.classList.remove('hidden');
-  vid.classList.remove('on');
-  vid.muted=false;vid.volume=1;
-  vid.src='scene'+n+'.mp4';
-  vid.addEventListener('playing',()=>vid.classList.add('on'),{once:true});$('skip').classList.remove('hidden');
-  const p=vid.play();
-  if(p&&p.catch)p.catch(()=>{
-    const t=document.createElement('div');t.className='tap hot-tap';
-    t.innerHTML='<button class="pbtn startbtn"><span class="lb"><span class="tri"></span>TOCA PARA CONTINUAR</span></button>';
-    stage.appendChild(t);t.querySelector('button').addEventListener('click',()=>{t.remove();vid.muted=false;vid.play().catch(()=>{})},{once:true});
+/* instalación */
+var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+var deferred=null,inst=document.getElementById('inst'),howto=document.getElementById('howto'),steps=document.getElementById('steps');
+if(standalone||/[?&]jugar\b/.test(location.search))inst.hidden=true;
+else document.body.classList.add('web');
+var ua=navigator.userAgent,isIOS=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),isAndroid=/android/i.test(ua);
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e});
+function installed(){inst.hidden=true;howto.classList.remove('on');var w=document.getElementById('webmsg');w.classList.add('ok');w.innerHTML='✓ ¡Instalada!<br>Ábrela desde el icono <b>GRAC</b> de tu pantalla de inicio.'}
+window.addEventListener('appinstalled',installed);
+function showSteps(){
+  var li;
+  if(isIOS){
+    li=/CriOS|FxiOS|EdgiOS/.test(ua)?['Abre este enlace en <b>Safari</b>.','Pulsa <b>Compartir</b> ⬆ (abajo o arriba de la pantalla).','Elige <b>Añadir a pantalla de inicio</b> y pulsa <b>Añadir</b>.']
+      :['Pulsa <b>Compartir</b> ⬆ (abajo o arriba de la pantalla).','Baja y elige <b>Añadir a pantalla de inicio</b>.','Pulsa <b>Añadir</b>. Te aparecerá el icono de GRAC.'];
+  }else if(isAndroid){
+    li=['Abre este enlace en <b>Chrome</b>.','Pulsa el menú <b>⋮</b> (arriba a la derecha).','Elige <b>Instalar aplicación</b> o <b>Añadir a pantalla de inicio</b>.'];
+  }else{
+    li=['Abre este enlace en <b>Chrome</b> o <b>Edge</b>.','Pulsa el icono de instalar ⊕ en la barra de direcciones, o el menú <b>⋮</b> → <b>Instalar GRAC</b>.'];
+  }
+  steps.innerHTML=li.map(function(x){return '<li>'+x+'</li>'}).join('');howto.classList.add('on');
+}
+inst.addEventListener('click',function(){
+  if(deferred){deferred.prompt();deferred.userChoice.then(function(r){if(r.outcome==='accepted')installed()}).finally(function(){deferred=null});}
+  else showSteps();
+});
+document.getElementById('howok').addEventListener('click',function(){howto.classList.remove('on')});
+howto.addEventListener('click',function(e){if(e.target===howto)howto.classList.remove('on')});
+
+/* uso sin internet y actualizaciones */
+function msg(t,ok){st.textContent=t;st.classList.toggle('ok',!!ok)}
+if('serviceWorker' in navigator){
+  var hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('message',function(e){
+    var d=e.data||{};
+    if(d.type==='progress')msg((hadController?'Descargando la nueva versión… ':'Preparando para usar sin internet… ')+Math.round(d.done*100/d.total)+'%');
+    if(d.type==='ready')msg('✓ Listo para usar sin internet',true);
+  });
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!hadController){hadController=true;return}
+    if(view.classList.contains('on'))pendingReload=true;else location.reload();
+  });
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){
+      if(hadController&&!reg.installing)msg('✓ Listo para usar sin internet',true);
+      if(navigator.onLine)reg.update().catch(function(){});
+    }).catch(function(){});
   });
 }
-function hotButton(html,x,y,onclick){
-  const b=document.createElement('button');b.className='pbtn hot pulse';b.innerHTML=html;
-  b.style.left=x+'%';b.style.top=y+'%';stage.appendChild(b);b.focus({preventScroll:true});
-  b.addEventListener('click',()=>{
-    b.classList.remove('pulse');b.classList.add('pressed','ok');
-    chime([67,74,81,84]);
-    const r=document.createElement('div');r.className='ring';r.style.left=x+'%';r.style.top=y+'%';stage.appendChild(r);
-    const pl=document.createElement('div');pl.className='plus';pl.textContent='+1000';pl.style.left=(x+8)+'%';pl.style.top=(y-14)+'%';stage.appendChild(pl);
-    const f=document.createElement('div');f.className='flash';stage.appendChild(f);
-    onclick();
-    setTimeout(()=>{b.remove();r.remove();pl.remove();f.remove()},700);
-  },{once:true});
-}
-function ended(){
-  if(fin)return;fin=true;
-  $('skip').classList.add('hidden');
-  if(scene===1){
-    hotButton('<span class="lg"></span><span class="lb"><span class="tri"></span>JUGAR</span>',74,64.5,()=>play(2));
-  }else if(scene===2){
-    hotButton('<span class="lg"></span><span class="lb"><span class="tri"></span>NIVELES</span>',75,25,()=>setTimeout(()=>openLevels(),600));
-  }
-}
-function openLevels(page,title){
-  page=page||'orquesta.html';title=title||'MUNDO 1 · LA ORQUESTA SINFÓNICA';
-  vid.pause();
-  $('bartitle').textContent=title;
-  $('cab').classList.add('hidden');$('levels').classList.remove('hidden');
-  if($('game').src.indexOf(page)<0)$('game').src=page;
-}
-vid.addEventListener('ended',ended);
-$('skip').addEventListener('click',()=>{vid.pause();try{vid.currentTime=Math.max(0,vid.duration-0.05)}catch(e){}ended()});
-$('repasa').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('repasa.html','REPASA · LAS NOTAS MUSICALES')});
-$('interpreta').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('interpreta.html','INTERPRETA · CARRILLÓN')});
-$('notas').addEventListener('click',()=>{chime([67,74,81,84]);openLevels('notas.html','JUEGA · LAS NOTAS MUSICALES')});
-$('home').addEventListener('click',()=>{
-  vid.pause();clear();$('skip').classList.add('hidden');vid.classList.remove('on');poster.classList.add('hidden');
-  $('levels').classList.add('hidden');$('cab').classList.remove('hidden');$('start').classList.remove('hidden');
-});
+})();
 </script>
 </body>
 </html>
