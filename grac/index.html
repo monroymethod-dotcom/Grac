@@ -59,7 +59,26 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .bar button{font-family:inherit;font-size:10px;background:var(--red);color:#fff;border:2px solid #fff;border-radius:6px;padding:7px 9px;cursor:pointer}
 .levels iframe{flex:1;width:100%;border:3px solid var(--cyan);border-radius:0 0 8px 8px;background:#fff}
 </style>
-</head>
+<style>
+html,body{height:100%;overflow:hidden;background:#f7f7f7}
+.cabinet{width:100%;height:100%;padding:0}
+.stage{aspect-ratio:auto;height:100%;border:0;box-shadow:none;border-radius:0;background:#f7f7f7}
+.start{gap:clamp(14px,3.5vh,30px);padding:24px 18px 48px}
+.start .head{width:min(82vw,560px);margin:0}
+.start p.blink{font-size:clamp(12px,3.4vw,18px)}
+.btnrow{flex-direction:column;flex-wrap:nowrap;gap:clamp(12px,2.2vh,18px);width:min(86vw,440px)}
+.btnrow .startbtn{width:100%;justify-content:center;padding:clamp(14px,2.4vh,20px) 14px;border-width:3px;outline-width:3px;border-radius:14px;box-shadow:6px 6px 0 rgba(24,16,30,.75)}
+.btnrow .startbtn:active{transform:translate(6px,6px);box-shadow:none}
+.btnrow .startbtn .lb{font-size:clamp(14px,4.4vw,20px)}
+.start .foot{font-size:11px;bottom:14px}
+.levels{width:100%;height:100%;padding:0}
+.bar{border-radius:0;border-left:0;border-right:0;flex-wrap:nowrap;gap:8px;padding:8px 10px;font-size:clamp(8px,2.4vw,11px)}
+#bartitle{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .sp{display:none}
+.bar button{flex:none}
+.levels iframe{border:0;border-radius:0}
+@media (orientation:landscape) and (max-height:520px){.btnrow{flex-direction:row;width:auto}.btnrow .startbtn{width:auto;padding:12px 18px}.start .head{width:min(50vw,420px)}}
+</style></head>
 <body>
 
 <div class="cabinet" id="cab">
