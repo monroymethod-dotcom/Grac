@@ -1,4 +1,4 @@
-<!doctype html><html><head><link rel="stylesheet" href="../fonts/fonts.css"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><script>document.documentElement.classList.add("vboot")</script><style>html.vboot #s0,html.vboot #flash{display:none!important}</style><link rel="stylesheet" href="../fonts/fonts.css"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!doctype html>
 <html lang="es">
 <head>
@@ -1039,4 +1039,4 @@ document.addEventListener('keydown',e=>{if(!$('s0').hidden&&(e.key==='Enter'||e.
 </body>
 </html>
 
-<script>addEventListener("load",function(){setTimeout(function(){var b=document.getElementById("go");if(b&&b.offsetParent!==null)b.click()},60)})</script></body></html>
+<script>(function(){function go(){var b=document.getElementById("go");if(b)b.click();setTimeout(function(){document.documentElement.classList.remove("vboot")},700)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})()</script></body></html>

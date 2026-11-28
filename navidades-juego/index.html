@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="../fonts/fonts.css">
+<head><script>document.documentElement.classList.add("vboot")</script><style>html.vboot #start,html.vboot #flash{display:none!important}</style><link rel="stylesheet" href="../fonts/fonts.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GRAC · La vuelta al mundo en Navidad</title>
@@ -1548,5 +1548,5 @@ if(location.hash.length>1)startEl.hidden=true;
 document.getElementById("startBtn").onclick=()=>{unlockAudio();loadAllInst();whenReady(a=>["C","E","G","c"].forEach((n,i)=>bell(NOTES[n][1],a.currentTime+.05+i*.09)));startEl.hidden=true;window.scrollTo(0,0);};
 render();
 </script>
-<script>addEventListener("load",function(){setTimeout(function(){var b=document.getElementById("startBtn");if(b&&b.offsetParent!==null)b.click()},60)})</script></body>
+<script>(function(){function go(){var b=document.getElementById("startBtn");if(b)b.click();setTimeout(function(){document.documentElement.classList.remove("vboot")},700)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})()</script></body>
 </html>
