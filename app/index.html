@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GRAC</title>
+<meta name="theme-color" content="#f7f7f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GRAC">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--ink:#18101e;--red:#de2c46;--yellow:#f4c430;--blue:#1e63d6;--green:#2eb060;--paper:#f7f7f7}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:'Nunito',system-ui,sans-serif}
+body{overflow-x:hidden}
+.stripes{position:fixed;left:0;right:0;top:0;height:8px;display:flex;z-index:2}
+.stripes i{flex:1}.stripes i:nth-child(1){background:var(--red)}.stripes i:nth-child(2){background:var(--yellow)}
+.stripes i:nth-child(3){background:var(--blue)}.stripes i:nth-child(4){background:var(--green)}
+.deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.deco img{position:absolute;opacity:.13;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(var(--r2))}}
+.wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:max(46px,env(safe-area-inset-top)) 18px 34px;text-align:center}
+.brand{display:block;width:min(82vw,470px);height:auto;margin:0 auto}
+.by{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0 40px;font-family:'Press Start 2P',monospace;font-size:11px}
+.by img{width:40px;height:40px}
+.tri{display:inline-block;margin:20px 0 30px;font-family:'Press Start 2P',monospace;font-size:13px;color:#fff;background:var(--red);
+  border:3px solid #fff;outline:3px solid var(--ink);border-radius:10px;padding:10px 16px;box-shadow:5px 5px 0 rgba(24,16,30,.75)}
+.grid{display:grid;gap:18px;text-align:left}
+.card{--c:var(--red);--t:#fff;position:relative;text-align:left;display:flex;align-items:center;gap:14px;width:100%;cursor:pointer;font:inherit;color:var(--t);
+  background:var(--c);border:3px solid #fff;outline:3px solid var(--ink);border-radius:16px;padding:16px 18px 16px 16px;
+  box-shadow:7px 7px 0 rgba(24,16,30,.75);transition:transform .08s,box-shadow .08s,filter .15s}
+.card.red{--c:var(--red)}.card.yellow{--c:var(--yellow);--t:var(--ink)}.card.blue{--c:var(--blue)}.card.green{--c:var(--green)}
+.card:hover{filter:brightness(1.07)}
+.card:active{transform:translate(7px,7px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.card:focus-visible{outline-color:var(--ink);outline-width:5px}
+.num{position:absolute;top:-14px;left:14px;font-family:'Press Start 2P',monospace;font-size:11px;color:var(--ink);background:#fff;
+  border:3px solid var(--ink);border-radius:8px;padding:5px 8px}
+.ic{flex:none;width:62px;height:62px;display:grid;place-items:center;font-size:34px;background:#fff;border-radius:50%;border:3px solid var(--ink)}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-family:'Press Start 2P',monospace;font-weight:400;font-size:14px;line-height:1.45}
+.tx small{display:block;margin-top:7px;font-size:14px;font-weight:800;opacity:.92}
+.go{flex:none;font-size:18px;opacity:.9}
+.legal{margin-top:44px;padding-top:18px;border-top:2px solid rgba(24,16,30,.12)}
+.legal p{margin:6px 0;font-size:13px;font-weight:700;color:rgba(24,16,30,.75)}
+.legal b{font-weight:900;color:var(--ink)}
+.legal .copy{margin-top:12px;font-size:12px;opacity:.7}
+#view{position:fixed;inset:0;background:#000;display:none;z-index:5}
+#view.on{display:block}
+#view iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+#back{position:fixed;z-index:6;left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom));display:none;
+  font-family:'Press Start 2P',monospace;font-size:10px;color:#fff;background:rgba(24,16,30,.85);border:2px solid #fff;
+  border-radius:8px;padding:9px 11px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.4)}
+#back.on{display:block}
+#back:hover{background:var(--red)}
+@media (max-width:420px){.tx b{font-size:12px}.ic{width:54px;height:54px;font-size:28px}.legal p{font-size:12px}}
+
+.inst{display:none;margin:-18px auto 30px;font-family:'Press Start 2P',monospace;font-size:11px;color:#fff;background:var(--ink);border:3px solid #fff;
+  outline:3px solid var(--ink);border-radius:10px;padding:12px 16px;cursor:pointer;box-shadow:5px 5px 0 rgba(24,16,30,.35)}
+.inst.on{display:inline-block}
+.status{margin:-22px 0 26px;font-size:13px;font-weight:800;min-height:18px;color:rgba(24,16,30,.7)}
+.status.ok{color:var(--green)}
+.bar{height:8px;max-width:260px;margin:8px auto 0;background:rgba(24,16,30,.12);border-radius:6px;overflow:hidden;display:none}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}
+.ios{display:none;margin:-14px auto 28px;max-width:420px;background:#fff;border:3px solid var(--ink);border-radius:12px;padding:12px 14px;font-size:14px;font-weight:700;text-align:left;line-height:1.45}
+.ios.on{display:block}
+</style>
+</head>
+<body>
+<div class="stripes"><i></i><i></i><i></i><i></i></div>
+<div class="deco" id="deco"></div>
+<main class="wrap" id="menu">
+  <img class="brand" src="grac/grac_word.png" alt="GRAC">
+  <div class="by">by @MonroyMethod <img src="grac/logo.png" alt=""></div>
+  <button class="inst" id="inst">⬇ INSTALAR GRAC</button>
+  <div class="ios" id="ios">Para instalar GRAC en el iPhone o iPad: pulsa <b>Compartir</b> <span aria-hidden="true">⬆</span> y luego <b>Añadir a pantalla de inicio</b>.</div>
+  <div class="status" id="status"></div>
+  <div class="grid"><button class="card red" data-page="grac/index.html"><span class="num">NIVEL 1</span><span class="ic">🎵</span><span class="tx"><b>Notas musicales</b><small>Repasa · Interpreta · Juega</small></span><span class="go">▶</span></button><button class="card yellow" data-page="ritmo-historia/index.html"><span class="num">NIVEL 2</span><span class="ic">🥁</span><span class="tx"><b>Los ritmos</b><small>Ritmo e historia</small></span><span class="go">▶</span></button><button class="card blue" data-page="orquesta/index.html"><span class="num">NIVEL 3</span><span class="ic">🎻</span><span class="tx"><b>La orquesta sinfónica</b><small>Instrumentos y familias</small></span><span class="go">▶</span></button><button class="card green" data-page="navidades-juego/index.html"><span class="num">NIVEL 4</span><span class="ic">🎄</span><span class="tx"><b>Es Navidad</b><small>La vuelta al mundo en Navidad</small></span><span class="go">▶</span></button></div>
+  <footer class="legal">
+    <p><b>GRAC</b> · M-Marca nacional · Nº Sol. M4253845</p>
+    <p><b>MONROY METHOD</b> · M-Marca nacional · Nº Sol. M3699532</p>
+    <p class="copy">© 2026 Monroy Method · Todos los derechos reservados</p>
+  </footer>
+</main>
+<div id="view"></div>
+<button id="back" title="Volver al menú">⌂ MENÚ</button>
+<script>
+(function(){
+var D=document.getElementById('deco'),SP=[[3,30,70,'grac/cplus.png',-12],[84,10,64,'grac/logo.png',10],[-2,46,90,'grac/logo.png',8],[86,40,80,'grac/cplus.png',14],
+ [6,78,66,'grac/cplus.png',10],[82,74,86,'grac/logo.png',-10],[44,92,60,'grac/logo.png',6],
+ [14,4,52,'grac/logo.png',-8],[64,2,46,'grac/logo.png',12],[92,24,58,'grac/logo.png',-6],[10,58,56,'grac/logo.png',14],
+ [90,58,50,'grac/logo.png',-14],[22,90,70,'grac/logo.png',-4],[70,88,54,'grac/logo.png',9],[30,66,44,'grac/logo.png',-10],[60,20,42,'grac/logo.png',7]];
+SP.forEach(function(d,k){var im=document.createElement('img');im.src=d[3];im.style.left=d[0]+'%';im.style.top=d[1]+'%';im.style.width=d[2]+'px';
+ im.style.transform='rotate('+d[4]+'deg)';im.style.setProperty('--r2',(d[4]+6)+'deg');im.style.animationDelay=(k*-1.1)+'s';if(d[3].indexOf('cplus')>=0)im.style.mixBlendMode='multiply';D.appendChild(im)});
+var view=document.getElementById('view'),back=document.getElementById('back'),menu=document.getElementById('menu'),st=document.getElementById('status');
+var pendingReload=false;
+function open(p){
+  view.innerHTML='';var f=document.createElement('iframe');
+  f.setAttribute('allow','autoplay; fullscreen');f.src=p;
+  view.appendChild(f);view.classList.add('on');back.classList.add('on');menu.style.display='none';
+}
+function close(){
+  if(pendingReload){location.reload();return}
+  view.classList.remove('on');back.classList.remove('on');view.innerHTML='';menu.style.display='';window.scrollTo(0,0);
+}
+document.querySelectorAll('.card').forEach(function(c){c.addEventListener('click',function(){open(c.dataset.page)})});
+back.addEventListener('click',close);
+
+/* instalación */
+var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+var deferred=null,inst=document.getElementById('inst');
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;if(!standalone)inst.classList.add('on')});
+inst.addEventListener('click',function(){if(!deferred)return;deferred.prompt();deferred.userChoice.finally(function(){deferred=null;inst.classList.remove('on')})});
+window.addEventListener('appinstalled',function(){inst.classList.remove('on')});
+var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+if(isIOS&&!standalone)document.getElementById('ios').classList.add('on');
+
+/* uso sin internet y actualizaciones */
+function msg(t,ok){st.textContent=t;st.classList.toggle('ok',!!ok)}
+if('serviceWorker' in navigator){
+  var hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('message',function(e){
+    var d=e.data||{};
+    if(d.type==='progress')msg((hadController?'Descargando la nueva versión… ':'Preparando para usar sin internet… ')+Math.round(d.done*100/d.total)+'%');
+    if(d.type==='ready')msg('✓ Listo para usar sin internet',true);
+  });
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!hadController){hadController=true;return}
+    if(view.classList.contains('on'))pendingReload=true;else location.reload();
+  });
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){
+      if(hadController&&!reg.installing)msg('✓ Listo para usar sin internet',true);
+      if(navigator.onLine)reg.update().catch(function(){});
+    }).catch(function(){});
+  });
+}
+})();
+</script>
+</body>
+</html>
