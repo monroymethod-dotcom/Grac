@@ -64,15 +64,20 @@ body{overflow-x:hidden}
 #next[hidden]{display:none}
 @media (max-width:420px){.tx b{font-size:12px}.ic{width:54px;height:54px;font-size:28px}.legal p{font-size:12px}}
 
-.inst{display:none;margin:-18px auto 30px;font-family:'Press Start 2P',monospace;font-size:11px;color:#fff;background:var(--ink);border:3px solid #fff;
-  outline:3px solid var(--ink);border-radius:10px;padding:12px 16px;cursor:pointer;box-shadow:5px 5px 0 rgba(24,16,30,.35)}
-.inst.on{display:inline-block}
+.inst{display:inline-flex;align-items:center;gap:10px;margin:-14px auto 30px;font-family:'Press Start 2P',monospace;font-size:clamp(13px,4vw,17px);color:#fff;
+  background:var(--blue);border:4px solid #fff;outline:4px solid var(--ink);border-radius:14px;padding:16px 22px;cursor:pointer;box-shadow:6px 6px 0 rgba(24,16,30,.75);
+  animation:pulse 1.6s ease-in-out infinite}
+.inst:active{transform:translate(6px,6px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.inst[hidden]{display:none}
+@keyframes pulse{50%{transform:scale(1.05)}}
 .status{margin:-22px 0 26px;font-size:13px;font-weight:800;min-height:18px;color:rgba(24,16,30,.7)}
 .status.ok{color:var(--green)}
-.bar{height:8px;max-width:260px;margin:8px auto 0;background:rgba(24,16,30,.12);border-radius:6px;overflow:hidden;display:none}
-.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}
-.ios{display:none;margin:-14px auto 28px;max-width:420px;background:#fff;border:3px solid var(--ink);border-radius:12px;padding:12px 14px;font-size:14px;font-weight:700;text-align:left;line-height:1.45}
-.ios.on{display:block}
+.howto{position:fixed;inset:0;z-index:20;background:rgba(24,16,30,.6);display:none;align-items:center;justify-content:center;padding:18px}
+.howto.on{display:flex}
+.howto .box{background:#fff;border:4px solid var(--ink);border-radius:16px;max-width:420px;width:100%;padding:20px 18px;box-shadow:7px 7px 0 rgba(24,16,30,.75);text-align:left}
+.howto h3{font-family:'Press Start 2P',monospace;font-weight:400;font-size:14px;margin:0 0 14px;color:var(--blue)}
+.howto ol{margin:0 0 16px;padding-left:22px;font-size:16px;font-weight:700;line-height:1.55}
+.howto button{width:100%;font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;background:var(--red);border:3px solid var(--ink);border-radius:10px;padding:14px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -81,9 +86,7 @@ body{overflow-x:hidden}
 <main class="wrap" id="menu">
   <img class="brand" src="grac/grac_word.png" alt="GRAC">
   <div class="by">by @MonroyMethod <img src="grac/logo.png" alt=""></div>
-  <button class="inst" id="inst">⬇ INSTALAR GRAC EN ANDROID</button>
-  <div class="ios" id="andr">📱 <b>Android:</b> pulsa el botón <b>Instalar</b> o, en Chrome, menú <b>⋮</b> → <b>Instalar aplicación</b>.</div>
-  <div class="ios" id="ios">🍎 <b>iPhone / iPad:</b> en Safari, pulsa <b>Compartir</b> <span aria-hidden="true">⬆</span> y luego <b>Añadir a pantalla de inicio</b>.</div>
+  <button class="inst" id="inst"><span aria-hidden="true">⬇</span> INSTALAR APP</button>
   <div class="status" id="status"></div>
   <div class="grid"><button class="card red" data-page="grac/index.html"><span class="num">NIVEL 1</span><span class="ic">🎵</span><span class="tx"><b>Notas musicales</b><small>Repasa · Interpreta · Juega</small></span><span class="go">▶</span></button><button class="card yellow" data-page="ritmo-historia/index.html"><span class="num">NIVEL 2</span><span class="ic">🥁</span><span class="tx"><b>Los ritmos</b><small>Ritmo e historia</small></span><span class="go">▶</span></button><button class="card blue" data-page="orquesta/index.html"><span class="num">NIVEL 3</span><span class="ic">🎻</span><span class="tx"><b>La orquesta sinfónica</b><small>Instrumentos y familias</small></span><span class="go">▶</span></button><button class="card green" data-page="navidades-juego/index.html"><span class="num">NIVEL 4</span><span class="ic">🎄</span><span class="tx"><b>Es Navidad</b><small>La vuelta al mundo en Navidad</small></span><span class="go">▶</span></button></div>
   <footer class="legal">
@@ -92,6 +95,11 @@ body{overflow-x:hidden}
     <p class="copy">© 2026 Monroy Method · Todos los derechos reservados</p>
   </footer>
 </main>
+<div class="howto" id="howto" role="dialog" aria-modal="true" aria-labelledby="howt"><div class="box">
+  <h3 id="howt">INSTALAR APP</h3>
+  <ol id="steps"></ol>
+  <button type="button" id="howok">ENTENDIDO</button>
+</div></div>
 <div id="view"></div>
 <nav id="nav"><button id="home">⌂ IR AL INICIO</button><button id="next">SIGUIENTE NIVEL ▶</button></nav>
 <script>
@@ -122,13 +130,29 @@ nextB.addEventListener('click',function(){if(cur>=0&&cards[cur+1])open(cur+1)});
 
 /* instalación */
 var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-var deferred=null,inst=document.getElementById('inst');
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;if(!standalone)inst.classList.add('on')});
-inst.addEventListener('click',function(){if(!deferred)return;deferred.prompt();deferred.userChoice.finally(function(){deferred=null;inst.classList.remove('on')})});
-window.addEventListener('appinstalled',function(){inst.classList.remove('on')});
-var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-if(isIOS&&!standalone)document.getElementById('ios').classList.add('on');
-if(/android/i.test(navigator.userAgent)&&!standalone)document.getElementById('andr').classList.add('on');
+var deferred=null,inst=document.getElementById('inst'),howto=document.getElementById('howto'),steps=document.getElementById('steps');
+if(standalone)inst.hidden=true;
+var ua=navigator.userAgent,isIOS=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),isAndroid=/android/i.test(ua);
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e});
+window.addEventListener('appinstalled',function(){inst.hidden=true;howto.classList.remove('on')});
+function showSteps(){
+  var li;
+  if(isIOS){
+    li=/CriOS|FxiOS|EdgiOS/.test(ua)?['Abre este enlace en <b>Safari</b>.','Pulsa <b>Compartir</b> ⬆ (abajo o arriba de la pantalla).','Elige <b>Añadir a pantalla de inicio</b> y pulsa <b>Añadir</b>.']
+      :['Pulsa <b>Compartir</b> ⬆ (abajo o arriba de la pantalla).','Baja y elige <b>Añadir a pantalla de inicio</b>.','Pulsa <b>Añadir</b>. Te aparecerá el icono de GRAC.'];
+  }else if(isAndroid){
+    li=['Abre este enlace en <b>Chrome</b>.','Pulsa el menú <b>⋮</b> (arriba a la derecha).','Elige <b>Instalar aplicación</b> o <b>Añadir a pantalla de inicio</b>.'];
+  }else{
+    li=['Abre este enlace en <b>Chrome</b> o <b>Edge</b>.','Pulsa el icono de instalar ⊕ en la barra de direcciones, o el menú <b>⋮</b> → <b>Instalar GRAC</b>.'];
+  }
+  steps.innerHTML=li.map(function(x){return '<li>'+x+'</li>'}).join('');howto.classList.add('on');
+}
+inst.addEventListener('click',function(){
+  if(deferred){deferred.prompt();deferred.userChoice.then(function(r){if(r.outcome==='accepted')inst.hidden=true}).finally(function(){deferred=null});}
+  else showSteps();
+});
+document.getElementById('howok').addEventListener('click',function(){howto.classList.remove('on')});
+howto.addEventListener('click',function(e){if(e.target===howto)howto.classList.remove('on')});
 
 /* uso sin internet y actualizaciones */
 function msg(t,ok){st.textContent=t;st.classList.toggle('ok',!!ok)}
