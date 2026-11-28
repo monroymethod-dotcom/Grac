@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><script>document.documentElement.classList.add("vboot")</script><style>html.vboot #s0,html.vboot #flash{display:none!important}</style><link rel="stylesheet" href="../fonts/fonts.css">
+<head><script>document.documentElement.classList.add("vboot");(function(){var L=[],O=window.AudioContext||window.webkitAudioContext;
+if(O){var W=function(a){var c=a?new O(a):new O();L.push(c);return c};W.prototype=O.prototype;window.AudioContext=W;if(window.webkitAudioContext)window.webkitAudioContext=W}
+var pend=[],P=HTMLMediaElement.prototype.play;
+HTMLMediaElement.prototype.play=function(){var el=this,r=P.apply(this,arguments);if(r&&r.catch)r.catch(function(){if(pend.indexOf(el)<0)pend.push(el)});return r};
+window.__vL=L;function need(){return L.some(function(c){return c.state!=="running"&&c.state!=="closed"})||pend.length>0}
+function unlock(){L.forEach(function(c){try{if(c.state!=="running")c.resume()}catch(e){}});
+ pend.splice(0).forEach(function(el){try{if(!el.ended)P.call(el).catch(function(){})}catch(e){}});
+ var p=document.getElementById("vsnd");if(p)p.remove()}
+["pointerdown","touchend","click","keydown"].forEach(function(t){addEventListener(t,unlock,true)});
+window.__vPill=function(){if(!need()||document.getElementById("vsnd"))return;var d=document.createElement("button");d.id="vsnd";d.type="button";
+ d.textContent="🔊 Toca para activar el sonido";document.body.appendChild(d)};
+})();</script><style>html.vboot #s0,html.vboot #flash{display:none!important}#vsnd{position:fixed;left:50%%;bottom:16px;transform:translateX(-50%%);z-index:99999;font:800 15px Nunito,system-ui,sans-serif;color:#fff;background:#18101e;border:3px solid #fff;outline:3px solid #18101e;border-radius:999px;padding:12px 18px;box-shadow:0 6px 18px rgba(0,0,0,.35);white-space:nowrap;animation:vsp 1.2s ease-in-out infinite}@keyframes vsp{50%%{transform:translateX(-50%%) scale(1.06)}}</style><link rel="stylesheet" href="../fonts/fonts.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
@@ -690,5 +701,5 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 const _show=show;show=function(id){keyHandler=null;_show(id)};
 })();
 </script>
-<script>(function(){function go(){var b=document.getElementById("go");if(b)b.click();setTimeout(function(){document.documentElement.classList.remove("vboot")},700)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})()</script></body>
+<script>(function(){function go(){var b=document.getElementById("go");if(b)b.click();setTimeout(function(){document.documentElement.classList.remove("vboot")},700);setTimeout(function(){window.__vPill&&__vPill()},900)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})()</script></body>
 </html>
