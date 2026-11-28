@@ -495,6 +495,7 @@ body.on-levels .gfoot{display:none}
 .vcard.locked{background:#eef1f7;box-shadow:none;border-style:dashed}.vcard.locked .vt{color:#9aa4bd;border-color:#c5ccdb}
 .vcard .lk{text-align:center}
 .albumg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 12px}
+.legal{font-size:10px!important;line-height:1.3!important;color:#9a95a3!important;opacity:.8;margin-top:6px!important}.legal .lgl{font-size:inherit!important;color:inherit!important}
 </style>
 </head>
 <body>
@@ -505,13 +506,13 @@ body.on-levels .gfoot{display:none}
   <button class="startbtn" id="startBtn" type="button"><span>▶</span> PRESS START</button>
   <p class="hint">Sube el volumen: vas a escuchar villancicos de todo el mundo.<br><b>¿No suena?</b> Quita el modo silencio del móvil.</p>
   <div class="pixels"><i></i><i></i><i></i><i></i></div>
-  <div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div>
+  <div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div>
 </section>
 <div class="top"><div class="wrap"><button class="brand" id="home-btn" type="button"><img src="assets/grac.png" alt="GRAC"><span class="bt">La vuelta al mundo en Navidad</span></button><span class="pts" id="pts" aria-live="polite">0 puntos</span></div></div>
 <main class="wrap" id="view"></main>
 <footer class="wrap gfoot"><div class="row1"><img class="g" src="assets/grac.png" alt="GRAC"><span class="byt">by @MonroyMethod</span><img class="m" src="assets/monroy.webp" alt="Monroy Method"></div>
 <p class="note">Contenido del proyecto «Navidades del mundo». Las fuentes están en el dossier del alumnado.</p>
-<div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></footer>
+<div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></footer>
 <div id="lmodal" class="pmodal" hidden><div class="pbox"><div class="ptitle">AVISO LEGAL</div>
 <p><b>Monroy Method®</b> es una marca registrada en la Oficina Española de Patentes y Marcas (OEPM), nº <b>M3699532</b>, clase 41 (educación, formación y entretenimiento). Titular: <b>Rita Monroy Suárez</b>.</p>
 <p><b>GRAC</b> es una saga de videojuegos educativos creada por Monroy Method. Este juego (diseño, estructura de juego, textos, ilustraciones y código) es propiedad de su autora. © 2026 Rita Monroy Suárez. Todos los derechos reservados.</p>
@@ -771,7 +772,7 @@ function home(){
  <button class="retobtn" type="button" data-reto><span class="mt">RETO MUSICAL</span><b>Contrarreloj o de 2 a 4 jugadores</b></button>
  <div class="trees">${Array.from({length:7},treeSVG).join("")}</div>
  <div class="lvtools"><button type="button" data-reset>Empezar de cero</button></div>
- <div class="lvlegal"><div class="legal">© 2026 Rita Monroy Suárez · Monroy Method® marca registrada OEPM nº M3699532. Todos los derechos reservados. Prohibida su copia, distribución o venta sin autorización. <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></div></section>`;
+ <div class="lvlegal"><div class="legal">© 2026 Monroy Method · <button type="button" class="lgl" onclick="openLegal()">Aviso legal</button></div></div></section>`;
  $view.querySelectorAll(".lvb[data-lvl]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lvl;if(!unlocked(i)){b.classList.add("shake");setTimeout(()=>b.classList.remove("shake"),400);tone(false);return;}go(STATIONS[i].id);});
  $view.querySelector("[data-reto]").onclick=()=>go("reto");
  $view.querySelector("[data-reset]").onclick=()=>{state.points=0;state.stars={};state.all=false;save();addPts(0);home();};
